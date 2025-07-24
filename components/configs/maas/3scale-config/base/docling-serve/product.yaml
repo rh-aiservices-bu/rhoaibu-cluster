@@ -1,0 +1,73 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Product
+metadata:
+  name: docling
+spec:
+  name: "Docling Serve"
+  systemName: "docling"
+  deployment:
+    apicastHosted:
+      authentication:
+        userkey:
+          authUserKey: "Authorization"
+          credentials: "authorization"
+  description: >
+    A document conversion service powered by multimodal AI models for extracting text and structure from PDFs and images. Features OCR, layout detection, table structure extraction, formula recognition, and code block processing. Converts to Markdown, JSON, HTML formats with preserved document structure.
+  backendUsages:
+    docling:
+      path: /
+  metrics:
+    hits:
+      description: Number of API hits
+      friendlyName: Hits
+      unit: "hit"
+  methods:
+    health:
+      friendlyName: "Health Check"
+      description: "Check the health of the service"
+    process_url:
+      friendlyName: "Convert from Source"
+      description: "Convert documents from URLs or base64-encoded files"
+    process_file:
+      friendlyName: "Convert Uploaded File"
+      description: "Convert uploaded files via multipart form data"
+  mappingRules:
+    - httpMethod: GET
+      pattern: /health
+      metricMethodRef: health
+      increment: 1
+    - httpMethod: POST
+      pattern: /v1alpha/convert/source
+      metricMethodRef: process_url
+      increment: 1
+    - httpMethod: POST
+      pattern: /v1alpha/convert/file
+      metricMethodRef: process_file
+      increment: 1
+  applicationPlans:
+    standard:
+      name: "Standard"
+      default: true
+      appsRequireApproval: false
+      published: true
+  policies:
+    - name: cors
+      version: builtin
+      enabled: true
+      configuration:
+        {
+          "allow_origin": "*",
+          "allow_headers": ["Authorization", "Content-type", "Accept"],
+          "allow_methods": [],
+        }
+    - name: upstream_connection
+      configuration:
+        connect_timeout: 300
+        read_timeout: 300
+        send_timeout: 300
+      enabled: true
+      version: builtin
+    - name: apicast
+      version: "builtin"
+      configuration: {}
+      enabled: true

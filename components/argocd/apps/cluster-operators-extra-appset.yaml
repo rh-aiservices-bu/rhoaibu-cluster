@@ -1,0 +1,74 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-operator-extra-applicationset
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  generators:
+    - list:
+        elements:
+          - cluster: local
+            values:
+              name: ovms-operator
+              path: components/operators-extra/ovms-operator/overlays/alpha
+              namespace: openshift-gitops
+          - cluster: local
+            values:
+              name: aikit-operator
+              path: components/operators-extra/aikit-operator/overlays/alpha
+              namespace: openshift-gitops
+          - cluster: local
+            values:
+              name: pachyderm-operator
+              path: components/operators-extra/pachyderm-operator/overlays/stable
+              namespace: openshift-gitops
+          - cluster: local
+            values:
+              name: starbust-operator
+              path: components/operators-extra/starbust-operator/overlays/alpha
+              namespace: openshift-gitops
+          - cluster: local
+            values:
+              name: redis-enterprise-operator
+              path: components/operators-extra/redis-enterprise-operator/overlays/production
+              namespace: openshift-gitops
+          # - cluster: local
+          #   values:
+          #     name: run-ai-operator
+          #     path: components/operators-extra/run-ai-operator/overlays/stable
+          #     namespace: openshift-gitops
+          ### This enables the upstream codeflare operator
+          # - cluster: local
+          #   values:
+          #     name: codeflare-operator
+          #     path: components/operators-extra/codeflare-operator/overlays/alpha
+          #     namespace: openshift-gitops
+
+  template:
+    metadata:
+      name: "{{values.name}}"
+      annotations:
+        argocd.argoproj.io/compare-options: IgnoreExtraneous
+        argocd.argoproj.io/sync-options: Prune=false
+    spec:
+      project: cluster-operators
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true
+        # retry:
+        #   limit: 2
+        #   backoff:
+        #     duration: 5s
+        #     factor: 2
+        #     maxDuration: 10m
+      source:
+        repoURL: https://github.com/rh-aiservices-bu/rhoaibu-cluster
+        targetRevision: dev
+        path: "{{values.path}}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: openshift-gitops

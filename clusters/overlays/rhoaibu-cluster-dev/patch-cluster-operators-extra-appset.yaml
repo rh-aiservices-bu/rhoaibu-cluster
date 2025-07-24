@@ -1,0 +1,3 @@
+- op: replace
+  path: /spec/template/spec/source/targetRevision
+  value: dev # Adjust it to the desired branch for Prod (main)

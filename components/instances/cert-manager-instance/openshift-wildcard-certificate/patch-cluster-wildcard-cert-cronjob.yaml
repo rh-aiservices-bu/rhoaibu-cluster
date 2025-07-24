@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: patch-cluster-wildcard-cert-cronjob
+spec:
+  schedule: "0 0 1 2,5,8,11 *" # Run at 00:00 on day-of-month 1 in February, May, August, and November.
+  concurrencyPolicy: Forbid
+  suspend: false
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 1000
+      template:
+        spec:
+          containers:
+            - image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+              command:
+                - /bin/bash
+                - -c
+                - |
+                  #!/usr/bin/env bash
+                  CERT_MANAGER_NAMESPACE="cert-manager-operator"
+                  if oc get secret openshift-wildcard-certificate -n $CERT_MANAGER_NAMESPACE; then
+                    oc delete secret openshift-wildcard-certificate -n openshift-ingress
+                    oc get secret openshift-wildcard-certificate -n $CERT_MANAGER_NAMESPACE -o json | sed 's/"namespace": "[^"]*",//; s/"creationTimestamp": "[^"]*",//; s/"resourceVersion": "[^"]*",//; s/"selfLink": "[^"]*",//; s/"uid": "[^"]*",//; s/"annotations": {[^}]*},//' | oc apply -n openshift-ingress -f -
+                    oc patch ingresscontroller default -n openshift-ingress-operator --type=merge --patch='{"spec": { "defaultCertificate": { "name": "openshift-wildcard-certificate" }}}'
+                  else
+                    echo "Could not execute sync as secret 'openshift-wildcard-certificate' in namespace 'openshift-ingress' does not exist, check status of CertificationRequest"
+                    exit 1
+                  fi
+              name: patch-cluster-wildcard-cert
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          terminationGracePeriodSeconds: 30
+          serviceAccountName: patch-cluster-wildcard-cert
+          serviceAccount: patch-cluster-wildcard-cert

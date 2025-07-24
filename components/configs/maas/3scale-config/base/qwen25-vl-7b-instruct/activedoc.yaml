@@ -1,0 +1,12 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ActiveDoc
+metadata:
+  name: qwen25-vl-7b-instruct
+spec:
+  name: "Qwen2.5-VL-7B-Instruct API Documentation"
+  systemName: "qwen25vl7binstruct"
+  activeDocOpenAPIRef:
+    url: "https://raw.githubusercontent.com/rh-aiservices-bu/maas-config/refs/heads/main/qwen25-vl-7b-instruct/apidoc.json"
+  published: true
+  skipSwaggerValidations: true
+  productSystemName: "qwen25-vl-7b-instruct"

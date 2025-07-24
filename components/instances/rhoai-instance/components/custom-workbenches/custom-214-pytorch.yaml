@@ -1,0 +1,33 @@
+---
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  annotations:
+    opendatahub.io/notebook-image-creator: cchase@redhat.com
+    opendatahub.io/notebook-image-desc: PyTorch Image from RHOAI 2.14
+    opendatahub.io/notebook-image-name: CUSTOM - 2.14 PyTorch
+    opendatahub.io/notebook-image-url: 'quay.io/modh/odh-pytorch-notebook:v3-2024b-20241004'
+    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+  name: custom-214-pytorch
+  namespace: redhat-ods-applications
+  labels:
+    app.kubernetes.io/created-by: byon
+    opendatahub.io/dashboard: 'true'
+    opendatahub.io/notebook-image: 'true'
+spec:
+  lookupPolicy:
+    local: true
+  tags:
+    - name: v3-2024b-20241004
+      annotations:
+        opendatahub.io/notebook-python-dependencies: '[{"name":"PyTorch","version":"2.4","visible":true}]'
+        opendatahub.io/notebook-software: '[{"name":"CUDA","version":"12.4","visible":true},{"name":"Python","version":"v3.11","visible":true},{"name":"PyTorch","version":"2.4","visible":true}]'
+        openshift.io/imported-from: 'quay.io/modh/odh-pytorch-notebook:v3-2024b-20241004'
+      from:
+        kind: DockerImage
+        name: 'quay.io/modh/odh-pytorch-notebook:v3-2024b-20241004'
+      generation: 2
+      importPolicy:
+        importMode: Legacy
+      referencePolicy:
+        type: Source

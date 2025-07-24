@@ -1,0 +1,8 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Backend
+metadata:
+  name: granite3-guardian-2b
+spec:
+  name: "Granite Guardian 3.1 2B"
+  systemName: "granite3-guardian-2b"
+  privateBaseURL: "http://granite3-guardian-2b-predictor.llm-hosting.svc.cluster.local:8080"

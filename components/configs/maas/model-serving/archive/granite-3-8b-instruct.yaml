@@ -1,0 +1,88 @@
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    opendatahub.io/accelerator-name: ''
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+    opendatahub.io/template-display-name: 'vLLM-RHOAI 2.17-max-len: 6144'
+    opendatahub.io/template-name: vllm-granite31-tools-6144
+    openshift.io/display-name: vllm-granite31-tools-6144
+  name: vllm-granite31-tools-6144
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: '8080'
+  containers:
+    - args:
+        - '--port=8080'
+        - '--model=/mnt/models'
+        - '--served-model-name=granite-3-8b-instruct'
+        - '--distributed-executor-backend=mp'
+        - '--max-model-len=6144'
+        - '--dtype=half'
+        - '--enable-auto-tool-choice'
+        - '--tool-call-parser'
+        - granite
+      command:
+        - python
+        - '-m'
+        - vllm.entrypoints.openai.api_server
+      env:
+        - name: HF_HOME
+          value: /tmp/hf_home
+      image: 'quay.io/opendatahub/vllm@sha256:f7e40286a9e0a5870fcb96f3dc6c2cb094ed8eb8d9a17dc886fc6aae2ad06519'
+      name: kserve-container
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      volumeMounts:
+        - mountPath: /dev/shm
+          name: shm
+  multiModel: false
+  supportedModelFormats:
+    - autoSelect: true
+      name: vLLM
+  volumes:
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 2Gi
+      name: shm
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: Granite-3.1-8b-instruct
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: granite-3-8b-instruct
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        limits:
+          cpu: '8'
+          memory: 24Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '4'
+          memory: 16Gi
+          nvidia.com/gpu: '1'
+      runtime: vllm-granite31-tools-6144
+      storage:
+        key: aws-connection-models
+        path: ibm-granite/granite-3.1-8b-instruct/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Equal
+        value: NVIDIA-A10G-PRIVATE

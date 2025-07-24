@@ -1,0 +1,11 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: redis-enterprise-operator-cert
+  namespace: redis-enterprise-operator
+spec:
+  channel: patch-me-see-overlays-dir
+  installPlanApproval: Automatic
+  name: redis-enterprise-operator-cert
+  source: certified-operators
+  sourceNamespace: openshift-marketplace

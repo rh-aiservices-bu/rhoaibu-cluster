@@ -1,0 +1,111 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: machineset-setup
+rules:
+  - apiGroups:
+      - machine.openshift.io
+    resources:
+      - machinesets
+    verbs:
+      - "*"
+  - apiGroups:
+      - autoscaling.openshift.io
+    resources:
+      - machineautoscalers
+    verbs:
+      - "*"
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    resourceNames:
+      - aws-creds
+    verbs:
+      - get
+      - list
+# - nonResourceURLs:
+#   - '*'
+#   verbs:
+#   - '*'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: machineset-setup
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: machineset-setup
+subjects:
+  - kind: ServiceAccount
+    name: machineset-setup
+    namespace: openshift-config
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: machineset-setup
+  namespace: openshift-config
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: machineset-setup-
+  name: machineset-setup
+  namespace: openshift-config
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    # argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      containers:
+        - name: machineset-setup
+          image: image-registry.openshift-image-registry.svc:5000/openshift/tools:latest
+          env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: MACHINE_MIN
+              value: "0"
+            - name: MACHINE_MAX
+              value: "4"
+          command:
+            - /bin/bash
+            - -c
+            - |
+              #!/usr/bin/env bash
+
+              ocp_create_machineset_autoscale(){
+                MACHINE_MIN=${1:-0}
+                MACHINE_MAX=${2:-4}
+                MACHINE_SETS=${3:-$(oc -n openshift-machine-api get machinesets.machine.openshift.io -o name | grep "g4dn.2xlarge" | sed 's@.*/@@' )}
+
+                for set in ${MACHINE_SETS}
+                do
+              cat << YAML | oc apply -f -
+              apiVersion: "autoscaling.openshift.io/v1beta1"
+              kind: "MachineAutoscaler"
+              metadata:
+                name: "${set}"
+                namespace: "openshift-machine-api"
+              spec:
+                minReplicas: ${MACHINE_MIN}
+                maxReplicas: ${MACHINE_MAX}
+                scaleTargetRef:
+                  apiVersion: machine.openshift.io/v1beta1
+                  kind: MachineSet
+                  name: "${set}"
+              YAML
+                done
+              }
+
+              ocp_create_machineset_autoscale ${MACHINE_MIN} ${MACHINE_MAX}
+
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 30
+      serviceAccount: machineset-setup
+      serviceAccountName: machineset-setup

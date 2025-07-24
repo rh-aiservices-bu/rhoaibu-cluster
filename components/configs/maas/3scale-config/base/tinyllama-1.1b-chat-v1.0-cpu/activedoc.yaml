@@ -1,0 +1,12 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ActiveDoc
+metadata:
+  name: tinyllama-cpu
+spec:
+  name: "TinyLlama on CPU API Documentation"
+  systemName: "tinyllamacpu"
+  activeDocOpenAPIRef:
+    url: "https://raw.githubusercontent.com/rh-aiservices-bu/maas-config/refs/heads/main/tinyllama-1.1b-chat-v1.0-cpu/apidoc.json"
+  published: true
+  skipSwaggerValidations: true
+  productSystemName: "tinyllama-cpu"

@@ -1,0 +1,12 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ActiveDoc
+metadata:
+  name: llama-4-scout-17b-16e-w4a16
+spec:
+  name: "Llama-4-Scout-17B-16E-W4A16 API Documentation"
+  systemName: "llama4scout17b16ew4a16"
+  activeDocOpenAPIRef:
+    url: "https://raw.githubusercontent.com/rh-aiservices-bu/maas-config/refs/heads/main/llama-4-scout-17b-16e-w4a16/apidoc.json"
+  published: true
+  skipSwaggerValidations: true
+  productSystemName: "llama-4-scout-17b-16e-w4a16"

@@ -1,0 +1,12 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ActiveDoc
+metadata:
+  name: safety-checker
+spec:
+  name: "Stable Diffusion Safety Checker API Documentation"
+  systemName: "safetychecker"
+  activeDocOpenAPIRef:
+    url: "https://raw.githubusercontent.com/rh-aiservices-bu/maas-config/refs/heads/main/safety-checker-clip/apidoc.json"
+  published: true
+  skipSwaggerValidations: true
+  productSystemName: "safety-checker"

@@ -1,0 +1,46 @@
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: Llama-4-Scout-17B-16E-W4A16
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: llama-4-scout-17b-16e-w4a16
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      args:
+        - '--model=/mnt/models'
+        - '--served-model-name=llama-4-scout-17b-16e-w4a16'
+        - '--tensor-parallel-size=4'
+        - '--max-model-len=400000'
+        - '--enable-auto-tool-choice'
+        - '--tool-call-parser'
+        - llama4_pythonic
+        - '--chat-template'
+        - /app/data/template/tool_chat_template_llama4_pythonic.jinja
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        limits:
+          cpu: '44'
+          memory: 360Gi
+          nvidia.com/gpu: '4'
+        requests:
+          cpu: '32'
+          memory: 300Gi
+          nvidia.com/gpu: '4'
+      runtime: vllm-rhoai-2.21
+      storage:
+        key: aws-connection-models
+        path: RedHatAI/Llama-4-Scout-17B-16E-Instruct-quantized.w4a16/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Equal
+        value: NVIDIA-L40S-MULTI-PRIVATE

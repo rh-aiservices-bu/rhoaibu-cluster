@@ -1,0 +1,11 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ActiveDoc
+metadata:
+  name: phi-4
+spec:
+  name: "Phi-4 API Documentation"
+  systemName: "phi4"
+  activeDocOpenAPIRef:
+    url: "https://raw.githubusercontent.com/rh-aiservices-bu/maas-config/refs/heads/main/phi-4/apidoc.json"
+  published: true
+  skipSwaggerValidations: true

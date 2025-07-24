@@ -1,0 +1,12 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ActiveDoc
+metadata:
+  name: mistral-small-24b-w8a8
+spec:
+  name: "Mistral-Small-24B-W8A8 API Documentation"
+  systemName: "mistralsmall24bw8a8"
+  activeDocOpenAPIRef:
+    url: "https://raw.githubusercontent.com/rh-aiservices-bu/maas-config/refs/heads/main/mistral-small-24b-w8a8/apidoc.json"
+  published: true
+  skipSwaggerValidations: true
+  productSystemName: "mistral-small-24b-w8a8"

@@ -1,0 +1,55 @@
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  annotations:
+    openshift.io/description: Can access Model Registry registry
+    openshift.io/display-name: Registry User registry
+  name: registry-user-registry
+  labels:
+    app: registry
+    app.kubernetes.io/component: registry
+    app.kubernetes.io/created-by: registry-operator
+    app.kubernetes.io/instance: registry-user-registry
+    app.kubernetes.io/managed-by: registry-operator
+    app.kubernetes.io/name: registry
+    app.kubernetes.io/part-of: registry
+    component: registry
+rules:
+  - verbs:
+      - get
+    apiGroups:
+      - ''
+    resources:
+      - services
+    resourceNames:
+      - registry
+  - verbs:
+      - get
+    apiGroups:
+      - ''
+    resources:
+      - endpoints
+    resourceNames:
+      - registry
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: dashboard-permissions-everybody
+  namespace: rhoai-model-registries
+  labels:
+    app: registry
+    app.kubernetes.io/component: registry
+    app.kubernetes.io/name: registry
+    app.kubernetes.io/part-of: registry
+    component: registry
+    opendatahub.io/dashboard: 'true'
+subjects:
+  - kind: Group
+    apiGroup: rbac.authorization.k8s.io
+    name: system:authenticated
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: registry-user-registry

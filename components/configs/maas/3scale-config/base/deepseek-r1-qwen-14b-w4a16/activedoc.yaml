@@ -1,0 +1,12 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ActiveDoc
+metadata:
+  name: deepseek-r1-qwen-14b-w4a16
+spec:
+  name: "DeepSeek-R1-Distill-Qwen-14B-W4A16 API Documentation"
+  systemName: "deepseekr1qwen14bw4a16"
+  activeDocOpenAPIRef:
+    url: "https://raw.githubusercontent.com/rh-aiservices-bu/maas-config/refs/heads/main/deepseek-r1-qwen-14b-w4a16/apidoc.json"
+  published: true
+  skipSwaggerValidations: true
+  productSystemName: "deepseek-r1-qwen-14b-w4a16"

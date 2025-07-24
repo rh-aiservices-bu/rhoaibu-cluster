@@ -1,0 +1,44 @@
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: tinyllama-1b-cpu
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: tinyllama-1b-cpu
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    containers:
+      - args:
+          - '--model'
+          - TinyLlama/TinyLlama-1.1B-Chat-v1.0
+          - '--port'
+          - '8080'
+          - '--max-model-len'
+          - '2048'
+        image: 'quay.io/rh-aiservices-bu/vllm-cpu-openai-ubi9:0.3'
+        name: kserve-container
+        resources:
+          limits:
+            cpu: '2'
+            memory: 8Gi
+          requests:
+            cpu: '1'
+            memory: 4Gi
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: tinyllama-1b-cpu
+spec:
+  to:
+    kind: Service
+    name: tinyllama-1b-cpu-predictor
+    weight: 100
+  port:
+    targetPort: tinyllama-1b-cpu-predictor
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: None
+  wildcardPolicy: None

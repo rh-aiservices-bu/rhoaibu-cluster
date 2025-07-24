@@ -1,0 +1,9 @@
+---
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ProxyConfigPromote
+metadata:
+  name: safety-checker
+spec:
+  productCRName: safety-checker
+  production: true
+  deleteCR: false

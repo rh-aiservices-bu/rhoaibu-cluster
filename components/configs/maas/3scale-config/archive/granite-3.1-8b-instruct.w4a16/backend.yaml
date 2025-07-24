@@ -1,0 +1,8 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Backend
+metadata:
+  name: granite-3-1-8b-instruct-w4a16
+spec:
+  name: "Granite-3.1-8B-Instruct-W4A16"
+  systemName: "granite-3-1-8b-instruct-w4a16"
+  privateBaseURL: "http://granite-3-1-8b-instruct-w4a16-predictor.llm-hosting.svc.cluster.local:8080"

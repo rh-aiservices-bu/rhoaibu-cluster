@@ -1,0 +1,74 @@
+---
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    opendatahub.io/accelerator-name: ''
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+    opendatahub.io/template-display-name: Sbert runtime 1.2.0
+    opendatahub.io/template-name: 'sbert-runtime:1.2.0'
+    openshift.io/display-name: 'sbert-runtime:1.2.0'
+  resourceVersion: '875624143'
+  name: sbert-runtime-1.2.
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: '8080'
+  containers:
+    - args:
+        - '--model-path=/mnt/models'
+        - '--trust-remote-code=true'
+      image: 'quay.io/rh-aiservices-bu/sbert-runtime:1.2.0'
+      name: kserve-container
+      ports:
+        - containerPort: 8080
+          name: http1
+          protocol: TCP
+  multiModel: false
+  supportedModelFormats:
+    - autoSelect: true
+      name: sBERT
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: Nomic-embed-text-v1.5
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: nomic-embed-text-v1-5-sbert-1-2-0
+  finalizers:
+    - inferenceservice.finalizers
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      env:
+        - name: UVICORN_WORKERS
+          value: '4'
+      modelFormat:
+        name: sBERT
+      name: ''
+      resources:
+        limits:
+          cpu: '2'
+          memory: 8Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '1'
+          memory: 4Gi
+          nvidia.com/gpu: '1'
+      runtime: sbert-runtime-1.2.0
+      storage:
+        key: aws-connection-models
+        path: nomic-ai/nomic-embed-text-v1.5/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Equal
+        value: Tesla-T4-PRIVATE

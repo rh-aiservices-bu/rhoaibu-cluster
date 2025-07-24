@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - github.com/redhat-cop/gitops-catalog/redhat-build-of-opentelemetry/operator/overlays/stable?ref=main
+
+patches:
+  - target:
+      kind: Subscription
+      name: opentelemetry-product
+    path: patch-channel.yaml

@@ -1,0 +1,9 @@
+---
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ProxyConfigPromote
+metadata:
+  name: granite-8b-lab-v1
+spec:
+  productCRName: granite-8b-lab-v1
+  production: true
+  deleteCR: false

@@ -1,0 +1,199 @@
+apiVersion: machine.openshift.io/v1beta1
+kind: MachineSet
+metadata:
+  annotations:
+    autoscaling.openshift.io/machineautoscaler: openshift-machine-api/rhods-internal-9dqmt-g5-2xlarge-us-east-1a
+    machine.openshift.io/GPU: "1"
+    machine.openshift.io/cluster-api-autoscaler-node-group-max-size: "2"
+    machine.openshift.io/cluster-api-autoscaler-node-group-min-size: "1"
+    machine.openshift.io/memoryMb: "32768"
+    machine.openshift.io/vCPU: "8"
+  resourceVersion: "2808223057"
+  name: rhods-internal-9dqmt-g5-2xlarge-us-east-1a
+  uid: d040f191-9f3c-4413-97e6-a27c431c9790
+  creationTimestamp: "2023-06-26T14:28:06Z"
+  generation: 384a
+  managedFields:
+    - apiVersion: machine.openshift.io/v1beta1
+      fieldsType: FieldsV1
+      fieldsV1:
+        "f:metadata":
+          "f:annotations":
+            .: {}
+            "f:machine.openshift.io/GPU": {}
+            "f:machine.openshift.io/memoryMb": {}
+            "f:machine.openshift.io/vCPU": {}
+      manager: machine-controller-manager
+      operation: Update
+      time: "2023-06-26T14:28:06Z"
+    - apiVersion: machine.openshift.io/v1beta1
+      fieldsType: FieldsV1
+      fieldsV1:
+        "f:metadata":
+          "f:labels":
+            .: {}
+            "f:hive.openshift.io/machine-pool": {}
+            "f:hive.openshift.io/managed": {}
+            "f:machine.openshift.io/cluster-api-cluster": {}
+        "f:spec":
+          .: {}
+          "f:selector": {}
+          "f:template":
+            .: {}
+            "f:metadata":
+              .: {}
+              "f:labels":
+                .: {}
+                "f:machine.openshift.io/cluster-api-cluster": {}
+                "f:machine.openshift.io/cluster-api-machine-role": {}
+                "f:machine.openshift.io/cluster-api-machine-type": {}
+                "f:machine.openshift.io/cluster-api-machineset": {}
+            "f:spec":
+              .: {}
+              "f:lifecycleHooks": {}
+              "f:metadata":
+                .: {}
+                "f:labels":
+                  .: {}
+                  "f:nvidia.com/device-plugin.config": {}
+              "f:providerSpec":
+                .: {}
+                "f:value":
+                  "f:instanceType": {}
+                  "f:metadata":
+                    .: {}
+                    "f:creationTimestamp": {}
+                  "f:blockDevices": {}
+                  "f:kind": {}
+                  "f:securityGroups": {}
+                  "f:deviceIndex": {}
+                  "f:ami":
+                    .: {}
+                    "f:id": {}
+                  "f:metadataServiceOptions": {}
+                  "f:tags": {}
+                  .: {}
+                  "f:placement":
+                    .: {}
+                    "f:availabilityZone": {}
+                    "f:region": {}
+                  "f:subnet":
+                    .: {}
+                    "f:filters": {}
+                  "f:apiVersion": {}
+                  "f:iamInstanceProfile":
+                    .: {}
+                    "f:id": {}
+                  "f:credentialsSecret":
+                    .: {}
+                    "f:name": {}
+                  "f:userDataSecret":
+                    .: {}
+                    "f:name": {}
+              "f:taints": {}
+      manager: manager
+      operation: Update
+      time: "2023-08-23T17:28:57Z"
+    - apiVersion: machine.openshift.io/v1beta1
+      fieldsType: FieldsV1
+      fieldsV1:
+        "f:metadata":
+          "f:annotations":
+            "f:autoscaling.openshift.io/machineautoscaler": {}
+            "f:machine.openshift.io/cluster-api-autoscaler-node-group-max-size":
+              {}
+            "f:machine.openshift.io/cluster-api-autoscaler-node-group-min-size":
+              {}
+          "f:labels":
+            "f:cluster-api/accelerator": {}
+      manager: cluster-autoscaler-operator
+      operation: Update
+      time: "2023-12-04T20:26:38Z"
+    - apiVersion: machine.openshift.io/v1beta1
+      fieldsType: FieldsV1
+      fieldsV1:
+        "f:status":
+          .: {}
+          "f:availableReplicas": {}
+          "f:fullyLabeledReplicas": {}
+          "f:observedGeneration": {}
+          "f:readyReplicas": {}
+          "f:replicas": {}
+      manager: machineset-controller
+      operation: Update
+      subresource: status
+      time: "2024-04-18T19:10:44Z"
+  namespace: openshift-machine-api
+  labels:
+    cluster-api/accelerator: ""
+    hive.openshift.io/machine-pool: g5-2xlarge
+    hive.openshift.io/managed: "true"
+    machine.openshift.io/cluster-api-cluster: rhods-internal-9dqmt
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      machine.openshift.io/cluster-api-cluster: rhods-internal-9dqmt
+      machine.openshift.io/cluster-api-machineset: rhods-internal-9dqmt-g5-2xlarge-us-east-1a
+  template:
+    metadata:
+      labels:
+        machine.openshift.io/cluster-api-cluster: rhods-internal-9dqmt
+        machine.openshift.io/cluster-api-machine-role: g5-2xlarge
+        machine.openshift.io/cluster-api-machine-type: g5-2xlarge
+        machine.openshift.io/cluster-api-machineset: rhods-internal-9dqmt-g5-2xlarge-us-east-1a
+    spec:
+      lifecycleHooks: {}
+      metadata:
+        labels:
+          nvidia.com/device-plugin.config: nvidia-a10g
+      providerSpec:
+        value:
+          userDataSecret:
+            name: worker-user-data
+          placement:
+            availabilityZone: us-east-1a
+            region: us-east-1
+          credentialsSecret:
+            name: aws-cloud-credentials
+          instanceType: g5.2xlarge
+          metadata:
+            creationTimestamp: null
+          blockDevices:
+            - ebs:
+                encrypted: true
+                iops: 0
+                kmsKey:
+                  arn: ""
+                volumeSize: 300
+                volumeType: gp3
+          securityGroups:
+            - filters:
+                - name: "tag:Name"
+                  values:
+                    - rhods-internal-9dqmt-worker-sg
+          kind: AWSMachineProviderConfig
+          metadataServiceOptions: {}
+          tags:
+            - name: kubernetes.io/cluster/rhods-internal-9dqmt
+              value: owned
+          deviceIndex: 0
+          ami:
+            id: ami-0a57c1b4939e5ef5b
+          subnet:
+            filters:
+              - name: "tag:Name"
+                values:
+                  - rhods-internal-9dqmt-private-us-east-1a
+          apiVersion: machine.openshift.io/v1beta1
+          iamInstanceProfile:
+            id: rhods-internal-9dqmt-worker-profile
+      taints:
+        - effect: NoSchedule
+          key: nvidia.com/gpu
+status:
+  availableReplicas: 2
+  fullyLabeledReplicas: 2
+  observedGeneration: 384
+  readyReplicas: 2
+  replicas: 2

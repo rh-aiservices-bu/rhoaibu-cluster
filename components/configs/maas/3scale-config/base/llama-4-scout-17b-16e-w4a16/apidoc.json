@@ -1,0 +1,1616 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Llama-4-Scout-17B-16E-W4A16",
+        "description": "Llama-4-Scout-17B-16E-W4A16 is a quantized version of the Llama-4-Scout model with 17 billion parameters, providing high-quality text generation capabilities."
+    },
+    "paths": {
+        "/health": {
+            "get": {
+                "summary": "Health",
+                "description": "Health check.",
+                "operationId": "health_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tokenize": {
+            "post": {
+                "summary": "Tokenize",
+                "operationId": "tokenize_tokenize_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "anyOf": [
+                                    {
+                                        "$ref": "#/components/schemas/TokenizeCompletionRequest"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/TokenizeChatRequest"
+                                    }
+                                ],
+                                "title": "Request"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/detokenize": {
+            "post": {
+                "summary": "Detokenize",
+                "operationId": "detokenize_detokenize_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DetokenizeRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/models": {
+            "get": {
+                "summary": "Show Available Models",
+                "operationId": "show_available_models_v1_models_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/version": {
+            "get": {
+                "summary": "Show Version",
+                "operationId": "show_version_version_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/chat/completions": {
+            "post": {
+                "summary": "Create Chat Completion",
+                "operationId": "create_chat_completion_v1_chat_completions_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChatCompletionRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/completions": {
+            "post": {
+                "summary": "Create Completion",
+                "operationId": "create_completion_v1_completions_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CompletionRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/embeddings": {
+            "post": {
+                "summary": "Create Embedding",
+                "operationId": "create_embedding_v1_embeddings_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "anyOf": [
+                                    {
+                                        "$ref": "#/components/schemas/EmbeddingCompletionRequest"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/EmbeddingChatRequest"
+                                    }
+                                ],
+                                "title": "Request"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Audio": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id"
+                ],
+                "title": "Audio"
+            },
+            "AudioURL": {
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "title": "Url"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "url"
+                ],
+                "title": "AudioURL"
+            },
+            "BaseModel": {
+                "properties": {},
+                "type": "object",
+                "title": "BaseModel"
+            },
+            "ChatCompletionAssistantMessageParam": {
+                "properties": {
+                    "role": {
+                        "type": "string",
+                        "const": "assistant",
+                        "title": "Role"
+                    },
+                    "audio": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Audio"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "content": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ChatCompletionContentPartTextParam"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ChatCompletionContentPartRefusalParam"
+                                        }
+                                    ]
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Content"
+                    },
+                    "function_call": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/FunctionCall"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "refusal": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Refusal"
+                    },
+                    "tool_calls": {
+                        "items": {
+                            "$ref": "#/components/schemas/ChatCompletionMessageToolCallParam"
+                        },
+                        "type": "array",
+                        "title": "Tool Calls"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "role"
+                ],
+                "title": "ChatCompletionAssistantMessageParam"
+            },
+            "ChatCompletionContentPartAudioParam": {
+                "properties": {
+                    "audio_url": {
+                        "$ref": "#/components/schemas/AudioURL"
+                    },
+                    "type": {
+                        "type": "string",
+                        "const": "audio_url",
+                        "title": "Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "audio_url",
+                    "type"
+                ],
+                "title": "ChatCompletionContentPartAudioParam"
+            },
+            "ChatCompletionContentPartImageParam": {
+                "properties": {
+                    "image_url": {
+                        "$ref": "#/components/schemas/ImageURL"
+                    },
+                    "type": {
+                        "type": "string",
+                        "const": "image_url",
+                        "title": "Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "image_url",
+                    "type"
+                ],
+                "title": "ChatCompletionContentPartImageParam"
+            },
+            "ChatCompletionContentPartInputAudioParam": {
+                "properties": {
+                    "input_audio": {
+                        "$ref": "#/components/schemas/InputAudio"
+                    },
+                    "type": {
+                        "type": "string",
+                        "const": "input_audio",
+                        "title": "Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "input_audio",
+                    "type"
+                ],
+                "title": "ChatCompletionContentPartInputAudioParam"
+            },
+            "ChatCompletionContentPartRefusalParam": {
+                "properties": {
+                    "refusal": {
+                        "type": "string",
+                        "title": "Refusal"
+                    },
+                    "type": {
+                        "type": "string",
+                        "const": "refusal",
+                        "title": "Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "refusal",
+                    "type"
+                ],
+                "title": "ChatCompletionContentPartRefusalParam"
+            },
+            "ChatCompletionContentPartTextParam": {
+                "properties": {
+                    "text": {
+                        "type": "string",
+                        "title": "Text"
+                    },
+                    "type": {
+                        "type": "string",
+                        "const": "text",
+                        "title": "Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "text",
+                    "type"
+                ],
+                "title": "ChatCompletionContentPartTextParam"
+            },
+            "ChatCompletionContentPartVideoParam": {
+                "properties": {
+                    "video_url": {
+                        "$ref": "#/components/schemas/VideoURL"
+                    },
+                    "type": {
+                        "type": "string",
+                        "const": "video_url",
+                        "title": "Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "video_url",
+                    "type"
+                ],
+                "title": "ChatCompletionContentPartVideoParam"
+            },
+            "ChatCompletionDeveloperMessageParam": {
+                "properties": {
+                    "content": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/ChatCompletionContentPartTextParam"
+                                },
+                                "type": "array"
+                            }
+                        ],
+                        "title": "Content"
+                    },
+                    "role": {
+                        "type": "string",
+                        "const": "developer",
+                        "title": "Role"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "content",
+                    "role"
+                ],
+                "title": "ChatCompletionDeveloperMessageParam"
+            },
+            "ChatCompletionFunctionMessageParam": {
+                "properties": {
+                    "content": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Content"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "role": {
+                        "type": "string",
+                        "const": "function",
+                        "title": "Role"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "content",
+                    "name",
+                    "role"
+                ],
+                "title": "ChatCompletionFunctionMessageParam"
+            },
+            "ChatCompletionMessageToolCallParam": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "function": {
+                        "$ref": "#/components/schemas/Function"
+                    },
+                    "type": {
+                        "type": "string",
+                        "const": "function",
+                        "title": "Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "function",
+                    "type"
+                ],
+                "title": "ChatCompletionMessageToolCallParam"
+            },
+            "ChatCompletionNamedFunction": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "name"
+                ],
+                "title": "ChatCompletionNamedFunction"
+            },
+            "ChatCompletionNamedToolChoiceParam": {
+                "properties": {
+                    "function": {
+                        "$ref": "#/components/schemas/ChatCompletionNamedFunction"
+                    },
+                    "type": {
+                        "type": "string",
+                        "const": "function",
+                        "title": "Type",
+                        "default": "function"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "function"
+                ],
+                "title": "ChatCompletionNamedToolChoiceParam"
+            },
+            "ChatCompletionRequest": {
+                "properties": {
+                    "messages": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionDeveloperMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionSystemMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionUserMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionAssistantMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionToolMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionFunctionMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/CustomChatCompletionMessageParam"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Messages"
+                    },
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "frequency_penalty": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Frequency Penalty",
+                        "default": 0.0
+                    },
+                    "response_format": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseFormat"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "stream_options": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/StreamOptions"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "tools": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/ChatCompletionToolsParam"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Tools"
+                    },
+                    "tool_choice": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "const": "none"
+                            },
+                            {
+                                "type": "string",
+                                "const": "auto"
+                            },
+                            {
+                                "$ref": "#/components/schemas/ChatCompletionNamedToolChoiceParam"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Tool Choice",
+                        "default": "none"
+                    },
+                    "guided_json": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "$ref": "#/components/schemas/BaseModel"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Guided Json",
+                        "description": "If specified, the output will follow the JSON schema."
+                    },
+                    "logits_processors": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/LogitsProcessorConstructor"
+                                        }
+                                    ]
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Logits Processors",
+                        "description": "A list of either qualified names of logits processors, or constructor objects, to apply when sampling."
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "messages",
+                    "model"
+                ],
+                "title": "ChatCompletionRequest"
+            },
+            "ChatCompletionSystemMessageParam": {
+                "properties": {
+                    "content": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/ChatCompletionContentPartTextParam"
+                                },
+                                "type": "array"
+                            }
+                        ],
+                        "title": "Content"
+                    },
+                    "role": {
+                        "type": "string",
+                        "const": "system",
+                        "title": "Role"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "content",
+                    "role"
+                ],
+                "title": "ChatCompletionSystemMessageParam"
+            },
+            "ChatCompletionToolMessageParam": {
+                "properties": {
+                    "content": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/ChatCompletionContentPartTextParam"
+                                },
+                                "type": "array"
+                            }
+                        ],
+                        "title": "Content"
+                    },
+                    "role": {
+                        "type": "string",
+                        "const": "tool",
+                        "title": "Role"
+                    },
+                    "tool_call_id": {
+                        "type": "string",
+                        "title": "Tool Call Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "content",
+                    "role",
+                    "tool_call_id"
+                ],
+                "title": "ChatCompletionToolMessageParam"
+            },
+            "ChatCompletionToolsParam": {
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "const": "function",
+                        "title": "Type",
+                        "default": "function"
+                    },
+                    "function": {
+                        "$ref": "#/components/schemas/FunctionDefinition"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "function"
+                ],
+                "title": "ChatCompletionToolsParam"
+            },
+            "ChatCompletionUserMessageParam": {
+                "properties": {
+                    "content": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ChatCompletionContentPartTextParam"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ChatCompletionContentPartImageParam"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ChatCompletionContentPartInputAudioParam"
+                                        }
+                                    ]
+                                },
+                                "type": "array"
+                            }
+                        ],
+                        "title": "Content"
+                    },
+                    "role": {
+                        "type": "string",
+                        "const": "user",
+                        "title": "Role"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "content",
+                    "role"
+                ],
+                "title": "ChatCompletionUserMessageParam"
+            },
+            "CompletionRequest": {
+                "properties": {
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "prompt": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "integer"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "items": {
+                                    "items": {
+                                        "type": "integer"
+                                    },
+                                    "type": "array"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            }
+                        ],
+                        "title": "Prompt"
+                    },
+                    "stream_options": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/StreamOptions"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "response_format": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseFormat"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "description": "Similar to chat completion, this parameter specifies the format of output."
+                    },
+                    "guided_json": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "$ref": "#/components/schemas/BaseModel"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Guided Json",
+                        "description": "If specified, the output will follow the JSON schema."
+                    },
+                    "logits_processors": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/LogitsProcessorConstructor"
+                                        }
+                                    ]
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Logits Processors",
+                        "description": "A list of either qualified names of logits processors, or constructor objects, to apply when sampling."
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "model",
+                    "prompt"
+                ],
+                "title": "CompletionRequest"
+            },
+            "CustomChatCompletionContentSimpleAudioParam": {
+                "properties": {
+                    "audio_url": {
+                        "type": "string",
+                        "title": "Audio Url"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "audio_url"
+                ],
+                "title": "CustomChatCompletionContentSimpleAudioParam",
+                "description": "A simpler version of the param that only accepts a plain audio_url."
+            },
+            "CustomChatCompletionContentSimpleImageParam": {
+                "properties": {
+                    "image_url": {
+                        "type": "string",
+                        "title": "Image Url"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "image_url"
+                ],
+                "title": "CustomChatCompletionContentSimpleImageParam",
+                "description": "A simpler version of the param that only accepts a plain image_url."
+            },
+            "CustomChatCompletionContentSimpleVideoParam": {
+                "properties": {
+                    "video_url": {
+                        "type": "string",
+                        "title": "Video Url"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "video_url"
+                ],
+                "title": "CustomChatCompletionContentSimpleVideoParam",
+                "description": "A simpler version of the param that only accepts a plain video_url."
+            },
+            "CustomChatCompletionMessageParam": {
+                "properties": {
+                    "role": {
+                        "type": "string",
+                        "title": "Role"
+                    },
+                    "content": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ChatCompletionContentPartTextParam"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ChatCompletionContentPartImageParam"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ChatCompletionContentPartInputAudioParam"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ChatCompletionContentPartAudioParam"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ChatCompletionContentPartVideoParam"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ChatCompletionContentPartRefusalParam"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/CustomChatCompletionContentSimpleImageParam"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/CustomChatCompletionContentSimpleAudioParam"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/CustomChatCompletionContentSimpleVideoParam"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
+                                },
+                                "type": "array"
+                            }
+                        ],
+                        "title": "Content"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "tool_call_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Tool Call Id"
+                    },
+                    "tool_calls": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/ChatCompletionMessageToolCallParam"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Tool Calls"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "role"
+                ],
+                "title": "CustomChatCompletionMessageParam",
+                "description": "Enables custom roles in the Chat Completion API."
+            },
+            "DetokenizeRequest": {
+                "properties": {
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "tokens": {
+                        "items": {
+                            "type": "integer"
+                        },
+                        "type": "array",
+                        "title": "Tokens"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "model",
+                    "tokens"
+                ],
+                "title": "DetokenizeRequest"
+            },
+            "EmbeddingChatRequest": {
+                "properties": {
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "messages": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionDeveloperMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionSystemMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionUserMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionAssistantMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionToolMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionFunctionMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/CustomChatCompletionMessageParam"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Messages"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "model",
+                    "messages"
+                ],
+                "title": "EmbeddingChatRequest"
+            },
+            "EmbeddingCompletionRequest": {
+                "properties": {
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "input": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "integer"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "items": {
+                                    "items": {
+                                        "type": "integer"
+                                    },
+                                    "type": "array"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            }
+                        ],
+                        "title": "Input"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "model",
+                    "input"
+                ],
+                "title": "EmbeddingCompletionRequest"
+            },
+            "Function": {
+                "properties": {
+                    "arguments": {
+                        "type": "string",
+                        "title": "Arguments"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "arguments",
+                    "name"
+                ],
+                "title": "Function"
+            },
+            "FunctionCall": {
+                "properties": {
+                    "arguments": {
+                        "type": "string",
+                        "title": "Arguments"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "arguments",
+                    "name"
+                ],
+                "title": "FunctionCall"
+            },
+            "FunctionDefinition": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "parameters": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Parameters"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "name"
+                ],
+                "title": "FunctionDefinition"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "ImageURL": {
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "title": "Url"
+                    },
+                    "detail": {
+                        "type": "string",
+                        "enum": [
+                            "auto",
+                            "low",
+                            "high"
+                        ],
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "url"
+                ],
+                "title": "ImageURL"
+            },
+            "InputAudio": {
+                "properties": {
+                    "data": {
+                        "type": "string",
+                        "title": "Data"
+                    },
+                    "format": {
+                        "type": "string",
+                        "enum": [
+                            "wav",
+                            "mp3"
+                        ],
+                        "title": "Format"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "data",
+                    "format"
+                ],
+                "title": "InputAudio"
+            },
+            "JsonSchemaResponseFormat": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "schema": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Schema"
+                    },
+                    "strict": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Strict"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "name"
+                ],
+                "title": "JsonSchemaResponseFormat"
+            },
+            "LogitsProcessorConstructor": {
+                "properties": {
+                    "qualname": {
+                        "type": "string",
+                        "title": "Qualname"
+                    },
+                    "args": {
+                        "anyOf": [
+                            {
+                                "items": {},
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Args"
+                    },
+                    "kwargs": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Kwargs"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "qualname"
+                ],
+                "title": "LogitsProcessorConstructor"
+            },
+            "ResponseFormat": {
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "text",
+                            "json_object",
+                            "json_schema"
+                        ],
+                        "title": "Type"
+                    },
+                    "json_schema": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/JsonSchemaResponseFormat"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "type"
+                ],
+                "title": "ResponseFormat"
+            },
+            "StreamOptions": {
+                "properties": {
+                    "include_usage": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Include Usage",
+                        "default": true
+                    },
+                    "continuous_usage_stats": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Continuous Usage Stats",
+                        "default": false
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "title": "StreamOptions"
+            },
+            "TokenizeChatRequest": {
+                "properties": {
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "messages": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionDeveloperMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionSystemMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionUserMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionAssistantMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionToolMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/ChatCompletionFunctionMessageParam"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/CustomChatCompletionMessageParam"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Messages"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "model",
+                    "messages"
+                ],
+                "title": "TokenizeChatRequest"
+            },
+            "TokenizeCompletionRequest": {
+                "properties": {
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "prompt": {
+                        "type": "string",
+                        "title": "Prompt"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "model",
+                    "prompt"
+                ],
+                "title": "TokenizeCompletionRequest"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            },
+            "VideoURL": {
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "title": "Url"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "url"
+                ],
+                "title": "VideoURL"
+            }
+        },
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "name": "Authorization"
+            }
+        }
+    },
+    "security": [
+        {
+            "BearerAuth": []
+        }
+    ]
+}

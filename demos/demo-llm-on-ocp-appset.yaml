@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-demos-applicationset
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  generators:
+    - list:
+        elements:
+          - cluster: local
+            values:
+              name: demo-vllm
+              path: llm-servers/vllm/gitops
+              namespace: openshift-gitops
+    # - list:
+    #     elements:
+    #       - cluster: local
+    #         values:
+    #           name: instance-rhoai
+    #           path: components/instances/rhoai-instance/overlays/default
+    #           namespace: openshift-gitops
+  template:
+    metadata:
+      name: "{{values.name}}"
+      annotations:
+        argocd.argoproj.io/compare-options: IgnoreExtraneous
+        argocd.argoproj.io/sync-options: Prune=false
+    spec:
+      project: cluster-demos
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true
+        # retry:
+        #   limit: 2
+        #   backoff:
+        #     duration: 5s
+        #     factor: 2
+        #     maxDuration: 10m
+      source:
+        repoURL: https://github.com/rh-aiservices-bu/llm-on-openshift
+        targetRevision: main
+        path: "{{values.path}}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: llm-serving

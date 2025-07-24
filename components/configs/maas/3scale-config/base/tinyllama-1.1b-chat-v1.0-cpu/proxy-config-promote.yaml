@@ -1,0 +1,9 @@
+---
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ProxyConfigPromote
+metadata:
+  name: tinyllama-cpu
+spec:
+  productCRName: tinyllama-cpu
+  production: true
+  deleteCR: false

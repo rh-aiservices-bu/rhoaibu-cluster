@@ -1,0 +1,9 @@
+---
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ProxyConfigPromote
+metadata:
+  name: llama-4-scout-17b-16e-w4a16
+spec:
+  productCRName: llama-4-scout-17b-16e-w4a16
+  production: true
+  deleteCR: false

@@ -1,0 +1,8 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Backend
+metadata:
+  name: mistral-small-24b-w8a8
+spec:
+  name: "Mistral-Small-24B-W8A8"
+  systemName: "mistral-small-24b-w8a8"
+  privateBaseURL: "http://mistral-small-24b-w8a8-predictor.llm-hosting.svc.cluster.local:8080"

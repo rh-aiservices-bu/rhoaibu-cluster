@@ -1,0 +1,30 @@
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: safety-checker
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: safety-checker
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    containers:
+      - args:
+          - '--model_name=safety-checker'
+        image: 'quay.io/rh-aiservices-bu/safety-checker:custom-0.1'
+        name: kserve-container
+        resources:
+          limits:
+            cpu: '1'
+            memory: 14Gi
+            nvidia.com/gpu: '1'
+          requests:
+            cpu: '1'
+            memory: 14Gi
+            nvidia.com/gpu: '1'
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        value: Tesla-T4-PRIVATE

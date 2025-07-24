@@ -1,0 +1,57 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-config-applicationset
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+    argocd.argoproj.io/sync-options: Prune=false
+spec:
+  generators:
+    - list:
+        elements:
+          - cluster: local
+            values:
+              name: config-namespaces
+              path: components/configs/namespaces/overlays
+              namespace: openshift-gitops
+          - cluster: local
+            values:
+              name: config-console
+              path: components/configs/console/overlays # This needs to point to specific overlays cluster path
+              namespace: openshift-gitops
+          # - cluster: local
+          #   values:
+          #     name: config-rbac
+          #     path: components/configs/rbac/overlays/rhoai-admins
+          #     namespace: openshift-gitops
+          - cluster: local
+            values:
+              name: config-oauth
+              path: components/configs/oauth/overlays
+              namespace: openshift-gitops
+  template:
+    metadata:
+      name: "{{values.name}}"
+      annotations:
+        argocd.argoproj.io/compare-options: IgnoreExtraneous
+        argocd.argoproj.io/sync-options: Prune=false
+    spec:
+      project: cluster-config
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true
+        # retry:
+        #   limit: 2
+        #   backoff:
+        #     duration: 5s
+        #     factor: 2
+        #     maxDuration: 10m
+      source:
+        repoURL: https://github.com/rh-aiservices-bu/rhoaibu-cluster
+        targetRevision: dev
+        path: "{{values.path}}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: openshift-gitops

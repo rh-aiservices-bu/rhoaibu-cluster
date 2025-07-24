@@ -1,0 +1,12 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ActiveDoc
+metadata:
+  name: nomic-embed-text-v1-5
+spec:
+  name: "Nomic Embed Text v1.5 API Documentation"
+  systemName: "nomicembedtextv15"
+  activeDocOpenAPIRef:
+    url: "https://raw.githubusercontent.com/rh-aiservices-bu/maas-config/refs/heads/main/nomic-embed-text-v1-5/apidoc.json"
+  published: true
+  skipSwaggerValidations: true
+  productSystemName: "nomic-embed-text-v1-5"

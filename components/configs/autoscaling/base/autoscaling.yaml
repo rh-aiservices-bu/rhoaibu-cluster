@@ -1,0 +1,28 @@
+apiVersion: autoscaling.openshift.io/v1
+kind: ClusterAutoscaler
+metadata:
+  name: default
+spec:
+  logVerbosity: 4
+  maxNodeProvisionTime: 15m
+  podPriorityThreshold: -10
+  resourceLimits:
+    gpus:
+      - max: 4
+        min: 0
+        type: Tesla-T4-SHARED
+      - max: 2
+        min: 0
+        type: NVIDIA-L40-SHARED
+      - max: 10
+        min: 0
+        type: Tesla-T4-PRIVATE
+      - max: 10
+        min: 0
+        type: NVIDIA-L40-PRIVATE
+  scaleDown:
+    delayAfterAdd: 20m
+    delayAfterDelete: 5m
+    delayAfterFailure: 30s
+    enabled: true
+    unneededTime: 5m

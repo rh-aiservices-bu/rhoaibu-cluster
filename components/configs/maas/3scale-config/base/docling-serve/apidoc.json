@@ -1,0 +1,2261 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Docling Serve",
+        "version": "0.2.0"
+    },
+    "paths": {
+        "/health": {
+            "get": {
+                "summary": "Health",
+                "operationId": "health_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HealthCheckResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1alpha/convert/source": {
+            "post": {
+                "summary": "Process Url",
+                "operationId": "process_url_v1alpha_convert_source_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "anyOf": [
+                                    {
+                                        "$ref": "#/components/schemas/ConvertDocumentFileSourcesRequest"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/ConvertDocumentHttpSourcesRequest"
+                                    }
+                                ],
+                                "title": "Conversion Request"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ConvertDocumentResponse"
+                                }
+                            },
+                            "application/zip": {}
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1alpha/convert/file": {
+            "post": {
+                "summary": "Process File",
+                "operationId": "process_file_v1alpha_convert_file_post",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_process_file_v1alpha_convert_file_post"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ConvertDocumentResponse"
+                                }
+                            },
+                            "application/zip": {}
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Body_process_file_v1alpha_convert_file_post": {
+                "properties": {
+                    "files": {
+                        "items": {
+                            "type": "string",
+                            "format": "binary"
+                        },
+                        "type": "array",
+                        "title": "Files"
+                    },
+                    "from_formats": {
+                        "items": {
+                            "$ref": "#/components/schemas/InputFormat"
+                        },
+                        "type": "array",
+                        "title": "From Formats",
+                        "default": [
+                            "docx",
+                            "pptx",
+                            "html",
+                            "xml_pubmed",
+                            "image",
+                            "pdf",
+                            "asciidoc",
+                            "md",
+                            "xlsx",
+                            "xml_uspto",
+                            "json_docling"
+                        ]
+                    },
+                    "to_formats": {
+                        "items": {
+                            "$ref": "#/components/schemas/OutputFormat"
+                        },
+                        "type": "array",
+                        "title": "To Formats",
+                        "default": [
+                            "md"
+                        ]
+                    },
+                    "image_export_mode": {
+                        "$ref": "#/components/schemas/ImageRefMode",
+                        "default": "embedded"
+                    },
+                    "do_ocr": {
+                        "type": "boolean",
+                        "title": "Do Ocr",
+                        "default": true
+                    },
+                    "force_ocr": {
+                        "type": "boolean",
+                        "title": "Force Ocr",
+                        "default": false
+                    },
+                    "ocr_engine": {
+                        "$ref": "#/components/schemas/OcrEngine",
+                        "default": "easyocr"
+                    },
+                    "ocr_lang": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Ocr Lang"
+                    },
+                    "pdf_backend": {
+                        "$ref": "#/components/schemas/PdfBackend",
+                        "default": "dlparse_v2"
+                    },
+                    "table_mode": {
+                        "$ref": "#/components/schemas/TableFormerMode",
+                        "default": "fast"
+                    },
+                    "abort_on_error": {
+                        "type": "boolean",
+                        "title": "Abort On Error",
+                        "default": false
+                    },
+                    "return_as_file": {
+                        "type": "boolean",
+                        "title": "Return As File",
+                        "default": false
+                    },
+                    "do_table_structure": {
+                        "type": "boolean",
+                        "title": "Do Table Structure",
+                        "default": true
+                    },
+                    "include_images": {
+                        "type": "boolean",
+                        "title": "Include Images",
+                        "default": true
+                    },
+                    "images_scale": {
+                        "type": "number",
+                        "title": "Images Scale",
+                        "default": 2.0
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "files"
+                ],
+                "title": "Body_process_file_v1alpha_convert_file_post"
+            },
+            "BoundingBox": {
+                "properties": {
+                    "l": {
+                        "type": "number",
+                        "title": "L"
+                    },
+                    "t": {
+                        "type": "number",
+                        "title": "T"
+                    },
+                    "r": {
+                        "type": "number",
+                        "title": "R"
+                    },
+                    "b": {
+                        "type": "number",
+                        "title": "B"
+                    },
+                    "coord_origin": {
+                        "$ref": "#/components/schemas/CoordOrigin",
+                        "default": "TOPLEFT"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "l",
+                    "t",
+                    "r",
+                    "b"
+                ],
+                "title": "BoundingBox",
+                "description": "BoundingBox."
+            },
+            "ChartBar": {
+                "properties": {
+                    "label": {
+                        "type": "string",
+                        "title": "Label"
+                    },
+                    "values": {
+                        "type": "number",
+                        "title": "Values"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "label",
+                    "values"
+                ],
+                "title": "ChartBar",
+                "description": "Represents a bar in a bar chart.\n\nAttributes:\n    label (str): The label for the bar.\n    values (float): The value associated with the bar."
+            },
+            "ChartLine": {
+                "properties": {
+                    "label": {
+                        "type": "string",
+                        "title": "Label"
+                    },
+                    "values": {
+                        "items": {
+                            "prefixItems": [
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "number"
+                                }
+                            ],
+                            "type": "array",
+                            "maxItems": 2,
+                            "minItems": 2
+                        },
+                        "type": "array",
+                        "title": "Values"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "label",
+                    "values"
+                ],
+                "title": "ChartLine",
+                "description": "Represents a line in a line chart.\n\nAttributes:\n    label (str): The label for the line.\n    values (List[Tuple[float, float]]): A list of (x, y) coordinate pairs\n        representing the line's data points."
+            },
+            "ChartPoint": {
+                "properties": {
+                    "value": {
+                        "prefixItems": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "number"
+                            }
+                        ],
+                        "type": "array",
+                        "maxItems": 2,
+                        "minItems": 2,
+                        "title": "Value"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "value"
+                ],
+                "title": "ChartPoint",
+                "description": "Represents a point in a scatter chart.\n\nAttributes:\n    value (Tuple[float, float]): A (x, y) coordinate pair representing a point in a\n        chart."
+            },
+            "ChartSlice": {
+                "properties": {
+                    "label": {
+                        "type": "string",
+                        "title": "Label"
+                    },
+                    "value": {
+                        "type": "number",
+                        "title": "Value"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "label",
+                    "value"
+                ],
+                "title": "ChartSlice",
+                "description": "Represents a slice in a pie chart.\n\nAttributes:\n    label (str): The label for the slice.\n    value (float): The value represented by the slice."
+            },
+            "ChartStackedBar": {
+                "properties": {
+                    "label": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Label"
+                    },
+                    "values": {
+                        "items": {
+                            "prefixItems": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ],
+                            "type": "array",
+                            "maxItems": 2,
+                            "minItems": 2
+                        },
+                        "type": "array",
+                        "title": "Values"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "label",
+                    "values"
+                ],
+                "title": "ChartStackedBar",
+                "description": "Represents a stacked bar in a stacked bar chart.\n\nAttributes:\n    label (List[str]): The labels for the stacked bars. Multiple values are stored\n        in cases where the chart is \"double stacked,\" meaning bars are stacked both\n        horizontally and vertically.\n    values (List[Tuple[str, int]]): A list of values representing different segments\n        of the stacked bar along with their label."
+            },
+            "CodeItem": {
+                "properties": {
+                    "self_ref": {
+                        "type": "string",
+                        "pattern": "^#(?:/([\\w-]+)(?:/(\\d+))?)?$",
+                        "title": "Self Ref"
+                    },
+                    "parent": {
+                        "$ref": "#/components/schemas/RefItem"
+                    },
+                    "children": {
+                        "items": {
+                            "$ref": "#/components/schemas/RefItem"
+                        },
+                        "type": "array",
+                        "title": "Children",
+                        "default": []
+                    },
+                    "label": {
+                        "type": "string",
+                        "const": "code",
+                        "title": "Label",
+                        "default": "code"
+                    },
+                    "prov": {
+                        "items": {
+                            "$ref": "#/components/schemas/ProvenanceItem"
+                        },
+                        "type": "array",
+                        "title": "Prov",
+                        "default": []
+                    },
+                    "orig": {
+                        "type": "string",
+                        "title": "Orig"
+                    },
+                    "text": {
+                        "type": "string",
+                        "title": "Text"
+                    },
+                    "code_language": {
+                        "$ref": "#/components/schemas/CodeLanguageLabel",
+                        "default": "unknown"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "self_ref",
+                    "orig",
+                    "text"
+                ],
+                "title": "CodeItem",
+                "description": "CodeItem."
+            },
+            "CodeLanguageLabel": {
+                "type": "string",
+                "enum": [
+                    "Ada",
+                    "Awk",
+                    "Bash",
+                    "bc",
+                    "C",
+                    "C#",
+                    "C++",
+                    "CMake",
+                    "COBOL",
+                    "CSS",
+                    "Ceylon",
+                    "Clojure",
+                    "Crystal",
+                    "Cuda",
+                    "Cython",
+                    "D",
+                    "Dart",
+                    "dc",
+                    "Dockerfile",
+                    "Elixir",
+                    "Erlang",
+                    "FORTRAN",
+                    "Forth",
+                    "Go",
+                    "HTML",
+                    "Haskell",
+                    "Haxe",
+                    "Java",
+                    "JavaScript",
+                    "Julia",
+                    "Kotlin",
+                    "Lisp",
+                    "Lua",
+                    "Matlab",
+                    "MoonScript",
+                    "Nim",
+                    "OCaml",
+                    "ObjectiveC",
+                    "Octave",
+                    "PHP",
+                    "Pascal",
+                    "Perl",
+                    "Prolog",
+                    "Python",
+                    "Racket",
+                    "Ruby",
+                    "Rust",
+                    "SML",
+                    "SQL",
+                    "Scala",
+                    "Scheme",
+                    "Swift",
+                    "TypeScript",
+                    "unknown",
+                    "VisualBasic",
+                    "XML",
+                    "YAML"
+                ],
+                "title": "CodeLanguageLabel",
+                "description": "CodeLanguageLabel."
+            },
+            "ConversionStatus": {
+                "type": "string",
+                "enum": [
+                    "pending",
+                    "started",
+                    "failure",
+                    "success",
+                    "partial_success",
+                    "skipped"
+                ],
+                "title": "ConversionStatus"
+            },
+            "ConvertDocumentFileSourcesRequest": {
+                "properties": {
+                    "options": {
+                        "$ref": "#/components/schemas/ConvertDocumentsOptions",
+                        "default": {
+                            "from_formats": [
+                                "docx",
+                                "pptx",
+                                "html",
+                                "xml_pubmed",
+                                "image",
+                                "pdf",
+                                "asciidoc",
+                                "md",
+                                "xlsx",
+                                "xml_uspto",
+                                "json_docling"
+                            ],
+                            "to_formats": [
+                                "md"
+                            ],
+                            "image_export_mode": "embedded",
+                            "do_ocr": true,
+                            "force_ocr": false,
+                            "ocr_engine": "easyocr",
+                            "pdf_backend": "dlparse_v2",
+                            "table_mode": "fast",
+                            "abort_on_error": false,
+                            "return_as_file": false,
+                            "do_table_structure": true,
+                            "include_images": true,
+                            "images_scale": 2.0
+                        }
+                    },
+                    "file_sources": {
+                        "items": {
+                            "$ref": "#/components/schemas/FileSource"
+                        },
+                        "type": "array",
+                        "title": "File Sources"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "file_sources"
+                ],
+                "title": "ConvertDocumentFileSourcesRequest"
+            },
+            "ConvertDocumentHttpSourcesRequest": {
+                "properties": {
+                    "options": {
+                        "$ref": "#/components/schemas/ConvertDocumentsOptions",
+                        "default": {
+                            "from_formats": [
+                                "docx",
+                                "pptx",
+                                "html",
+                                "xml_pubmed",
+                                "image",
+                                "pdf",
+                                "asciidoc",
+                                "md",
+                                "xlsx",
+                                "xml_uspto",
+                                "json_docling"
+                            ],
+                            "to_formats": [
+                                "md"
+                            ],
+                            "image_export_mode": "embedded",
+                            "do_ocr": true,
+                            "force_ocr": false,
+                            "ocr_engine": "easyocr",
+                            "pdf_backend": "dlparse_v2",
+                            "table_mode": "fast",
+                            "abort_on_error": false,
+                            "return_as_file": false,
+                            "do_table_structure": true,
+                            "include_images": true,
+                            "images_scale": 2.0
+                        }
+                    },
+                    "http_sources": {
+                        "items": {
+                            "$ref": "#/components/schemas/HttpSource"
+                        },
+                        "type": "array",
+                        "title": "Http Sources"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "http_sources"
+                ],
+                "title": "ConvertDocumentHttpSourcesRequest"
+            },
+            "ConvertDocumentResponse": {
+                "properties": {
+                    "document": {
+                        "$ref": "#/components/schemas/DocumentResponse"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/ConversionStatus"
+                    },
+                    "errors": {
+                        "items": {
+                            "$ref": "#/components/schemas/ErrorItem"
+                        },
+                        "type": "array",
+                        "title": "Errors",
+                        "default": []
+                    },
+                    "processing_time": {
+                        "type": "number",
+                        "title": "Processing Time"
+                    },
+                    "timings": {
+                        "additionalProperties": {
+                            "$ref": "#/components/schemas/ProfilingItem"
+                        },
+                        "type": "object",
+                        "title": "Timings",
+                        "default": {}
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "document",
+                    "status",
+                    "processing_time"
+                ],
+                "title": "ConvertDocumentResponse"
+            },
+            "ConvertDocumentsOptions": {
+                "properties": {
+                    "from_formats": {
+                        "items": {
+                            "$ref": "#/components/schemas/InputFormat"
+                        },
+                        "type": "array",
+                        "title": "From Formats",
+                        "description": "Input format(s) to convert from. String or list of strings. Allowed values: docx, pptx, html, xml_pubmed, image, pdf, asciidoc, md, xlsx, xml_uspto, json_docling. Optional, defaults to all formats.",
+                        "default": [
+                            "docx",
+                            "pptx",
+                            "html",
+                            "xml_pubmed",
+                            "image",
+                            "pdf",
+                            "asciidoc",
+                            "md",
+                            "xlsx",
+                            "xml_uspto",
+                            "json_docling"
+                        ],
+                        "examples": [
+                            [
+                                "docx",
+                                "pptx",
+                                "html",
+                                "xml_pubmed",
+                                "image",
+                                "pdf",
+                                "asciidoc",
+                                "md",
+                                "xlsx",
+                                "xml_uspto",
+                                "json_docling"
+                            ]
+                        ]
+                    },
+                    "to_formats": {
+                        "items": {
+                            "$ref": "#/components/schemas/OutputFormat"
+                        },
+                        "type": "array",
+                        "title": "To Formats",
+                        "description": "Output format(s) to convert to. String or list of strings. Allowed values: md, json, html, text, doctags. Optional, defaults to Markdown.",
+                        "default": [
+                            "md"
+                        ],
+                        "examples": [
+                            [
+                                "md"
+                            ]
+                        ]
+                    },
+                    "image_export_mode": {
+                        "$ref": "#/components/schemas/ImageRefMode",
+                        "description": "Image export mode for the document (in case of JSON, Markdown or HTML). Allowed values: placeholder, embedded, referenced. Optional, defaults to Embedded.",
+                        "default": "embedded",
+                        "examples": [
+                            "embedded"
+                        ]
+                    },
+                    "do_ocr": {
+                        "type": "boolean",
+                        "title": "Do Ocr",
+                        "description": "If enabled, the bitmap content will be processed using OCR. Boolean. Optional, defaults to true",
+                        "default": true
+                    },
+                    "force_ocr": {
+                        "type": "boolean",
+                        "title": "Force Ocr",
+                        "description": "If enabled, replace existing text with OCR-generated text over content. Boolean. Optional, defaults to false.",
+                        "default": false
+                    },
+                    "ocr_engine": {
+                        "$ref": "#/components/schemas/OcrEngine",
+                        "description": "The OCR engine to use. String. Allowed values: easyocr, tesseract, rapidocr. Optional, defaults to easyocr.",
+                        "default": "easyocr",
+                        "examples": [
+                            "easyocr"
+                        ]
+                    },
+                    "ocr_lang": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Ocr Lang",
+                        "description": "List of languages used by the OCR engine. Note that each OCR engine has different values for the language names. String or list of strings. Optional, defaults to empty.",
+                        "examples": [
+                            [
+                                "fr",
+                                "de",
+                                "es",
+                                "en"
+                            ]
+                        ]
+                    },
+                    "pdf_backend": {
+                        "$ref": "#/components/schemas/PdfBackend",
+                        "description": "The PDF backend to use. String. Allowed values: pypdfium2, dlparse_v1, dlparse_v2. Optional, defaults to dlparse_v2.",
+                        "default": "dlparse_v2",
+                        "examples": [
+                            "dlparse_v2"
+                        ]
+                    },
+                    "table_mode": {
+                        "$ref": "#/components/schemas/TableFormerMode",
+                        "description": "Mode to use for table structure, String. Allowed values: fast, accurate. Optional, defaults to fast.",
+                        "default": "fast",
+                        "examples": [
+                            "fast"
+                        ]
+                    },
+                    "abort_on_error": {
+                        "type": "boolean",
+                        "title": "Abort On Error",
+                        "description": "Abort on error if enabled. Boolean. Optional, defaults to false.",
+                        "default": false
+                    },
+                    "return_as_file": {
+                        "type": "boolean",
+                        "title": "Return As File",
+                        "description": "Return the output as a zip file (will happen anyway if multiple files are generated). Boolean. Optional, defaults to false.",
+                        "default": false,
+                        "examples": [
+                            false
+                        ]
+                    },
+                    "do_table_structure": {
+                        "type": "boolean",
+                        "title": "Do Table Structure",
+                        "description": "If enabled, the table structure will be extracted. Boolean. Optional, defaults to true.",
+                        "default": true,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "include_images": {
+                        "type": "boolean",
+                        "title": "Include Images",
+                        "description": "If enabled, images will be extracted from the document. Boolean. Optional, defaults to true.",
+                        "default": true,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "images_scale": {
+                        "type": "number",
+                        "title": "Images Scale",
+                        "description": "Scale factor for images. Float. Optional, defaults to 2.0.",
+                        "default": 2.0,
+                        "examples": [
+                            2.0
+                        ]
+                    }
+                },
+                "type": "object",
+                "title": "ConvertDocumentsOptions"
+            },
+            "CoordOrigin": {
+                "type": "string",
+                "enum": [
+                    "TOPLEFT",
+                    "BOTTOMLEFT"
+                ],
+                "title": "CoordOrigin",
+                "description": "CoordOrigin."
+            },
+            "DoclingComponentType": {
+                "type": "string",
+                "enum": [
+                    "document_backend",
+                    "model",
+                    "doc_assembler",
+                    "user_input"
+                ],
+                "title": "DoclingComponentType"
+            },
+            "DoclingDocument": {
+                "properties": {
+                    "schema_name": {
+                        "type": "string",
+                        "const": "DoclingDocument",
+                        "title": "Schema Name",
+                        "default": "DoclingDocument"
+                    },
+                    "version": {
+                        "type": "string",
+                        "pattern": "^(?P<major>0|[1-9]\\d*)\\.(?P<minor>0|[1-9]\\d*)\\.(?P<patch>0|[1-9]\\d*)(?:-(?P<prerelease>(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+                        "title": "Version",
+                        "default": "1.0.0"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "origin": {
+                        "$ref": "#/components/schemas/DocumentOrigin"
+                    },
+                    "furniture": {
+                        "$ref": "#/components/schemas/GroupItem",
+                        "default": {
+                            "self_ref": "#/furniture",
+                            "children": [],
+                            "name": "_root_",
+                            "label": "unspecified"
+                        }
+                    },
+                    "body": {
+                        "$ref": "#/components/schemas/GroupItem",
+                        "default": {
+                            "self_ref": "#/body",
+                            "children": [],
+                            "name": "_root_",
+                            "label": "unspecified"
+                        }
+                    },
+                    "groups": {
+                        "items": {
+                            "$ref": "#/components/schemas/GroupItem"
+                        },
+                        "type": "array",
+                        "title": "Groups",
+                        "default": []
+                    },
+                    "texts": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "$ref": "#/components/schemas/SectionHeaderItem"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/ListItem"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/TextItem"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/CodeItem"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Texts",
+                        "default": []
+                    },
+                    "pictures": {
+                        "items": {
+                            "$ref": "#/components/schemas/PictureItem"
+                        },
+                        "type": "array",
+                        "title": "Pictures",
+                        "default": []
+                    },
+                    "tables": {
+                        "items": {
+                            "$ref": "#/components/schemas/TableItem"
+                        },
+                        "type": "array",
+                        "title": "Tables",
+                        "default": []
+                    },
+                    "key_value_items": {
+                        "items": {
+                            "$ref": "#/components/schemas/KeyValueItem"
+                        },
+                        "type": "array",
+                        "title": "Key Value Items",
+                        "default": []
+                    },
+                    "pages": {
+                        "additionalProperties": {
+                            "$ref": "#/components/schemas/PageItem"
+                        },
+                        "type": "object",
+                        "title": "Pages",
+                        "default": {}
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name"
+                ],
+                "title": "DoclingDocument",
+                "description": "DoclingDocument."
+            },
+            "DocumentOrigin": {
+                "properties": {
+                    "mimetype": {
+                        "type": "string",
+                        "title": "Mimetype"
+                    },
+                    "binary_hash": {
+                        "type": "integer",
+                        "maximum": 1.8446744073709552e+19,
+                        "minimum": 0.0,
+                        "title": "Binary Hash"
+                    },
+                    "filename": {
+                        "type": "string",
+                        "title": "Filename"
+                    },
+                    "uri": {
+                        "type": "string",
+                        "minLength": 1,
+                        "format": "uri",
+                        "title": "Uri"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "mimetype",
+                    "binary_hash",
+                    "filename"
+                ],
+                "title": "DocumentOrigin",
+                "description": "FileSource."
+            },
+            "DocumentResponse": {
+                "properties": {
+                    "filename": {
+                        "type": "string",
+                        "title": "Filename"
+                    },
+                    "md_content": {
+                        "type": "string",
+                        "title": "Md Content"
+                    },
+                    "json_content": {
+                        "$ref": "#/components/schemas/DoclingDocument"
+                    },
+                    "html_content": {
+                        "type": "string",
+                        "title": "Html Content"
+                    },
+                    "text_content": {
+                        "type": "string",
+                        "title": "Text Content"
+                    },
+                    "doctags_content": {
+                        "type": "string",
+                        "title": "Doctags Content"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "filename"
+                ],
+                "title": "DocumentResponse"
+            },
+            "ErrorItem": {
+                "properties": {
+                    "component_type": {
+                        "$ref": "#/components/schemas/DoclingComponentType"
+                    },
+                    "module_name": {
+                        "type": "string",
+                        "title": "Module Name"
+                    },
+                    "error_message": {
+                        "type": "string",
+                        "title": "Error Message"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "component_type",
+                    "module_name",
+                    "error_message"
+                ],
+                "title": "ErrorItem"
+            },
+            "FileSource": {
+                "properties": {
+                    "base64_string": {
+                        "type": "string",
+                        "title": "Base64 String",
+                        "description": "Content of the file serialized in base64. For example it can be obtained via `base64 -w 0 /path/to/file/pdf-to-convert.pdf`."
+                    },
+                    "filename": {
+                        "type": "string",
+                        "title": "Filename",
+                        "description": "Filename of the uploaded document",
+                        "examples": [
+                            "file.pdf"
+                        ]
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "base64_string",
+                    "filename"
+                ],
+                "title": "FileSource"
+            },
+            "GroupItem": {
+                "properties": {
+                    "self_ref": {
+                        "type": "string",
+                        "pattern": "^#(?:/([\\w-]+)(?:/(\\d+))?)?$",
+                        "title": "Self Ref"
+                    },
+                    "parent": {
+                        "$ref": "#/components/schemas/RefItem"
+                    },
+                    "children": {
+                        "items": {
+                            "$ref": "#/components/schemas/RefItem"
+                        },
+                        "type": "array",
+                        "title": "Children",
+                        "default": []
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name",
+                        "default": "group"
+                    },
+                    "label": {
+                        "$ref": "#/components/schemas/GroupLabel",
+                        "default": "unspecified"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "self_ref"
+                ],
+                "title": "GroupItem",
+                "description": "GroupItem."
+            },
+            "GroupLabel": {
+                "type": "string",
+                "enum": [
+                    "unspecified",
+                    "list",
+                    "ordered_list",
+                    "chapter",
+                    "section",
+                    "sheet",
+                    "slide",
+                    "form_area",
+                    "key_value_area",
+                    "comment_section"
+                ],
+                "title": "GroupLabel",
+                "description": "GroupLabel."
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "HealthCheckResponse": {
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "title": "Status",
+                        "default": "ok"
+                    }
+                },
+                "type": "object",
+                "title": "HealthCheckResponse"
+            },
+            "HttpSource": {
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "title": "Url",
+                        "description": "HTTP url to process",
+                        "examples": [
+                            "https://arxiv.org/pdf/2206.01062"
+                        ]
+                    },
+                    "headers": {
+                        "type": "object",
+                        "title": "Headers",
+                        "description": "Additional headers used to fetch the urls, e.g. authorization, agent, etc",
+                        "default": {}
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "url"
+                ],
+                "title": "HttpSource"
+            },
+            "ImageRef": {
+                "properties": {
+                    "mimetype": {
+                        "type": "string",
+                        "title": "Mimetype"
+                    },
+                    "dpi": {
+                        "type": "integer",
+                        "title": "Dpi"
+                    },
+                    "size": {
+                        "$ref": "#/components/schemas/Size"
+                    },
+                    "uri": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "minLength": 1,
+                                "format": "uri"
+                            },
+                            {
+                                "type": "string",
+                                "format": "path"
+                            }
+                        ],
+                        "title": "Uri"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "mimetype",
+                    "dpi",
+                    "size",
+                    "uri"
+                ],
+                "title": "ImageRef",
+                "description": "ImageRef."
+            },
+            "ImageRefMode": {
+                "type": "string",
+                "enum": [
+                    "placeholder",
+                    "embedded",
+                    "referenced"
+                ],
+                "title": "ImageRefMode",
+                "description": "ImageRefMode."
+            },
+            "InputFormat": {
+                "type": "string",
+                "enum": [
+                    "docx",
+                    "pptx",
+                    "html",
+                    "xml_pubmed",
+                    "image",
+                    "pdf",
+                    "asciidoc",
+                    "md",
+                    "xlsx",
+                    "xml_uspto",
+                    "json_docling"
+                ],
+                "title": "InputFormat",
+                "description": "A document format supported by document backend parsers."
+            },
+            "KeyValueItem": {
+                "properties": {
+                    "self_ref": {
+                        "type": "string",
+                        "pattern": "^#(?:/([\\w-]+)(?:/(\\d+))?)?$",
+                        "title": "Self Ref"
+                    },
+                    "parent": {
+                        "$ref": "#/components/schemas/RefItem"
+                    },
+                    "children": {
+                        "items": {
+                            "$ref": "#/components/schemas/RefItem"
+                        },
+                        "type": "array",
+                        "title": "Children",
+                        "default": []
+                    },
+                    "label": {
+                        "type": "string",
+                        "const": "key_value_region",
+                        "title": "Label",
+                        "default": "key_value_region"
+                    },
+                    "prov": {
+                        "items": {
+                            "$ref": "#/components/schemas/ProvenanceItem"
+                        },
+                        "type": "array",
+                        "title": "Prov",
+                        "default": []
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "self_ref"
+                ],
+                "title": "KeyValueItem",
+                "description": "KeyValueItem."
+            },
+            "ListItem": {
+                "properties": {
+                    "self_ref": {
+                        "type": "string",
+                        "pattern": "^#(?:/([\\w-]+)(?:/(\\d+))?)?$",
+                        "title": "Self Ref"
+                    },
+                    "parent": {
+                        "$ref": "#/components/schemas/RefItem"
+                    },
+                    "children": {
+                        "items": {
+                            "$ref": "#/components/schemas/RefItem"
+                        },
+                        "type": "array",
+                        "title": "Children",
+                        "default": []
+                    },
+                    "label": {
+                        "type": "string",
+                        "const": "list_item",
+                        "title": "Label",
+                        "default": "list_item"
+                    },
+                    "prov": {
+                        "items": {
+                            "$ref": "#/components/schemas/ProvenanceItem"
+                        },
+                        "type": "array",
+                        "title": "Prov",
+                        "default": []
+                    },
+                    "orig": {
+                        "type": "string",
+                        "title": "Orig"
+                    },
+                    "text": {
+                        "type": "string",
+                        "title": "Text"
+                    },
+                    "enumerated": {
+                        "type": "boolean",
+                        "title": "Enumerated",
+                        "default": false
+                    },
+                    "marker": {
+                        "type": "string",
+                        "title": "Marker",
+                        "default": "-"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "self_ref",
+                    "orig",
+                    "text"
+                ],
+                "title": "ListItem",
+                "description": "SectionItem."
+            },
+            "OcrEngine": {
+                "type": "string",
+                "enum": [
+                    "easyocr",
+                    "tesseract_cli",
+                    "tesseract",
+                    "ocrmac",
+                    "rapidocr"
+                ],
+                "title": "OcrEngine",
+                "description": "Enum of valid OCR engines."
+            },
+            "OutputFormat": {
+                "type": "string",
+                "enum": [
+                    "md",
+                    "json",
+                    "html",
+                    "text",
+                    "doctags"
+                ],
+                "title": "OutputFormat"
+            },
+            "PageItem": {
+                "properties": {
+                    "size": {
+                        "$ref": "#/components/schemas/Size"
+                    },
+                    "image": {
+                        "$ref": "#/components/schemas/ImageRef"
+                    },
+                    "page_no": {
+                        "type": "integer",
+                        "title": "Page No"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "size",
+                    "page_no"
+                ],
+                "title": "PageItem",
+                "description": "PageItem."
+            },
+            "PdfBackend": {
+                "type": "string",
+                "enum": [
+                    "pypdfium2",
+                    "dlparse_v1",
+                    "dlparse_v2"
+                ],
+                "title": "PdfBackend",
+                "description": "Enum of valid PDF backends."
+            },
+            "PictureBarChartData": {
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "title": "Title"
+                    },
+                    "kind": {
+                        "type": "string",
+                        "const": "bar_chart_data",
+                        "title": "Kind",
+                        "default": "bar_chart_data"
+                    },
+                    "x_axis_label": {
+                        "type": "string",
+                        "title": "X Axis Label"
+                    },
+                    "y_axis_label": {
+                        "type": "string",
+                        "title": "Y Axis Label"
+                    },
+                    "bars": {
+                        "items": {
+                            "$ref": "#/components/schemas/ChartBar"
+                        },
+                        "type": "array",
+                        "title": "Bars"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "title",
+                    "x_axis_label",
+                    "y_axis_label",
+                    "bars"
+                ],
+                "title": "PictureBarChartData",
+                "description": "Represents data of a bar chart.\n\nAttributes:\n    kind (Literal[\"bar_chart_data\"]): The type of the chart.\n    x_axis_label (str): The label for the x-axis.\n    y_axis_label (str): The label for the y-axis.\n    bars (List[ChartBar]): A list of bars in the chart."
+            },
+            "PictureClassificationClass": {
+                "properties": {
+                    "class_name": {
+                        "type": "string",
+                        "title": "Class Name"
+                    },
+                    "confidence": {
+                        "type": "number",
+                        "title": "Confidence"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "class_name",
+                    "confidence"
+                ],
+                "title": "PictureClassificationClass",
+                "description": "PictureClassificationData."
+            },
+            "PictureClassificationData": {
+                "properties": {
+                    "kind": {
+                        "type": "string",
+                        "const": "classification",
+                        "title": "Kind",
+                        "default": "classification"
+                    },
+                    "provenance": {
+                        "type": "string",
+                        "title": "Provenance"
+                    },
+                    "predicted_classes": {
+                        "items": {
+                            "$ref": "#/components/schemas/PictureClassificationClass"
+                        },
+                        "type": "array",
+                        "title": "Predicted Classes"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "provenance",
+                    "predicted_classes"
+                ],
+                "title": "PictureClassificationData",
+                "description": "PictureClassificationData."
+            },
+            "PictureDescriptionData": {
+                "properties": {
+                    "kind": {
+                        "type": "string",
+                        "const": "description",
+                        "title": "Kind",
+                        "default": "description"
+                    },
+                    "text": {
+                        "type": "string",
+                        "title": "Text"
+                    },
+                    "provenance": {
+                        "type": "string",
+                        "title": "Provenance"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "text",
+                    "provenance"
+                ],
+                "title": "PictureDescriptionData",
+                "description": "PictureDescriptionData."
+            },
+            "PictureItem": {
+                "properties": {
+                    "self_ref": {
+                        "type": "string",
+                        "pattern": "^#(?:/([\\w-]+)(?:/(\\d+))?)?$",
+                        "title": "Self Ref"
+                    },
+                    "parent": {
+                        "$ref": "#/components/schemas/RefItem"
+                    },
+                    "children": {
+                        "items": {
+                            "$ref": "#/components/schemas/RefItem"
+                        },
+                        "type": "array",
+                        "title": "Children",
+                        "default": []
+                    },
+                    "label": {
+                        "type": "string",
+                        "const": "picture",
+                        "title": "Label",
+                        "default": "picture"
+                    },
+                    "prov": {
+                        "items": {
+                            "$ref": "#/components/schemas/ProvenanceItem"
+                        },
+                        "type": "array",
+                        "title": "Prov",
+                        "default": []
+                    },
+                    "captions": {
+                        "items": {
+                            "$ref": "#/components/schemas/RefItem"
+                        },
+                        "type": "array",
+                        "title": "Captions",
+                        "default": []
+                    },
+                    "references": {
+                        "items": {
+                            "$ref": "#/components/schemas/RefItem"
+                        },
+                        "type": "array",
+                        "title": "References",
+                        "default": []
+                    },
+                    "footnotes": {
+                        "items": {
+                            "$ref": "#/components/schemas/RefItem"
+                        },
+                        "type": "array",
+                        "title": "Footnotes",
+                        "default": []
+                    },
+                    "image": {
+                        "$ref": "#/components/schemas/ImageRef"
+                    },
+                    "annotations": {
+                        "items": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#/components/schemas/PictureClassificationData"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/PictureDescriptionData"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/PictureMoleculeData"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/PictureMiscData"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/PictureLineChartData"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/PictureBarChartData"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/PictureStackedBarChartData"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/PicturePieChartData"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/PictureScatterChartData"
+                                }
+                            ],
+                            "discriminator": {
+                                "propertyName": "kind",
+                                "mapping": {
+                                    "bar_chart_data": "#/components/schemas/PictureBarChartData",
+                                    "classification": "#/components/schemas/PictureClassificationData",
+                                    "description": "#/components/schemas/PictureDescriptionData",
+                                    "line_chart_data": "#/components/schemas/PictureLineChartData",
+                                    "misc": "#/components/schemas/PictureMiscData",
+                                    "molecule_data": "#/components/schemas/PictureMoleculeData",
+                                    "pie_chart_data": "#/components/schemas/PicturePieChartData",
+                                    "scatter_chart_data": "#/components/schemas/PictureScatterChartData",
+                                    "stacked_bar_chart_data": "#/components/schemas/PictureStackedBarChartData"
+                                }
+                            }
+                        },
+                        "type": "array",
+                        "title": "Annotations",
+                        "default": []
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "self_ref"
+                ],
+                "title": "PictureItem",
+                "description": "PictureItem."
+            },
+            "PictureLineChartData": {
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "title": "Title"
+                    },
+                    "kind": {
+                        "type": "string",
+                        "const": "line_chart_data",
+                        "title": "Kind",
+                        "default": "line_chart_data"
+                    },
+                    "x_axis_label": {
+                        "type": "string",
+                        "title": "X Axis Label"
+                    },
+                    "y_axis_label": {
+                        "type": "string",
+                        "title": "Y Axis Label"
+                    },
+                    "lines": {
+                        "items": {
+                            "$ref": "#/components/schemas/ChartLine"
+                        },
+                        "type": "array",
+                        "title": "Lines"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "title",
+                    "x_axis_label",
+                    "y_axis_label",
+                    "lines"
+                ],
+                "title": "PictureLineChartData",
+                "description": "Represents data of a line chart.\n\nAttributes:\n    kind (Literal[\"line_chart_data\"]): The type of the chart.\n    x_axis_label (str): The label for the x-axis.\n    y_axis_label (str): The label for the y-axis.\n    lines (List[ChartLine]): A list of lines in the chart."
+            },
+            "PictureMiscData": {
+                "properties": {
+                    "kind": {
+                        "type": "string",
+                        "const": "misc",
+                        "title": "Kind",
+                        "default": "misc"
+                    },
+                    "content": {
+                        "type": "object",
+                        "title": "Content"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "content"
+                ],
+                "title": "PictureMiscData",
+                "description": "PictureMiscData."
+            },
+            "PictureMoleculeData": {
+                "properties": {
+                    "kind": {
+                        "type": "string",
+                        "const": "molecule_data",
+                        "title": "Kind",
+                        "default": "molecule_data"
+                    },
+                    "smi": {
+                        "type": "string",
+                        "title": "Smi"
+                    },
+                    "confidence": {
+                        "type": "number",
+                        "title": "Confidence"
+                    },
+                    "class_name": {
+                        "type": "string",
+                        "title": "Class Name"
+                    },
+                    "segmentation": {
+                        "items": {
+                            "prefixItems": [
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "number"
+                                }
+                            ],
+                            "type": "array",
+                            "maxItems": 2,
+                            "minItems": 2
+                        },
+                        "type": "array",
+                        "title": "Segmentation"
+                    },
+                    "provenance": {
+                        "type": "string",
+                        "title": "Provenance"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "smi",
+                    "confidence",
+                    "class_name",
+                    "segmentation",
+                    "provenance"
+                ],
+                "title": "PictureMoleculeData",
+                "description": "PictureMoleculeData."
+            },
+            "PicturePieChartData": {
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "title": "Title"
+                    },
+                    "kind": {
+                        "type": "string",
+                        "const": "pie_chart_data",
+                        "title": "Kind",
+                        "default": "pie_chart_data"
+                    },
+                    "slices": {
+                        "items": {
+                            "$ref": "#/components/schemas/ChartSlice"
+                        },
+                        "type": "array",
+                        "title": "Slices"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "title",
+                    "slices"
+                ],
+                "title": "PicturePieChartData",
+                "description": "Represents data of a pie chart.\n\nAttributes:\n    kind (Literal[\"pie_chart_data\"]): The type of the chart.\n    slices (List[ChartSlice]): A list of slices in the pie chart."
+            },
+            "PictureScatterChartData": {
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "title": "Title"
+                    },
+                    "kind": {
+                        "type": "string",
+                        "const": "scatter_chart_data",
+                        "title": "Kind",
+                        "default": "scatter_chart_data"
+                    },
+                    "x_axis_label": {
+                        "type": "string",
+                        "title": "X Axis Label"
+                    },
+                    "y_axis_label": {
+                        "type": "string",
+                        "title": "Y Axis Label"
+                    },
+                    "points": {
+                        "items": {
+                            "$ref": "#/components/schemas/ChartPoint"
+                        },
+                        "type": "array",
+                        "title": "Points"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "title",
+                    "x_axis_label",
+                    "y_axis_label",
+                    "points"
+                ],
+                "title": "PictureScatterChartData",
+                "description": "Represents data of a scatter chart.\n\nAttributes:\n    kind (Literal[\"scatter_chart_data\"]): The type of the chart.\n    x_axis_label (str): The label for the x-axis.\n    y_axis_label (str): The label for the y-axis.\n    points (List[ChartPoint]): A list of points in the scatter chart."
+            },
+            "PictureStackedBarChartData": {
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "title": "Title"
+                    },
+                    "kind": {
+                        "type": "string",
+                        "const": "stacked_bar_chart_data",
+                        "title": "Kind",
+                        "default": "stacked_bar_chart_data"
+                    },
+                    "x_axis_label": {
+                        "type": "string",
+                        "title": "X Axis Label"
+                    },
+                    "y_axis_label": {
+                        "type": "string",
+                        "title": "Y Axis Label"
+                    },
+                    "stacked_bars": {
+                        "items": {
+                            "$ref": "#/components/schemas/ChartStackedBar"
+                        },
+                        "type": "array",
+                        "title": "Stacked Bars"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "title",
+                    "x_axis_label",
+                    "y_axis_label",
+                    "stacked_bars"
+                ],
+                "title": "PictureStackedBarChartData",
+                "description": "Represents data of a stacked bar chart.\n\nAttributes:\n    kind (Literal[\"stacked_bar_chart_data\"]): The type of the chart.\n    x_axis_label (str): The label for the x-axis.\n    y_axis_label (str): The label for the y-axis.\n    stacked_bars (List[ChartStackedBar]): A list of stacked bars in the chart."
+            },
+            "ProfilingItem": {
+                "properties": {
+                    "scope": {
+                        "$ref": "#/components/schemas/ProfilingScope"
+                    },
+                    "count": {
+                        "type": "integer",
+                        "title": "Count",
+                        "default": 0
+                    },
+                    "times": {
+                        "items": {
+                            "type": "number"
+                        },
+                        "type": "array",
+                        "title": "Times",
+                        "default": []
+                    },
+                    "start_timestamps": {
+                        "items": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "type": "array",
+                        "title": "Start Timestamps",
+                        "default": []
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "scope"
+                ],
+                "title": "ProfilingItem"
+            },
+            "ProfilingScope": {
+                "type": "string",
+                "enum": [
+                    "page",
+                    "document"
+                ],
+                "title": "ProfilingScope"
+            },
+            "ProvenanceItem": {
+                "properties": {
+                    "page_no": {
+                        "type": "integer",
+                        "title": "Page No"
+                    },
+                    "bbox": {
+                        "$ref": "#/components/schemas/BoundingBox"
+                    },
+                    "charspan": {
+                        "prefixItems": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "integer"
+                            }
+                        ],
+                        "type": "array",
+                        "maxItems": 2,
+                        "minItems": 2,
+                        "title": "Charspan"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "page_no",
+                    "bbox",
+                    "charspan"
+                ],
+                "title": "ProvenanceItem",
+                "description": "ProvenanceItem."
+            },
+            "RefItem": {
+                "properties": {
+                    "$ref": {
+                        "type": "string",
+                        "pattern": "^#(?:/([\\w-]+)(?:/(\\d+))?)?$",
+                        "title": "$Ref"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "$ref"
+                ],
+                "title": "RefItem",
+                "description": "RefItem."
+            },
+            "SectionHeaderItem": {
+                "properties": {
+                    "self_ref": {
+                        "type": "string",
+                        "pattern": "^#(?:/([\\w-]+)(?:/(\\d+))?)?$",
+                        "title": "Self Ref"
+                    },
+                    "parent": {
+                        "$ref": "#/components/schemas/RefItem"
+                    },
+                    "children": {
+                        "items": {
+                            "$ref": "#/components/schemas/RefItem"
+                        },
+                        "type": "array",
+                        "title": "Children",
+                        "default": []
+                    },
+                    "label": {
+                        "type": "string",
+                        "const": "section_header",
+                        "title": "Label",
+                        "default": "section_header"
+                    },
+                    "prov": {
+                        "items": {
+                            "$ref": "#/components/schemas/ProvenanceItem"
+                        },
+                        "type": "array",
+                        "title": "Prov",
+                        "default": []
+                    },
+                    "orig": {
+                        "type": "string",
+                        "title": "Orig"
+                    },
+                    "text": {
+                        "type": "string",
+                        "title": "Text"
+                    },
+                    "level": {
+                        "type": "integer",
+                        "maximum": 100.0,
+                        "minimum": 1.0,
+                        "title": "Level",
+                        "default": 1
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "self_ref",
+                    "orig",
+                    "text"
+                ],
+                "title": "SectionHeaderItem",
+                "description": "SectionItem."
+            },
+            "Size": {
+                "properties": {
+                    "width": {
+                        "type": "number",
+                        "title": "Width",
+                        "default": 0.0
+                    },
+                    "height": {
+                        "type": "number",
+                        "title": "Height",
+                        "default": 0.0
+                    }
+                },
+                "type": "object",
+                "title": "Size",
+                "description": "Size."
+            },
+            "TableCell": {
+                "properties": {
+                    "bbox": {
+                        "$ref": "#/components/schemas/BoundingBox"
+                    },
+                    "row_span": {
+                        "type": "integer",
+                        "title": "Row Span",
+                        "default": 1
+                    },
+                    "col_span": {
+                        "type": "integer",
+                        "title": "Col Span",
+                        "default": 1
+                    },
+                    "start_row_offset_idx": {
+                        "type": "integer",
+                        "title": "Start Row Offset Idx"
+                    },
+                    "end_row_offset_idx": {
+                        "type": "integer",
+                        "title": "End Row Offset Idx"
+                    },
+                    "start_col_offset_idx": {
+                        "type": "integer",
+                        "title": "Start Col Offset Idx"
+                    },
+                    "end_col_offset_idx": {
+                        "type": "integer",
+                        "title": "End Col Offset Idx"
+                    },
+                    "text": {
+                        "type": "string",
+                        "title": "Text"
+                    },
+                    "column_header": {
+                        "type": "boolean",
+                        "title": "Column Header",
+                        "default": false
+                    },
+                    "row_header": {
+                        "type": "boolean",
+                        "title": "Row Header",
+                        "default": false
+                    },
+                    "row_section": {
+                        "type": "boolean",
+                        "title": "Row Section",
+                        "default": false
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "start_row_offset_idx",
+                    "end_row_offset_idx",
+                    "start_col_offset_idx",
+                    "end_col_offset_idx",
+                    "text"
+                ],
+                "title": "TableCell",
+                "description": "TableCell."
+            },
+            "TableData": {
+                "properties": {
+                    "table_cells": {
+                        "items": {
+                            "$ref": "#/components/schemas/TableCell"
+                        },
+                        "type": "array",
+                        "title": "Table Cells",
+                        "default": []
+                    },
+                    "num_rows": {
+                        "type": "integer",
+                        "title": "Num Rows",
+                        "default": 0
+                    },
+                    "num_cols": {
+                        "type": "integer",
+                        "title": "Num Cols",
+                        "default": 0
+                    },
+                    "grid": {
+                        "type": "array",
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/TableCell"
+                            }
+                        },
+                        "title": "Grid",
+                        "description": "grid.",
+                        "readOnly": true
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "grid"
+                ],
+                "title": "TableData",
+                "description": "BaseTableData."
+            },
+            "TableFormerMode": {
+                "type": "string",
+                "enum": [
+                    "fast",
+                    "accurate"
+                ],
+                "title": "TableFormerMode",
+                "description": "Modes for the TableFormer model."
+            },
+            "TableItem": {
+                "properties": {
+                    "self_ref": {
+                        "type": "string",
+                        "pattern": "^#(?:/([\\w-]+)(?:/(\\d+))?)?$",
+                        "title": "Self Ref"
+                    },
+                    "parent": {
+                        "$ref": "#/components/schemas/RefItem"
+                    },
+                    "children": {
+                        "items": {
+                            "$ref": "#/components/schemas/RefItem"
+                        },
+                        "type": "array",
+                        "title": "Children",
+                        "default": []
+                    },
+                    "label": {
+                        "type": "string",
+                        "enum": [
+                            "document_index",
+                            "table"
+                        ],
+                        "title": "Label",
+                        "default": "table"
+                    },
+                    "prov": {
+                        "items": {
+                            "$ref": "#/components/schemas/ProvenanceItem"
+                        },
+                        "type": "array",
+                        "title": "Prov",
+                        "default": []
+                    },
+                    "captions": {
+                        "items": {
+                            "$ref": "#/components/schemas/RefItem"
+                        },
+                        "type": "array",
+                        "title": "Captions",
+                        "default": []
+                    },
+                    "references": {
+                        "items": {
+                            "$ref": "#/components/schemas/RefItem"
+                        },
+                        "type": "array",
+                        "title": "References",
+                        "default": []
+                    },
+                    "footnotes": {
+                        "items": {
+                            "$ref": "#/components/schemas/RefItem"
+                        },
+                        "type": "array",
+                        "title": "Footnotes",
+                        "default": []
+                    },
+                    "image": {
+                        "$ref": "#/components/schemas/ImageRef"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/TableData"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "self_ref",
+                    "data"
+                ],
+                "title": "TableItem",
+                "description": "TableItem."
+            },
+            "TextItem": {
+                "properties": {
+                    "self_ref": {
+                        "type": "string",
+                        "pattern": "^#(?:/([\\w-]+)(?:/(\\d+))?)?$",
+                        "title": "Self Ref"
+                    },
+                    "parent": {
+                        "$ref": "#/components/schemas/RefItem"
+                    },
+                    "children": {
+                        "items": {
+                            "$ref": "#/components/schemas/RefItem"
+                        },
+                        "type": "array",
+                        "title": "Children",
+                        "default": []
+                    },
+                    "label": {
+                        "type": "string",
+                        "enum": [
+                            "caption",
+                            "checkbox_selected",
+                            "checkbox_unselected",
+                            "footnote",
+                            "formula",
+                            "page_footer",
+                            "page_header",
+                            "paragraph",
+                            "reference",
+                            "text",
+                            "title"
+                        ],
+                        "title": "Label"
+                    },
+                    "prov": {
+                        "items": {
+                            "$ref": "#/components/schemas/ProvenanceItem"
+                        },
+                        "type": "array",
+                        "title": "Prov",
+                        "default": []
+                    },
+                    "orig": {
+                        "type": "string",
+                        "title": "Orig"
+                    },
+                    "text": {
+                        "type": "string",
+                        "title": "Text"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "self_ref",
+                    "label",
+                    "orig",
+                    "text"
+                ],
+                "title": "TextItem",
+                "description": "TextItem."
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "type": ["string", "integer"]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        },
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "name": "Authorization"
+            }
+        }
+    },
+    "security": [
+        {
+            "BearerAuth": []
+        }
+    ]
+}

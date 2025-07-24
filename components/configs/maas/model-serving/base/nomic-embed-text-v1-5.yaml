@@ -1,0 +1,71 @@
+---
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    opendatahub.io/accelerator-name: ''
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+    opendatahub.io/template-display-name: 'TEI 1.6'
+    opendatahub.io/template-name: 'tei-1.6'
+    openshift.io/display-name: 'tei-1.6'
+  name: tei-1.6
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: '8080'
+  containers:
+    - args:
+        - '--model-id=/mnt/models'
+        - '--max-batch-tokens=2048'
+        - '--port=8080'
+        - '--max-client-batch-size=2048'
+        - '--auto-truncate'
+      image: 'ghcr.io/huggingface/text-embeddings-inference:turing-1.6'
+      name: kserve-container
+      ports:
+        - containerPort: 8080
+          name: http1
+          protocol: TCP
+  multiModel: false
+  supportedModelFormats:
+    - autoSelect: true
+      name: sBERT
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: Nomic-embed-text-v1.5
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: nomic-embed-text-v1-5
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      modelFormat:
+        name: sBERT
+      name: ''
+      resources:
+        limits:
+          cpu: '6'
+          memory: 22Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '4'
+          memory: 18Gi
+          nvidia.com/gpu: '1'
+      runtime: tei-1.6
+      storage:
+        key: aws-connection-models
+        path: nomic-ai/nomic-embed-text-v1.5/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Equal
+        value: Tesla-T4-PRIVATE

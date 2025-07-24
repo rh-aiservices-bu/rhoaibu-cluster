@@ -1,0 +1,8 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Backend
+metadata:
+  name: deepseek-r1-qwen-14b-w4a16
+spec:
+  name: "DeepSeek-R1-Distill-Qwen-14B-W4A16"
+  systemName: "deepseek-r1-qwen-14b-w4a16"
+  privateBaseURL: "http://deepseek-r1-qwen-14b-w4a16-predictor.llm-hosting.svc.cluster.local:8080"

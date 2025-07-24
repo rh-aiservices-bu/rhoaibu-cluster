@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonAnnotations:
+  argocd.argoproj.io/compare-options: IgnoreExtraneous
+  argocd.argoproj.io/sync-options: Prune=true
+
+resources:
+  - ../../base/
+
+patches:
+  - target:
+      kind: ConsoleNotification
+      name: banner-cluster
+    patch: |-
+      - op: replace
+        path: /spec/text
+        value: 'This environment is available to any Red Hat employee who wants to use RHOAI -'
+      # https://htmlcolorcodes.com/color-picker
+      # - op: replace
+      #   path: /spec/color
+      #   value: '#54FF00'
+      - op: replace
+        path: /spec/backgroundColor
+        value: '#FF333C'
+      - op: add
+        path: /spec/link
+        value:
+          href: 'https://source.redhat.com/departments/products_and_global_engineering/artificial_intelligence/rhoaibucluster'
+          text: More Information

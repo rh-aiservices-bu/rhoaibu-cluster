@@ -1,0 +1,43 @@
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: DeepSeek-R1-Distill-Qwen-14B-W4A16
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: deepseek-r1-qwen-14b-w4a16
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      args:
+        - '--model=/mnt/models'
+        - '--served-model-name=r1-qwen-14b-w4a16'
+        - '--max-model-len=40000'
+        - '--enable-auto-tool-choice'
+        - '--tool-call-parser'
+        - hermes
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        limits:
+          cpu: '6'
+          memory: 24Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '4'
+          memory: 16Gi
+          nvidia.com/gpu: '1'
+      runtime: vllm-rhoai-2.21
+      storage:
+        key: aws-connection-models
+        path: RedHatAI/DeepSeek-R1-Distill-Qwen-14B-quantized.w4a16/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Equal
+        value: 'NVIDIA-L40S-PRIVATE'

@@ -1,0 +1,8 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Backend
+metadata:
+  name: granite-8b-lab-v1
+spec:
+  name: "Granite-8b-lab-v1"
+  systemName: "granite-8b-lab-v1"
+  privateBaseURL: "http://granite-8b-lab-v1-predictor.llm-hosting.svc.cluster.local:8080"

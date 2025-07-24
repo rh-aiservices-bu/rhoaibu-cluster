@@ -1,0 +1,27 @@
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterSecretStore
+metadata:
+  annotations:
+    external-secrets.io/disable-maintenance-checks: 'true'
+  name: rhoaibu-external-store
+spec:
+  provider:
+    aws:
+      auth:
+        secretRef:
+          accessKeyIDSecretRef:
+            key: access-key
+            name: awssm-secret
+            namespace: external-secrets
+          secretAccessKeySecretRef:
+            key: secret-access-key
+            name: awssm-secret
+            namespace: external-secrets
+      region: us-west-2
+      service: SecretsManager
+  conditions:
+    - namespaces:
+        - "cert-manager"
+        - "openshift-config"
+        - "rhoai-model-registries"

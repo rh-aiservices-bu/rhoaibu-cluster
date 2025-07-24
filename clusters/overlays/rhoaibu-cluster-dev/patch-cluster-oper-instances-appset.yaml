@@ -1,0 +1,9 @@
+- op: replace
+  path: /spec/template/spec/source/targetRevision
+  value: dev # Adjust it to the desired branch for Dev (main)
+- op: replace
+  path: /spec/generators/2/list/elements/0/values/path
+  value: components/instances/odf-instance/aggregate/overlays/rhoaibu-cluster-dev
+- op: replace
+  path: /spec/generators/6/list/elements/0/values/path
+  value: components/instances/external-secrets-instance/overlays/rhoaibu-cluster-dev

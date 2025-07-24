@@ -1,0 +1,8 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Backend
+metadata:
+  name: llama-4-scout-17b-16e-w4a16
+spec:
+  name: "Llama-4-Scout-17B-16E-W4A16"
+  systemName: "llama-4-scout-17b-16e-w4a16"
+  privateBaseURL: "http://llama-4-scout-17b-16e-w4a16-predictor.llm-hosting.svc.cluster.local:8080"

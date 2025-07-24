@@ -1,0 +1,8 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Backend
+metadata:
+  name: safety-checker
+spec:
+  name: "Stable Diffusion Safety Checker"
+  systemName: "safety-checker"
+  privateBaseURL: "http://safety-checker-predictor.llm-hosting.svc.cluster.local:8080"

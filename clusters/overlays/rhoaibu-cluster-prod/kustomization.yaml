@@ -1,0 +1,34 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources: # This is the GitOps Configuration for the RHOAIBU Prod Cluster
+  - ../../base
+
+patches:
+  - target:
+      group: argoproj.io
+      kind: ApplicationSet
+      name: cluster-operator-extra-applicationset
+    path: patch-cluster-operators-extra-appset.yaml
+  - target:
+      group: argoproj.io
+      kind: ApplicationSet
+      name: cluster-operators-applicationset
+    path: patch-cluster-operators-appset.yaml
+  - target:
+      group: argoproj.io
+      kind: ApplicationSet
+      name: cluster-config-applicationset
+    path: patch-cluster-config-appset.yaml
+  - target:
+      group: argoproj.io
+      kind: ApplicationSet
+      name: cluster-oper-instances-applicationset
+    path: patch-cluster-oper-instances-appset.yaml
+  # Uncomment patches to disable automatic sync
+  - target:
+      group: argoproj.io
+      kind: ApplicationSet
+    patch: |-
+      - op: remove
+        path: /spec/template/spec/syncPolicy

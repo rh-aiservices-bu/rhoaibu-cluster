@@ -1,0 +1,14 @@
+apiVersion: dashboard.opendatahub.io/v1
+kind: AcceleratorProfile
+metadata:
+  name: medium-large-gpu-card
+  namespace: redhat-ods-applications
+spec:
+  description: 'Restricted use - Do not select without approval'
+  displayName: Large GPU Card (NVIDIA L40 - 24 GB VRAM)
+  enabled: true
+  identifier: nvidia.com/gpu
+  tolerations:
+    - effect: NoSchedule
+      key: nvidia.com/gpu
+      value: NVIDIA-L40-SHARED

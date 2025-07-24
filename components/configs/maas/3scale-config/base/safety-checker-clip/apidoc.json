@@ -1,0 +1,97 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Stable Diffusion Safety Checker",
+        "description": "This model can be used for identifying NSFW images."
+    },
+    "paths": {
+        "/v2/models/safety-checker/infer": {
+            "post": {
+                "summary": "Infer",
+                "description": "Infer.",
+                "operationId": "infer_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InferenceRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "InferenceRequest": {
+                "type": "object",
+                "properties": {
+                    "inputs": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "default": "image"
+                                },
+                                "shape": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    },
+                                    "minItems": 2,
+                                    "maxItems": 2,
+                                    "default": [1,1]
+                                },
+                                "datatype": {
+                                    "type": "string",
+                                    "default": "String"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "name",
+                                "shape",
+                                "datatype",
+                                "data"
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                    "inputs"
+                ]
+            }
+        },
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "name": "Authorization"
+            }
+        }
+    },
+    "security": [
+        {
+            "BearerAuth": []
+        }
+    ]
+}

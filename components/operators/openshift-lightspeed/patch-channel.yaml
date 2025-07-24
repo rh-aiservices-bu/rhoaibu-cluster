@@ -1,0 +1,6 @@
+- op: replace
+  path: /spec/installPlanApproval
+  value: Automatic
+- op: replace
+  path: /spec/channel
+  value: alpha

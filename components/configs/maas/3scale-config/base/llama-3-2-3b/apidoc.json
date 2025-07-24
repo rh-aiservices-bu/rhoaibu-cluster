@@ -1,0 +1,2251 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Llama-3.2-3B",
+        "description": "Llama-3.2-3B is a 3 billion parameter language model from Meta's Llama 3.2 series, providing high-quality text generation capabilities."
+    },
+    "paths": {
+        "/health": {
+            "get": {
+                "summary": "Health",
+                "description": "Health check.",
+                "operationId": "health_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tokenize": {
+            "post": {
+                "summary": "Tokenize",
+                "operationId": "tokenize_tokenize_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "anyOf": [
+                                    {
+                                        "$ref": "#/components/schemas/TokenizeCompletionRequest"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/TokenizeChatRequest"
+                                    }
+                                ],
+                                "title": "Request"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/detokenize": {
+            "post": {
+                "summary": "Detokenize",
+                "operationId": "detokenize_detokenize_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DetokenizeRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/models": {
+            "get": {
+                "summary": "Show Available Models",
+                "operationId": "show_available_models_v1_models_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ModelList"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/version": {
+            "get": {
+                "summary": "Show version",
+                "operationId": "show_version_version_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/VersionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/chat/completions": {
+            "post": {
+                "summary": "Create Chat Completion",
+                "operationId": "create_chat_completion_v1_chat_completions_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChatCompletionRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ChatCompletionResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/v1/completions": {
+            "post": {
+                "summary": "Create Completion",
+                "operationId": "create_completion_v1_completions_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CompletionRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CompletionResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/v1/embeddings": {
+            "post": {
+                "summary": "Create Embedding",
+                "operationId": "create_embedding_v1_embeddings_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EmbeddingRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EmbeddingResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ChatCompletionRequest": {
+                "properties": {
+                    "messages": {
+                        "items": {
+                            "$ref": "#/components/schemas/ChatCompletionRequestMessage"
+                        },
+                        "type": "array",
+                        "title": "Messages"
+                    },
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "frequency_penalty": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": 0.0,
+                        "title": "Frequency Penalty"
+                    },
+                    "logit_bias": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "type": "integer"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Logit Bias"
+                    },
+                    "logprobs": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": false,
+                        "title": "Logprobs"
+                    },
+                    "top_logprobs": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Top Logprobs"
+                    },
+                    "max_tokens": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Max Tokens"
+                    },
+                    "n": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": 1,
+                        "title": "N"
+                    },
+                    "presence_penalty": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": 0.0,
+                        "title": "Presence Penalty"
+                    },
+                    "response_format": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseFormat"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null
+                    },
+                    "seed": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Seed"
+                    },
+                    "stop": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Stop"
+                    },
+                    "stream": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": false,
+                        "title": "Stream"
+                    },
+                    "stream_options": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/StreamOptions"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null
+                    },
+                    "temperature": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": 0.7,
+                        "title": "Temperature"
+                    },
+                    "top_p": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": 1.0,
+                        "title": "Top P"
+                    },
+                    "tools": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/ChatCompletionTool"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Tools"
+                    },
+                    "tool_choice": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/ChatCompletionToolChoiceOption"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": "none"
+                    },
+                    "parallel_tool_calls": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": true,
+                        "title": "Parallel Tool Calls"
+                    },
+                    "user": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "User"
+                    },
+                    "use_beam_search": {
+                        "type": "boolean",
+                        "default": false,
+                        "title": "Use Beam Search"
+                    },
+                    "best_of": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Best Of"
+                    },
+                    "top_k": {
+                        "type": "integer",
+                        "default": -1,
+                        "title": "Top K"
+                    },
+                    "min_p": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "Min P"
+                    },
+                    "repetition_penalty": {
+                        "type": "number",
+                        "default": 1.0,
+                        "title": "Repetition Penalty"
+                    },
+                    "length_penalty": {
+                        "type": "number",
+                        "default": 1.0,
+                        "title": "Length Penalty"
+                    },
+                    "early_stopping": {
+                        "type": "boolean",
+                        "default": false,
+                        "title": "Early Stopping"
+                    },
+                    "ignore_eos": {
+                        "type": "boolean",
+                        "default": false,
+                        "title": "Ignore Eos"
+                    },
+                    "min_tokens": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Min Tokens"
+                    },
+                    "stop_token_ids": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "integer"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Stop Token Ids"
+                    },
+                    "skip_special_tokens": {
+                        "type": "boolean",
+                        "default": true,
+                        "title": "Skip Special Tokens"
+                    },
+                    "spaces_between_special_tokens": {
+                        "type": "boolean",
+                        "default": true,
+                        "title": "Spaces Between Special Tokens"
+                    },
+                    "truncate_prompt_tokens": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Truncate Prompt Tokens"
+                    },
+                    "include_stop_str_in_output": {
+                        "type": "boolean",
+                        "default": false,
+                        "title": "Include Stop Str In Output"
+                    },
+                    "guided_json": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Guided Json"
+                    },
+                    "guided_regex": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Guided Regex"
+                    },
+                    "guided_choice": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Guided Choice"
+                    },
+                    "guided_grammar": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Guided Grammar"
+                    },
+                    "guided_decoding_backend": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Guided Decoding Backend"
+                    },
+                    "guided_whitespace_pattern": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Guided Whitespace Pattern"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "messages",
+                    "model"
+                ],
+                "title": "ChatCompletionRequest"
+            },
+            "ChatCompletionRequestMessage": {
+                "properties": {
+                    "role": {
+                        "type": "string",
+                        "title": "Role"
+                    },
+                    "content": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/ChatCompletionContentPartParam"
+                                },
+                                "type": "array"
+                            }
+                        ],
+                        "title": "Content"
+                    },
+                    "name": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Name"
+                    },
+                    "tool_calls": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/ChatCompletionMessageToolCall"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Tool Calls"
+                    },
+                    "tool_call_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Tool Call Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "role",
+                    "content"
+                ],
+                "title": "ChatCompletionRequestMessage"
+            },
+            "ChatCompletionContentPartParam": {
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "title": "Type"
+                    },
+                    "text": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Text"
+                    },
+                    "image_url": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/ChatCompletionContentPartImageParam"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "type"
+                ],
+                "title": "ChatCompletionContentPartParam"
+            },
+            "ChatCompletionContentPartImageParam": {
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "title": "Url"
+                    },
+                    "detail": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": "auto",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "url"
+                ],
+                "title": "ChatCompletionContentPartImageParam"
+            },
+            "ChatCompletionMessageToolCall": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Type"
+                    },
+                    "function": {
+                        "$ref": "#/components/schemas/Function"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "type",
+                    "function"
+                ],
+                "title": "ChatCompletionMessageToolCall"
+            },
+            "Function": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "arguments": {
+                        "type": "string",
+                        "title": "Arguments"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name",
+                    "arguments"
+                ],
+                "title": "Function"
+            },
+            "ResponseFormat": {
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "title": "Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "type"
+                ],
+                "title": "ResponseFormat"
+            },
+            "StreamOptions": {
+                "properties": {
+                    "include_usage": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": false,
+                        "title": "Include Usage"
+                    }
+                },
+                "type": "object",
+                "title": "StreamOptions"
+            },
+            "ChatCompletionTool": {
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "title": "Type"
+                    },
+                    "function": {
+                        "$ref": "#/components/schemas/FunctionDefinition"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "type",
+                    "function"
+                ],
+                "title": "ChatCompletionTool"
+            },
+            "FunctionDefinition": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Description"
+                    },
+                    "parameters": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Parameters"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name"
+                ],
+                "title": "FunctionDefinition"
+            },
+            "ChatCompletionToolChoiceOption": {
+                "anyOf": [
+                    {
+                        "type": "string"
+                    },
+                    {
+                        "$ref": "#/components/schemas/ChatCompletionNamedToolChoice"
+                    }
+                ],
+                "title": "ChatCompletionToolChoiceOption"
+            },
+            "ChatCompletionNamedToolChoice": {
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "title": "Type"
+                    },
+                    "function": {
+                        "$ref": "#/components/schemas/ChatCompletionNamedToolChoiceFunction"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "type",
+                    "function"
+                ],
+                "title": "ChatCompletionNamedToolChoice"
+            },
+            "ChatCompletionNamedToolChoiceFunction": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name"
+                ],
+                "title": "ChatCompletionNamedToolChoiceFunction"
+            },
+            "ChatCompletionResponse": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "object": {
+                        "type": "string",
+                        "title": "Object"
+                    },
+                    "created": {
+                        "type": "integer",
+                        "title": "Created"
+                    },
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "choices": {
+                        "items": {
+                            "$ref": "#/components/schemas/ChatCompletionResponseChoice"
+                        },
+                        "type": "array",
+                        "title": "Choices"
+                    },
+                    "usage": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/UsageInfo"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null
+                    },
+                    "system_fingerprint": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "System Fingerprint"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "object",
+                    "created",
+                    "model",
+                    "choices"
+                ],
+                "title": "ChatCompletionResponse"
+            },
+            "ChatCompletionResponseChoice": {
+                "properties": {
+                    "index": {
+                        "type": "integer",
+                        "title": "Index"
+                    },
+                    "message": {
+                        "$ref": "#/components/schemas/ChatMessage"
+                    },
+                    "logprobs": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/LogProbs"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null
+                    },
+                    "finish_reason": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Finish Reason"
+                    },
+                    "stop_reason": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Stop Reason"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "index",
+                    "message"
+                ],
+                "title": "ChatCompletionResponseChoice"
+            },
+            "ChatMessage": {
+                "properties": {
+                    "role": {
+                        "type": "string",
+                        "title": "Role"
+                    },
+                    "content": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Content"
+                    },
+                    "tool_calls": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/ChatCompletionMessageToolCall"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Tool Calls"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "role"
+                ],
+                "title": "ChatMessage"
+            },
+            "LogProbs": {
+                "properties": {
+                    "content": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/ChatCompletionTokenLogprob"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Content"
+                    }
+                },
+                "type": "object",
+                "title": "LogProbs"
+            },
+            "ChatCompletionTokenLogprob": {
+                "properties": {
+                    "token": {
+                        "type": "string",
+                        "title": "Token"
+                    },
+                    "logprob": {
+                        "type": "number",
+                        "title": "Logprob"
+                    },
+                    "bytes": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "integer"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Bytes"
+                    },
+                    "top_logprobs": {
+                        "items": {
+                            "$ref": "#/components/schemas/TopLogprob"
+                        },
+                        "type": "array",
+                        "title": "Top Logprobs"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "token",
+                    "logprob",
+                    "top_logprobs"
+                ],
+                "title": "ChatCompletionTokenLogprob"
+            },
+            "TopLogprob": {
+                "properties": {
+                    "token": {
+                        "type": "string",
+                        "title": "Token"
+                    },
+                    "logprob": {
+                        "type": "number",
+                        "title": "Logprob"
+                    },
+                    "bytes": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "integer"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Bytes"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "token",
+                    "logprob"
+                ],
+                "title": "TopLogprob"
+            },
+            "UsageInfo": {
+                "properties": {
+                    "prompt_tokens": {
+                        "type": "integer",
+                        "title": "Prompt Tokens"
+                    },
+                    "total_tokens": {
+                        "type": "integer",
+                        "title": "Total Tokens"
+                    },
+                    "completion_tokens": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Completion Tokens"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "prompt_tokens",
+                    "total_tokens"
+                ],
+                "title": "UsageInfo"
+            },
+            "CompletionRequest": {
+                "properties": {
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "prompt": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "items": {
+                                    "type": "integer"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "items": {
+                                    "items": {
+                                        "type": "integer"
+                                    },
+                                    "type": "array"
+                                },
+                                "type": "array"
+                            }
+                        ],
+                        "title": "Prompt"
+                    },
+                    "best_of": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Best Of"
+                    },
+                    "echo": {
+                        "type": "boolean",
+                        "default": false,
+                        "title": "Echo"
+                    },
+                    "frequency_penalty": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "Frequency Penalty"
+                    },
+                    "logit_bias": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "type": "number"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Logit Bias"
+                    },
+                    "logprobs": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Logprobs"
+                    },
+                    "max_tokens": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": 16,
+                        "title": "Max Tokens"
+                    },
+                    "n": {
+                        "type": "integer",
+                        "default": 1,
+                        "title": "N"
+                    },
+                    "presence_penalty": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "Presence Penalty"
+                    },
+                    "seed": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Seed"
+                    },
+                    "stop": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Stop"
+                    },
+                    "stream": {
+                        "type": "boolean",
+                        "default": false,
+                        "title": "Stream"
+                    },
+                    "stream_options": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/StreamOptions"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null
+                    },
+                    "suffix": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Suffix"
+                    },
+                    "temperature": {
+                        "type": "number",
+                        "default": 1.0,
+                        "title": "Temperature"
+                    },
+                    "top_p": {
+                        "type": "number",
+                        "default": 1.0,
+                        "title": "Top P"
+                    },
+                    "user": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "User"
+                    },
+                    "use_beam_search": {
+                        "type": "boolean",
+                        "default": false,
+                        "title": "Use Beam Search"
+                    },
+                    "top_k": {
+                        "type": "integer",
+                        "default": -1,
+                        "title": "Top K"
+                    },
+                    "min_p": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "Min P"
+                    },
+                    "repetition_penalty": {
+                        "type": "number",
+                        "default": 1.0,
+                        "title": "Repetition Penalty"
+                    },
+                    "length_penalty": {
+                        "type": "number",
+                        "default": 1.0,
+                        "title": "Length Penalty"
+                    },
+                    "early_stopping": {
+                        "type": "boolean",
+                        "default": false,
+                        "title": "Early Stopping"
+                    },
+                    "stop_token_ids": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "integer"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Stop Token Ids"
+                    },
+                    "ignore_eos": {
+                        "type": "boolean",
+                        "default": false,
+                        "title": "Ignore Eos"
+                    },
+                    "min_tokens": {
+                        "type": "integer",
+                        "default": 0,
+                        "title": "Min Tokens"
+                    },
+                    "skip_special_tokens": {
+                        "type": "boolean",
+                        "default": true,
+                        "title": "Skip Special Tokens"
+                    },
+                    "spaces_between_special_tokens": {
+                        "type": "boolean",
+                        "default": true,
+                        "title": "Spaces Between Special Tokens"
+                    },
+                    "truncate_prompt_tokens": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Truncate Prompt Tokens"
+                    },
+                    "include_stop_str_in_output": {
+                        "type": "boolean",
+                        "default": false,
+                        "title": "Include Stop Str In Output"
+                    },
+                    "guided_json": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Guided Json"
+                    },
+                    "guided_regex": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Guided Regex"
+                    },
+                    "guided_choice": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Guided Choice"
+                    },
+                    "guided_grammar": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Guided Grammar"
+                    },
+                    "guided_decoding_backend": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Guided Decoding Backend"
+                    },
+                    "guided_whitespace_pattern": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Guided Whitespace Pattern"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "model",
+                    "prompt"
+                ],
+                "title": "CompletionRequest"
+            },
+            "CompletionResponse": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "object": {
+                        "type": "string",
+                        "title": "Object"
+                    },
+                    "created": {
+                        "type": "integer",
+                        "title": "Created"
+                    },
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "choices": {
+                        "items": {
+                            "$ref": "#/components/schemas/CompletionResponseChoice"
+                        },
+                        "type": "array",
+                        "title": "Choices"
+                    },
+                    "usage": {
+                        "$ref": "#/components/schemas/UsageInfo"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "object",
+                    "created",
+                    "model",
+                    "choices",
+                    "usage"
+                ],
+                "title": "CompletionResponse"
+            },
+            "CompletionResponseChoice": {
+                "properties": {
+                    "index": {
+                        "type": "integer",
+                        "title": "Index"
+                    },
+                    "text": {
+                        "type": "string",
+                        "title": "Text"
+                    },
+                    "logprobs": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/CompletionLogProbs"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null
+                    },
+                    "finish_reason": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Finish Reason"
+                    },
+                    "stop_reason": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Stop Reason"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "index",
+                    "text"
+                ],
+                "title": "CompletionResponseChoice"
+            },
+            "CompletionLogProbs": {
+                "properties": {
+                    "text_offset": {
+                        "items": {
+                            "type": "integer"
+                        },
+                        "type": "array",
+                        "title": "Text Offset"
+                    },
+                    "token_logprobs": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Token Logprobs"
+                    },
+                    "tokens": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Tokens"
+                    },
+                    "top_logprobs": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "additionalProperties": {
+                                        "type": "number"
+                                    },
+                                    "type": "object"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Top Logprobs"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "text_offset",
+                    "token_logprobs",
+                    "tokens",
+                    "top_logprobs"
+                ],
+                "title": "CompletionLogProbs"
+            },
+            "EmbeddingRequest": {
+                "properties": {
+                    "input": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "items": {
+                                    "type": "integer"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "items": {
+                                    "items": {
+                                        "type": "integer"
+                                    },
+                                    "type": "array"
+                                },
+                                "type": "array"
+                            }
+                        ],
+                        "title": "Input"
+                    },
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "encoding_format": {
+                        "type": "string",
+                        "default": "float",
+                        "title": "Encoding Format"
+                    },
+                    "dimensions": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Dimensions"
+                    },
+                    "user": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "User"
+                    },
+                    "extra_body": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {},
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Extra Body"
+                    },
+                    "additional_data": {
+                        "anyOf": [
+                            {},
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Additional Data"
+                    },
+                    "truncate_prompt_tokens": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Truncate Prompt Tokens"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "input",
+                    "model"
+                ],
+                "title": "EmbeddingRequest"
+            },
+            "EmbeddingResponse": {
+                "properties": {
+                    "object": {
+                        "type": "string",
+                        "title": "Object"
+                    },
+                    "data": {
+                        "items": {
+                            "$ref": "#/components/schemas/EmbeddingResponseData"
+                        },
+                        "type": "array",
+                        "title": "Data"
+                    },
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "usage": {
+                        "$ref": "#/components/schemas/UsageInfo"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "object",
+                    "data",
+                    "model",
+                    "usage"
+                ],
+                "title": "EmbeddingResponse"
+            },
+            "EmbeddingResponseData": {
+                "properties": {
+                    "index": {
+                        "type": "integer",
+                        "title": "Index"
+                    },
+                    "object": {
+                        "type": "string",
+                        "title": "Object"
+                    },
+                    "embedding": {
+                        "items": {
+                            "type": "number"
+                        },
+                        "type": "array",
+                        "title": "Embedding"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "index",
+                    "object",
+                    "embedding"
+                ],
+                "title": "EmbeddingResponseData"
+            },
+            "ModelList": {
+                "properties": {
+                    "object": {
+                        "type": "string",
+                        "title": "Object"
+                    },
+                    "data": {
+                        "items": {
+                            "$ref": "#/components/schemas/ModelCard"
+                        },
+                        "type": "array",
+                        "title": "Data"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "object",
+                    "data"
+                ],
+                "title": "ModelList"
+            },
+            "ModelCard": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "object": {
+                        "type": "string",
+                        "title": "Object"
+                    },
+                    "created": {
+                        "type": "integer",
+                        "title": "Created"
+                    },
+                    "owned_by": {
+                        "type": "string",
+                        "title": "Owned By"
+                    },
+                    "root": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Root"
+                    },
+                    "parent": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Parent"
+                    },
+                    "max_model_len": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Max Model Len"
+                    },
+                    "permission": {
+                        "items": {
+                            "$ref": "#/components/schemas/ModelPermission"
+                        },
+                        "type": "array",
+                        "title": "Permission"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "object",
+                    "created",
+                    "owned_by",
+                    "permission"
+                ],
+                "title": "ModelCard"
+            },
+            "ModelPermission": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "object": {
+                        "type": "string",
+                        "title": "Object"
+                    },
+                    "created": {
+                        "type": "integer",
+                        "title": "Created"
+                    },
+                    "allow_create_engine": {
+                        "type": "boolean",
+                        "title": "Allow Create Engine"
+                    },
+                    "allow_sampling": {
+                        "type": "boolean",
+                        "title": "Allow Sampling"
+                    },
+                    "allow_logprobs": {
+                        "type": "boolean",
+                        "title": "Allow Logprobs"
+                    },
+                    "allow_search_indices": {
+                        "type": "boolean",
+                        "title": "Allow Search Indices"
+                    },
+                    "allow_view": {
+                        "type": "boolean",
+                        "title": "Allow View"
+                    },
+                    "allow_fine_tuning": {
+                        "type": "boolean",
+                        "title": "Allow Fine Tuning"
+                    },
+                    "organization": {
+                        "type": "string",
+                        "title": "Organization"
+                    },
+                    "group": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Group"
+                    },
+                    "is_blocking": {
+                        "type": "boolean",
+                        "title": "Is Blocking"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "object",
+                    "created",
+                    "allow_create_engine",
+                    "allow_sampling",
+                    "allow_logprobs",
+                    "allow_search_indices",
+                    "allow_view",
+                    "allow_fine_tuning",
+                    "organization",
+                    "is_blocking"
+                ],
+                "title": "ModelPermission"
+            },
+            "VersionResponse": {
+                "properties": {
+                    "version": {
+                        "type": "string",
+                        "title": "Version"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "version"
+                ],
+                "title": "VersionResponse"
+            },
+            "TokenizeCompletionRequest": {
+                "properties": {
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "prompt": {
+                        "type": "string",
+                        "title": "Prompt"
+                    },
+                    "add_special_tokens": {
+                        "type": "boolean",
+                        "default": true,
+                        "title": "Add Special Tokens"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "model",
+                    "prompt"
+                ],
+                "title": "TokenizeCompletionRequest"
+            },
+            "TokenizeChatRequest": {
+                "properties": {
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "messages": {
+                        "items": {
+                            "$ref": "#/components/schemas/ChatCompletionRequestMessage"
+                        },
+                        "type": "array",
+                        "title": "Messages"
+                    },
+                    "add_generation_prompt": {
+                        "type": "boolean",
+                        "default": true,
+                        "title": "Add Generation Prompt"
+                    },
+                    "add_special_tokens": {
+                        "type": "boolean",
+                        "default": false,
+                        "title": "Add Special Tokens"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "model",
+                    "messages"
+                ],
+                "title": "TokenizeChatRequest"
+            },
+            "DetokenizeRequest": {
+                "properties": {
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "tokens": {
+                        "items": {
+                            "type": "integer"
+                        },
+                        "type": "array",
+                        "title": "Tokens"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "model",
+                    "tokens"
+                ],
+                "title": "DetokenizeRequest"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        },
+        "securitySchemes": {
+            "HTTPBearer": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    }
+}

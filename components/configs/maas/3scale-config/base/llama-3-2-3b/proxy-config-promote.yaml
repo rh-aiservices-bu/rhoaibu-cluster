@@ -1,0 +1,9 @@
+---
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ProxyConfigPromote
+metadata:
+  name: llama-3-2-3b
+spec:
+  productCRName: llama-3-2-3b
+  production: true
+  deleteCR: false

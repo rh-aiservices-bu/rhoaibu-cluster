@@ -1,0 +1,12 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ActiveDoc
+metadata:
+  name: granite-vision-3-2-2b
+spec:
+  name: "Granite-Vision-3.2-2b API Documentation"
+  systemName: "granitevision322b"
+  activeDocOpenAPIRef:
+    url: "https://raw.githubusercontent.com/rh-aiservices-bu/maas-config/refs/heads/main/granite-vision-3-2-2b/apidoc.json"
+  published: true
+  skipSwaggerValidations: true
+  productSystemName: "granite-vision-3-2-2b"

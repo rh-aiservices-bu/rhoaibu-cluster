@@ -1,0 +1,45 @@
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: Llama-3.2-3B
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: llama-3-2-3b
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      args:
+        - '--model=/mnt/models'
+        - '--served-model-name=llama-3-2-3b'
+        - '--max-model-len=120000'
+        - '--enable-auto-tool-choice'
+        - '--tool-call-parser'
+        - 'llama3_json'
+        - '--chat-template'
+        - '/app/data/template/tool_chat_template_llama3.2_json.jinja'
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        limits:
+          cpu: '6'
+          memory: 24Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '4'
+          memory: 16Gi
+          nvidia.com/gpu: '1'
+      runtime: vllm-rhoai-2.21
+      storage:
+        key: aws-connection-models
+        path: meta-llama/Llama-3.2-3B-Instruct/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Equal
+        value: NVIDIA-L40-PRIVATE

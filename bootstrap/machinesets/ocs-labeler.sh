@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Only use this script if the node-labeler in Git
+
+selector="node-role.kubernetes.io/worker"
+node_count=$(oc get nodes --selector $selector --show-labels | grep ocs | awk '{print $1}' | wc -l)
+if [ ${node_count} -lt 3 ]; then
+  echo "Not enough selected nodes present in cluster"
+  oc get nodes --selector=${selector}
+  exit 1
+fi
+echo "Labeling the following nodes"
+selector_command="oc get nodes --selector node-role.kubernetes.io/worker --show-labels | grep ocs | awk '{print \$1}'"
+node_names=$(eval $selector_command)
+for node_name in $node_names; do
+  echo "Labeling node $node_name"
+    oc label nodes --selector=node=${node_name} cluster.ocs.openshift.io/openshift-storage="" --overwrite=true
+done

@@ -1,0 +1,18 @@
+apiVersion: ols.openshift.io/v1alpha1
+kind: OLSConfig
+metadata:
+  name: cluster
+spec:
+  llm:
+    providers:
+      - credentialsSecretRef:
+          name: credentials
+        models:
+          - name: your_fancy_model_name_in_overlays
+        name: OpenShiftAI
+        type: openai
+        url: 'URL_FOR_YOUR_MODEL_USE_OVERLAYS'
+  ols:
+    defaultModel: your_fancy_model_name_in_overlays
+    defaultProvider: OpenShiftAI
+    logLevel: DEBUG

@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - https://github.com/redhat-cop/gitops-catalog/openshift-gitops-operator/instance/overlays/default?ref=main
+  - rb-cluster.yaml
+patchesStrategicMerge:
+- |-
+  apiVersion: argoproj.io/v1beta1
+  kind: ArgoCD
+  metadata:
+    name: openshift-gitops
+  spec:
+    kustomizeBuildOptions: '--enable-helm'
+    initialRepositories: |
+    - url: https://github.com/rh-aiservices-bu/rh-aiservices-bu-bootstrap.git
+      type: git
+      passwordSecret:
+        key: password
+        name: git-auth
+      usernameSecret:
+        key: username
+        name: git-auth

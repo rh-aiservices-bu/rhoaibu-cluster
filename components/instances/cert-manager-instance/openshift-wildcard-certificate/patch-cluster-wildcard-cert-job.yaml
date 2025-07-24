@@ -1,0 +1,78 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: patch-cluster-wildcard-cert
+rules:
+  - apiGroups:
+      - operator.openshift.io
+    resources:
+      - ingresscontrollers
+    verbs:
+      - get
+      - list
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - patch
+      - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: patch-cluster-wildcard-cert
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: patch-cluster-wildcard-cert
+subjects:
+  - kind: ServiceAccount
+    name: patch-cluster-wildcard-cert
+    namespace: cert-manager-operator
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: patch-cluster-wildcard-cert
+  namespace: cert-manager-operator
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: patch-cluster-wildcard-cert
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  ttlSecondsAfterFinished: 1000
+  template:
+    spec:
+      containers:
+        - image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+          command:
+            - /bin/bash
+            - -c
+            - |
+              #!/usr/bin/env bash
+              CERT_MANAGER_NAMESPACE="cert-manager-operator"
+              if oc get secret openshift-wildcard-certificate -n $CERT_MANAGER_NAMESPACE; then
+                oc delete secret openshift-wildcard-certificate -n openshift-ingress
+                oc get secret openshift-wildcard-certificate -n $CERT_MANAGER_NAMESPACE -o json | sed 's/"namespace": "[^"]*",//; s/"creationTimestamp": "[^"]*",//; s/"resourceVersion": "[^"]*",//; s/"selfLink": "[^"]*",//; s/"uid": "[^"]*",//; s/"annotations": {[^}]*},//' | oc apply -n openshift-ingress -f -
+                oc patch ingresscontroller default -n openshift-ingress-operator --type=merge --patch='{"spec": { "defaultCertificate": { "name": "openshift-wildcard-certificate" }}}'
+              else
+                echo "Could not execute sync as secret 'openshift-wildcard-certificate' in namespace 'openshift-ingress' does not exist, check status of CertificationRequest"
+                exit 1
+              fi
+          name: patch-cluster-wildcard-cert
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 30
+      serviceAccountName: patch-cluster-wildcard-cert
+      serviceAccount: patch-cluster-wildcard-cert

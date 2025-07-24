@@ -1,0 +1,38 @@
+---
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  annotations:
+    internal.config.kubernetes.io/previousKinds: ImageStream
+    internal.config.kubernetes.io/previousNames: custom-docling-ui-client
+    internal.config.kubernetes.io/previousNamespaces: default
+    opendatahub.io/notebook-image-desc: 'Docling UI Workbench, a client for Docling Serve'
+    opendatahub.io/notebook-image-name: CUSTOM-Docling UI client for Docling Serve 🦆
+    opendatahub.io/notebook-image-url: 'https://github.com/rh-aiservices-bu/llm-on-openshift/tree/main/tools/docling-server'
+    opendatahub.io/recommended-accelerators: '[]'
+  name: custom-docling-ui
+  namespace: redhat-ods-applications
+  labels:
+    app.kubernetes.io/part-of: workbenches
+    app.opendatahub.io/workbenches: 'true'
+    component.opendatahub.io/name: notebooks
+    opendatahub.io/component: 'true'
+    opendatahub.io/notebook-image: 'true'
+spec:
+  lookupPolicy:
+    local: true
+  tags:
+    - name: 2.16.0
+      annotations:
+        opendatahub.io/notebook-build-commit: 93ed4d1
+        opendatahub.io/notebook-python-dependencies: ''
+        opendatahub.io/notebook-software: '[{"name":"Docling UI","version":"2.16.0"}]'
+        openshift.io/imported-from: quay.io/rh-aiservices-bu/docling-workbench
+      from:
+        kind: DockerImage
+        name: 'quay.io/rh-aiservices-bu/docling-workbench:0.0.6'
+      generation: 10
+      importPolicy:
+        importMode: Legacy
+      referencePolicy:
+        type: Source

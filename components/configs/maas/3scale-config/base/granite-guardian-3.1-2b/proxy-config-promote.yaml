@@ -1,0 +1,9 @@
+---
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ProxyConfigPromote
+metadata:
+  name: granite3-guardian-2b
+spec:
+  productCRName: granite3-guardian-2b
+  production: true
+  deleteCR: false

@@ -1,0 +1,17 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: registry-db
+  namespace: rhoai-model-registries
+  labels:
+    component: db
+spec:
+  ports:
+    - name: dbapi
+      protocol: TCP
+      port: 3306
+      targetPort: 3306
+  type: ClusterIP
+  selector:
+    component: db

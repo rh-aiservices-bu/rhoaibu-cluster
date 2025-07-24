@@ -1,0 +1,42 @@
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: Phi-4
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: phi-4
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      args:
+        - '--port=8080'
+        - '--model=/mnt/models'
+        - '--served-model-name=microsoft/phi-4'
+        - '--distributed-executor-backend=mp'
+        - '--dtype=half'
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        limits:
+          cpu: '7'
+          memory: 60Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '4'
+          memory: 32Gi
+          nvidia.com/gpu: '1'
+      runtime: vllm-rhoai-2.21
+      storage:
+        key: aws-connection-models
+        path: /microsoft/phi-4
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Equal
+        value: NVIDIA-L40S-PRIVATE

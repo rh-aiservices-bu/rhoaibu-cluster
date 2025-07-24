@@ -1,0 +1,12 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ActiveDoc
+metadata:
+  name: granite3-guardian-2b
+spec:
+  name: "Granite Guardian 3.1 2B API Documentation"
+  systemName: "granite3guardian2b"
+  activeDocOpenAPIRef:
+    url: "https://raw.githubusercontent.com/rh-aiservices-bu/maas-config/refs/heads/main/granite-guardian-3.1-2b/apidoc.json"
+  published: true
+  skipSwaggerValidations: true
+  productSystemName: "granite3-guardian-2b"

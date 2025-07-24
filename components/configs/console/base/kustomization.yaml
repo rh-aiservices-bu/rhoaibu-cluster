@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - banner-cluster.yaml
+  - link-aionopenshift.yaml # Link to the AI on OpenShift Website
+  - link-parasol-demo.yaml # Link to the Parasol Insurance Demo Docs
+  - link-documentation.yaml # Link to the Official RHOAI Documentation
+  - link-kbchatbot.yaml # Link to the Knowledge Base Chatbot
+  - link-fraud-detection-demo-docs.yaml # Link to the Fraud Detection Demo Docs
+  - link-maas.yaml # Link to the Model as a Service

@@ -1,0 +1,53 @@
+---
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  annotations:
+    opendatahub.io/notebook-image-creator: gmoutier@redhat.com
+    opendatahub.io/notebook-image-order: '12'
+    opendatahub.io/notebook-image-desc: 'CUSTOM-Tools-and-Extensions-Companion'
+    opendatahub.io/notebook-image-name: CUSTOM-Tools-and-Extensions-Companion
+    opendatahub.io/notebook-image-url: 'quay.io/rh-aiservices-bu/odh-tec:latest'
+    opendatahub.io/recommended-accelerators: '[]'
+  name: custom-custom-tools-and-extensions-compation
+  namespace: redhat-ods-applications
+  labels:
+    app.kubernetes.io/created-by: byon
+    opendatahub.io/component: 'true'
+    opendatahub.io/dashboard: 'true'
+    opendatahub.io/notebook-image: 'true'
+spec:
+  lookupPolicy:
+    local: true
+  tags:
+    - name: 2.0.7
+      annotations:
+        opendatahub.io/notebook-build-commit: '24a4aa'
+        opendatahub.io/notebook-python-dependencies: '[]'
+        opendatahub.io/notebook-software: '[{"name":"ODH-TEC","version":"2.0.7"}]'
+        opendatahub.io/workbench-image-recommended: 'false'
+        openshift.io/imported-from: 'quay.io/rh-aiservices-bu/odh-tec:2.0.7'
+      from:
+        kind: DockerImage
+        name: 'quay.io/rh-aiservices-bu/odh-tec:2.0.7'
+      generation: 21
+      importPolicy:
+        importMode: Legacy
+      referencePolicy:
+        type: Source
+    - name: 2.0.3
+      annotations:
+        opendatahub.io/image-tag-outdated: 'true'
+        opendatahub.io/notebook-build-commit: 'e3dc6a'
+        opendatahub.io/notebook-python-dependencies: '[]'
+        opendatahub.io/notebook-software: '[{"name":"ODH-TEC","version":"2.0.3"}]'
+        opendatahub.io/workbench-image-recommended: 'false'
+        openshift.io/imported-from: 'quay.io/rh-aiservices-bu/odh-tec:2.0.3'
+      from:
+        kind: DockerImage
+        name: 'quay.io/rh-aiservices-bu/odh-tec:2.0.3'
+      generation: 21
+      importPolicy:
+        importMode: Legacy
+      referencePolicy:
+        type: Source

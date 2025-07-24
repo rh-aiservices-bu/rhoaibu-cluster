@@ -1,0 +1,22 @@
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: google-client-secret
+  namespace: openshift-config
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: rhoaibu-external-store
+    kind: ClusterSecretStore
+  target:
+    name: google-client-secret
+    creationPolicy: Owner
+    metadata:
+      annotations:
+        template.openshift.io/expose-clientSecret: '{.data[''clientSecret'']}'
+  data:
+    - secretKey: clientSecret
+      remoteRef:
+        key: google-client-secret
+        property: clientSecret

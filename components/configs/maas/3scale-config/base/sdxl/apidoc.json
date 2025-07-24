@@ -1,0 +1,421 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "SDXL Serving runtime"
+    },
+    "paths": {
+        "/health": {
+            "get": {
+                "summary": "Health",
+                "description": "Health check endpoint.",
+                "operationId": "health_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HealthCheckResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/generate": {
+            "post": {
+                "summary": "Generate",
+                "description": "Instead of immediately processing the generation request,\ncreate a job and place it on the queue. Return the job id.",
+                "operationId": "generate_generate_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GenerationRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenerationResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/progress/{job_id}": {
+            "get": {
+                "summary": "Get Job Status",
+                "description": "GET endpoint for clients to poll for updates on a given job.\nReturns JSON messages with progress updates and, when completed, the generated image (base64 encoded).",
+                "operationId": "get_job_status_progress__job_id__get",
+                "parameters": [
+                    {
+                        "name": "job_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Job Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "GenerationRequest": {
+                "properties": {
+                    "prompt": {
+                        "type": "string",
+                        "title": "Prompt"
+                    },
+                    "height": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Height"
+                    },
+                    "width": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Width"
+                    },
+                    "guidance_scale": {
+                        "type": "number",
+                        "title": "Guidance Scale",
+                        "default": 8.0
+                    },
+                    "num_inference_steps": {
+                        "type": "integer",
+                        "title": "Num Inference Steps",
+                        "default": 50
+                    },
+                    "crops_coords_top_left": {
+                        "prefixItems": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "integer"
+                            }
+                        ],
+                        "type": "array",
+                        "maxItems": 2,
+                        "minItems": 2,
+                        "title": "Crops Coords Top Left",
+                        "default": [
+                            0,
+                            0
+                        ]
+                    },
+                    "prompt_2": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Prompt 2"
+                    },
+                    "negative_prompt": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Negative Prompt"
+                    },
+                    "negative_prompt_2": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Negative Prompt 2"
+                    },
+                    "timesteps": {
+                        "items": {
+                            "type": "integer"
+                        },
+                        "type": "array",
+                        "title": "Timesteps"
+                    },
+                    "sigmas": {
+                        "items": {
+                            "type": "number"
+                        },
+                        "type": "array",
+                        "title": "Sigmas"
+                    },
+                    "denoising_limit": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Denoising Limit",
+                        "default": 0.8
+                    },
+                    "eta": {
+                        "type": "number",
+                        "title": "Eta",
+                        "default": 0.0
+                    },
+                    "guidance_rescale": {
+                        "type": "number",
+                        "title": "Guidance Rescale",
+                        "default": 0.0
+                    },
+                    "original_size": {
+                        "anyOf": [
+                            {
+                                "prefixItems": [
+                                    {
+                                        "type": "integer"
+                                    },
+                                    {
+                                        "type": "integer"
+                                    }
+                                ],
+                                "type": "array",
+                                "maxItems": 2,
+                                "minItems": 2
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Original Size"
+                    },
+                    "target_size": {
+                        "anyOf": [
+                            {
+                                "prefixItems": [
+                                    {
+                                        "type": "integer"
+                                    },
+                                    {
+                                        "type": "integer"
+                                    }
+                                ],
+                                "type": "array",
+                                "maxItems": 2,
+                                "minItems": 2
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Target Size"
+                    },
+                    "negative_original_size": {
+                        "anyOf": [
+                            {
+                                "prefixItems": [
+                                    {
+                                        "type": "integer"
+                                    },
+                                    {
+                                        "type": "integer"
+                                    }
+                                ],
+                                "type": "array",
+                                "maxItems": 2,
+                                "minItems": 2
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Negative Original Size"
+                    },
+                    "negative_crops_coords_top_left": {
+                        "prefixItems": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "integer"
+                            }
+                        ],
+                        "type": "array",
+                        "maxItems": 2,
+                        "minItems": 2,
+                        "title": "Negative Crops Coords Top Left",
+                        "default": [
+                            0,
+                            0
+                        ]
+                    },
+                    "negative_target_size": {
+                        "anyOf": [
+                            {
+                                "prefixItems": [
+                                    {
+                                        "type": "integer"
+                                    },
+                                    {
+                                        "type": "integer"
+                                    }
+                                ],
+                                "type": "array",
+                                "maxItems": 2,
+                                "minItems": 2
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Negative Target Size"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "prompt"
+                ],
+                "title": "GenerationRequest",
+                "examples": [
+                    {
+                        "guidance_scale": 8.0,
+                        "height": 1024,
+                        "num_inference_steps": 30,
+                        "prompt": "cat, photo, 4k",
+                        "width": 1024
+                    }
+                ]
+            },
+            "GenerationResponse": {
+                "properties": {
+                    "job_id": {
+                        "type": "string",
+                        "title": "Job Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "job_id"
+                ],
+                "title": "GenerationResponse"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "HealthCheckResponse": {
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "title": "Status",
+                        "default": "ok"
+                    }
+                },
+                "type": "object",
+                "title": "HealthCheckResponse"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        }
+    }
+}

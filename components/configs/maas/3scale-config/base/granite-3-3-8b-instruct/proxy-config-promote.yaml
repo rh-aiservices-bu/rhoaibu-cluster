@@ -1,0 +1,9 @@
+---
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ProxyConfigPromote
+metadata:
+  name: granite-3-3-8b-instruct
+spec:
+  productCRName: granite-3-3-8b-instruct
+  production: true
+  deleteCR: false

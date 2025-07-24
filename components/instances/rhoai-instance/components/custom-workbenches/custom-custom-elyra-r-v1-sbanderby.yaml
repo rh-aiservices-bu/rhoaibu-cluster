@@ -1,0 +1,33 @@
+---
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  annotations:
+    opendatahub.io/notebook-image-creator: rcarrata@redhat.com
+    opendatahub.io/notebook-image-desc: Custom Image - Elyra R for Sara Banderby
+    opendatahub.io/notebook-image-name: CUSTOM-elyra-r-v1-sbanderby
+    opendatahub.io/notebook-image-url: 'quay.io/sara_banderby/elyra-r:version1'
+    opendatahub.io/recommended-accelerators: '[]'
+  name: custom-custom-elyra-r-v1-sbanderby
+  namespace: redhat-ods-applications
+  labels:
+    app.kubernetes.io/created-by: byon
+    opendatahub.io/dashboard: 'true'
+    opendatahub.io/notebook-image: 'true'
+spec:
+  lookupPolicy:
+    local: true
+  tags:
+    - name: version1
+      annotations:
+        opendatahub.io/notebook-python-dependencies: '[]'
+        opendatahub.io/notebook-software: '[]'
+        openshift.io/imported-from: 'quay.io/sara_banderby/elyra-r:version1'
+      from:
+        kind: DockerImage
+        name: 'quay.io/sara_banderby/elyra-r:version1'
+      generation: 2
+      importPolicy:
+        importMode: Legacy
+      referencePolicy:
+        type: Source

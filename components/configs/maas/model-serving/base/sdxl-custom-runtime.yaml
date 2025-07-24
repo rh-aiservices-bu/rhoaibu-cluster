@@ -1,0 +1,75 @@
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  name: sdxl
+  annotations:
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+    openshift.io/display-name: "SDXL Runtime"
+    opendatahub.io/template-display-name: "SDXL Runtime"
+    opendatahub.io/template-name: sdxl
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  multiModel: false
+  builtInAdapter:
+    modelLoadingTimeoutMillis: 90000
+  supportedModelFormats:
+    - name: sdxl
+      autoSelect: true
+  containers:
+    - name: kserve-container
+      image: quay.io/rh-aiservices-bu/sdxl-serving-runtime:0.1.10
+      volumeMounts:
+        - mountPath: /dev/shm
+          name: shm
+      ports:
+        - containerPort: 8080
+          name: http1
+          protocol: TCP
+  volumes:
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 2Gi
+      name: shm
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: SDXL-1.0
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: sdxl
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      modelFormat:
+        name: sdxl
+      name: ''
+      resources:
+        limits:
+          cpu: '6'
+          memory: 24Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '4'
+          memory: 16Gi
+          nvidia.com/gpu: '1'
+      runtime: sdxl
+      args:
+        - --single-file-model=/mnt/models/stable-diffusion-xl-base-1.0/sd_xl_base_1.0.safetensors
+        - --use-refiner=True
+        - --refiner-single-file-model=/mnt/models/stable-diffusion-xl-refiner-1.0/sd_xl_refiner_1.0.safetensors
+        - --device=cuda
+      storage:
+        key: aws-connection-models
+        path: /stabilityai/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Equal
+        value: 'NVIDIA-L40-PRIVATE'

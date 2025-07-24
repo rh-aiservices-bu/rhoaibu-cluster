@@ -1,0 +1,6 @@
+- op: replace
+  path: /spec/template/spec/source/targetRevision
+  value: dev # Adjust it to the desired branch for Dev (main)
+- op: replace
+  path: /spec/generators/0/git/revision
+  value: dev # Adjust it to the desired branch for Dev (main)

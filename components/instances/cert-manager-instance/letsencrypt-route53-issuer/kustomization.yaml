@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonAnnotations:
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+
+resources:
+  - letsencrypt-prod-cluster-issuer.yaml
+  - letsencrypt-staging-cluster-issuer.yaml
+  - cert-manager-instance.yaml # This needs to be applied due to the DNS01 solver configuration - https://docs.openshift.com/container-platform/4.15/security/cert_manager_operator/cert-manager-customizing-api-fields.html#cert-manager-override-arguments_cert-manager-customizing-api-fields

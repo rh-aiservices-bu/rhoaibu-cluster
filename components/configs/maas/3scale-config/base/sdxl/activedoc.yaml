@@ -1,0 +1,12 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ActiveDoc
+metadata:
+  name: sdxl-serving
+spec:
+  name: "SDXL Serving Runtime API Documentation"
+  systemName: "sdxlserving"
+  activeDocOpenAPIRef:
+    url: "https://raw.githubusercontent.com/rh-aiservices-bu/maas-config/refs/heads/main/sdxl/apidoc.json"
+  published: true
+  skipSwaggerValidations: true
+  productSystemName: "sdxl"

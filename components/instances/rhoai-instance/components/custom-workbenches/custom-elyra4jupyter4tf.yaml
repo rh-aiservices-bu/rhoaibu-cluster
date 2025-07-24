@@ -1,0 +1,33 @@
+---
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  annotations:
+    opendatahub.io/notebook-image-creator: eignatow@redhat.com
+    opendatahub.io/notebook-image-desc: added by eder
+    opendatahub.io/notebook-image-name: elyra4+jupyter4+Tf
+    opendatahub.io/notebook-image-url: 'quay.io/opendatahub/workbench-images@sha256:2f4539e638188bb63f65823aa03a3e4614effc071041008be9cf7caa721cb401'
+    opendatahub.io/recommended-accelerators: '[]'
+  name: custom-elyra4jupyter4tf
+  namespace: redhat-ods-applications
+  labels:
+    app.kubernetes.io/created-by: byon
+    opendatahub.io/dashboard: 'true'
+    opendatahub.io/notebook-image: 'false'
+spec:
+  lookupPolicy:
+    local: true
+  tags:
+    - name: latest
+      annotations:
+        opendatahub.io/notebook-python-dependencies: '[]'
+        opendatahub.io/notebook-software: '[]'
+        openshift.io/imported-from: 'quay.io/opendatahub/workbench-images@sha256:2f4539e638188bb63f65823aa03a3e4614effc071041008be9cf7caa721cb401'
+      from:
+        kind: DockerImage
+        name: 'quay.io/opendatahub/workbench-images@sha256:2f4539e638188bb63f65823aa03a3e4614effc071041008be9cf7caa721cb401'
+      generation: 2
+      importPolicy:
+        importMode: Legacy
+      referencePolicy:
+        type: Source

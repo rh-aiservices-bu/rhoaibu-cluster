@@ -1,0 +1,12 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ActiveDoc
+metadata:
+  name: llama-3-2-3b
+spec:
+  name: "Llama-3.2-3B API Documentation"
+  systemName: "llama323b"
+  activeDocOpenAPIRef:
+    url: "https://raw.githubusercontent.com/rh-aiservices-bu/maas-config/refs/heads/main/llama-3-2-3b/apidoc.json"
+  published: true
+  skipSwaggerValidations: true
+  productSystemName: "llama-3-2-3b"

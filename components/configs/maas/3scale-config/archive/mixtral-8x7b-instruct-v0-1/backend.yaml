@@ -1,0 +1,8 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Backend
+metadata:
+  name: mixtral-8x7b-instruct-v0-1
+spec:
+  name: "Mixtral-8x7B-Instruct-v0.1"
+  systemName: "mixtral-8x7b-instruct-v0-1"
+  privateBaseURL: "http://mixtral-8x7b-instruct-v0-1-predictor.llm-hosting.svc.cluster.local:8080"

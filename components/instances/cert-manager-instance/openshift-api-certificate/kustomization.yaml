@@ -1,0 +1,9 @@
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+namespace: cert-manager-operator
+
+resources:
+  - openshift-api-certificate.yaml
+  - patch-cluster-api-cert-job.yaml
+  - patch-cluster-api-cert-cronjob.yaml

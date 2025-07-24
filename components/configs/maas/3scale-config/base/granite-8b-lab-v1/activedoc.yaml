@@ -1,0 +1,12 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ActiveDoc
+metadata:
+  name: granite-8b-lab-v1
+spec:
+  name: "Granite-8b-lab-v1 API Documentation"
+  systemName: "granite8blabv1"
+  activeDocOpenAPIRef:
+    url: "https://raw.githubusercontent.com/rh-aiservices-bu/maas-config/refs/heads/main/granite-8b-lab-v1/apidoc.json"
+  published: true
+  skipSwaggerValidations: true
+  productSystemName: "granite-8b-lab-v1"

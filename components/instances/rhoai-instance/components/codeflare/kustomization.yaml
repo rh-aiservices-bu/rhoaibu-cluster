@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - default-flavor.yaml
+
+patchesStrategicMerge:
+  - enable_codeflare_patch.yaml
+  - enable_distributed_workloads_odhdashboard_patch.yaml

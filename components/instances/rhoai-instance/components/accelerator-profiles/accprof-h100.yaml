@@ -1,0 +1,14 @@
+apiVersion: dashboard.opendatahub.io/v1
+kind: AcceleratorProfile
+metadata:
+  name: huge-gpu-card
+  namespace: redhat-ods-applications
+spec:
+  description: 'Restricted use - Do not select without approval'
+  displayName: Huge GPU Card (NVIDIA H100 - 80 GB VRAM)
+  enabled: false
+  identifier: nvidia.com/gpu
+  tolerations:
+    - effect: NoSchedule
+      key: nvidia.com/gpu
+      value: NVIDIA-H100-SHARED

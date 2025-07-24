@@ -1,0 +1,77 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Product
+metadata:
+  name: sdxl-serving
+spec:
+  name: "StableDiffusion-XL"
+  systemName: "sdxl"
+  deployment:
+    apicastHosted:
+      authentication:
+        userkey:
+          authUserKey: "Authorization"
+          credentials: "authorization"
+  description: >
+    An advanced text-to-image generation model featuring a 3x larger UNet and dual text encoders (CLIP ViT-L/14 + OpenCLIP ViT-bigG/14). Supports ensemble pipeline with base and refiner models for photorealistic image synthesis, plus SDXL-Turbo variant for single-step real-time generation.
+  backendUsages:
+    sdxl-http:
+      path: /
+  metrics:
+    hits:
+      description: Number of API hits
+      friendlyName: Hits
+      unit: "hit"
+  methods:
+    health:
+      friendlyName: "Health Check"
+      description: "Check the health of the SDXL service"
+    generate:
+      friendlyName: "Generate Image"
+      description: "Submit an image generation request and receive a job ID"
+    generation:
+      friendlyName: "Check Job Progress"
+      description: "Poll for job status and retrieve generated results"
+  mappingRules:
+    - httpMethod: GET
+      pattern: /health
+      metricMethodRef: health
+      increment: 1
+    - httpMethod: POST
+      pattern: /generate
+      metricMethodRef: generate
+      increment: 1
+    - httpMethod: GET
+      pattern: /progress/{job_id}
+      metricMethodRef: generation
+      increment: 1
+  applicationPlans:
+    standard:
+      name: "Standard"
+      default: true
+      appsRequireApproval: false
+      published: true
+  policies:
+    - name: cors
+      version: builtin
+      enabled: true
+      configuration:
+        {
+          "allow_origin": "*",
+          "allow_headers": ["Authorization", "Content-type", "Accept"],
+          "allow_methods": [],
+        }
+    - name: upstream_connection
+      configuration:
+        connect_timeout: 300
+        read_timeout: 300
+        send_timeout: 300
+      enabled: true
+      version: builtin
+    - name: websocket
+      version: builtin
+      enabled: true
+      configuration: {}
+    - name: apicast
+      version: "builtin"
+      configuration: {}
+      enabled: true

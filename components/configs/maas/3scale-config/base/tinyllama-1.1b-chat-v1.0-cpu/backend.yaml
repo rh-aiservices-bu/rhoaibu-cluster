@@ -1,0 +1,8 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Backend
+metadata:
+  name: tinyllama-cpu
+spec:
+  name: "TinyLlama on CPU"
+  systemName: "tinyllama-cpu"
+  privateBaseURL: "http://tinyllama-1b-cpu-predictor.cpu-vllm.svc.cluster.local:8080"

@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: patch-cluster-api-cert-cronjob
+spec:
+  schedule: "0 0 1 2,5,8,11 *" # Run at 00:00 on day-of-month 1 in February, May, August, and November.
+  concurrencyPolicy: Forbid
+  suspend: false
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+              env:
+                - name: API_HOST_NAME
+                  value: api.home.ocplab.com
+              command:
+                - /bin/bash
+                - -c
+                - |
+                  #!/usr/bin/env bash
+                  CERT_MANAGER_NAMESPACE="cert-manager-operator"
+                  API_HOST_NAME=$(oc get secret openshift-api-certificate -n $CERT_MANAGER_NAMESPACE -o jsonpath='{.metadata.annotations.cert-manager\.io/common-name}')
+                  if oc get secret openshift-api-certificate -n $CERT_MANAGER_NAMESPACE; then
+                    oc delete secret openshift-api-certificate -n openshift-config
+                    oc get secret openshift-api-certificate -n $CERT_MANAGER_NAMESPACE -o json | sed 's/"namespace": "[^"]*",//; s/"creationTimestamp": "[^"]*",//; s/"resourceVersion": "[^"]*",//; s/"selfLink": "[^"]*",//; s/"uid": "[^"]*",//; s/"annotations": {[^}]*},//' | oc apply -n openshift-config -f -
+                    oc patch apiserver cluster --type=merge -p '{"spec":{"servingCerts": {"namedCertificates": [{"names": ["'$API_HOST_NAME'"], "servingCertificate": {"name": "openshift-api-certificate"}}]}}}'
+                  else
+                    echo "Could not execute sync as secret 'openshift-api-certificate' in namespace 'openshift-config' does not exist, check status of CertificationRequest"
+                    exit 1
+                  fi
+              name: patch-cluster-api-cert
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          terminationGracePeriodSeconds: 30
+          serviceAccount: patch-cluster-api-cert
+          serviceAccountName: patch-cluster-api-cert

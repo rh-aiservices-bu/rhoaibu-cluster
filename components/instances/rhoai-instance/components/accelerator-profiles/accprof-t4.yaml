@@ -1,0 +1,14 @@
+apiVersion: dashboard.opendatahub.io/v1
+kind: AcceleratorProfile
+metadata:
+  name: medium-gpu-card
+  namespace: redhat-ods-applications
+spec:
+  description: 'Regular users should select this'
+  displayName: Medium GPU Card (NVIDIA T4 - 16 GB VRAM)
+  enabled: true
+  identifier: nvidia.com/gpu
+  tolerations:
+    - effect: NoSchedule
+      key: nvidia.com/gpu
+      value: Tesla-T4-SHARED

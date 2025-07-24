@@ -1,0 +1,84 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-oper-instances-applicationset
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  generators:
+    - list:
+        elements:
+          - cluster: local
+            values:
+              name: instance-nfd
+              path: components/instances/nfd-instance/overlays/nvidia
+              namespace: openshift-gitops
+    - list:
+        elements:
+          - cluster: local
+            values:
+              name: instance-rhoai
+              path: components/instances/rhoai-instance/overlays/full
+              namespace: openshift-gitops
+    - list:
+        elements:
+          - cluster: local
+            values:
+              name: instance-odf
+              path: components/instances/odf-instance/aggregate/overlays/ # this needs to point to specific <cluster> path
+              namespace: openshift-gitops
+    - list:
+        elements:
+          - cluster: local
+            values:
+              name: instance-nvidia-operator
+              path: components/instances/nvidia-oper-instance/aggregate/overlays/default
+              namespace: openshift-gitops
+    - list:
+        elements:
+          - cluster: local
+            values:
+              name: instance-ocp-virt
+              path: components/instances/ocp-virt-instance/base
+              namespace: openshift-gitops
+    - list:
+        elements:
+          - cluster: local
+            values:
+              name: instance-ocp-lightspeed
+              path: components/instances/ocp-lightspeed-instance/overlays
+              namespace: openshift-gitops
+    - list:
+        elements:
+          - cluster: local
+            values:
+              name: instance-external-secrets
+              path: components/instances/external-secrets-instance/overlays
+              namespace: openshift-gitops
+  template:
+    metadata:
+      name: "{{values.name}}"
+      annotations:
+        argocd.argoproj.io/compare-options: IgnoreExtraneous
+        argocd.argoproj.io/sync-options: Prune=false
+    spec:
+      project: cluster-oper-instances
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true
+        # retry:
+        #   limit: 2
+        #   backoff:
+        #     duration: 5s
+        #     factor: 2
+        #     maxDuration: 10m
+      source:
+        repoURL: https://github.com/rh-aiservices-bu/rhoaibu-cluster
+        targetRevision: dev
+        path: "{{values.path}}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: openshift-gitops

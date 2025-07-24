@@ -1,0 +1,156 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Product
+metadata:
+  name: granite3-guardian-2b
+spec:
+  name: "Granite Guardian 3.1 2B"
+  systemName: "granite3-guardian-2b"
+  deployment:
+    apicastHosted:
+      authentication:
+        userkey:
+          authUserKey: "Authorization"
+          credentials: "authorization"
+  description: >
+    A 2B parameter safety model fine-tuned for risk detection in prompts and responses. Detects harm, bias, jailbreaking, violence, and profanity. Trained on human annotations and red-team data, achieving 0.90 recall on jailbreak detection and outperforming other open-source safety models.
+  backendUsages:
+    granite3-guardian-2b:
+      path: /
+  metrics:
+    hits:
+      description: Number of API hits
+      friendlyName: Hits
+      unit: "hit"
+    total_tokens:
+      description: Number of total tokens
+      friendlyName: Total Tokens
+      unit: "token"
+    prompt_tokens:
+      description: Number of prompt tokens
+      friendlyName: Prompt Tokens
+      unit: "token"
+    completion_tokens:
+      description: Number of completion tokens
+      friendlyName: Completion Tokens
+      unit: "token"
+  methods:
+    health:
+      friendlyName: "Health Check"
+      description: "Check the health of the model"
+    models:
+      friendlyName: "Models"
+      description: "Get the list of models"
+    version:
+      friendlyName: "Version Check"
+      description: "Check the version of the model"
+    chat/completions:
+      friendlyName: "Chat Completions"
+      description: "Get the completions for the input text"
+  mappingRules:
+    - httpMethod: GET
+      pattern: /health
+      metricMethodRef: health
+      increment: 1
+    - httpMethod: GET
+      pattern: /v1/models
+      metricMethodRef: models
+      increment: 1
+    - httpMethod: GET
+      pattern: /version
+      metricMethodRef: version
+      increment: 1
+    - httpMethod: POST
+      pattern: /v1/chat/completions
+      metricMethodRef: chat/completions
+      increment: 1
+  applicationPlans:
+    standard:
+      name: "Standard"
+      default: true
+      appsRequireApproval: false
+      published: true
+  policies:
+    - name: cors
+      version: builtin
+      enabled: true
+      configuration:
+        {
+          "allow_origin": "*",
+          "allow_headers": ["Authorization", "Content-type", "Accept"],
+          "allow_methods": [],
+        }
+    - name: upstream_connection
+      configuration:
+        connect_timeout: 300
+        read_timeout: 300
+        send_timeout: 300
+      enabled: true
+      version: builtin
+    - name: llm-metrics
+      version: "0.1"
+      enabled: true
+      configuration:
+        {
+          "rules":
+            [
+              {
+                "increment": "{{ llm_usage.total_tokens }}",
+                "condition":
+                  {
+                    "operations":
+                      [
+                        {
+                          "right_type": "plain",
+                          "left_type": "liquid",
+                          "left": "{{status}}",
+                          "right": "200",
+                          "op": "==",
+                        },
+                      ],
+                    "combine_op": "and",
+                  },
+                "metric": "total_tokens",
+              },
+              {
+                "increment": "{{ llm_usage.prompt_tokens }}",
+                "condition":
+                  {
+                    "operations":
+                      [
+                        {
+                          "right_type": "plain",
+                          "left_type": "liquid",
+                          "left": "{{status}}",
+                          "right": "200",
+                          "op": "==",
+                        },
+                      ],
+                    "combine_op": "and",
+                  },
+                "metric": "prompt_tokens",
+              },
+              {
+                "increment": "{{ llm_usage.completion_tokens }}",
+                "condition":
+                  {
+                    "operations":
+                      [
+                        {
+                          "right_type": "plain",
+                          "left_type": "liquid",
+                          "left": "{{status}}",
+                          "right": "200",
+                          "op": "==",
+                        },
+                      ],
+                    "combine_op": "and",
+                  },
+                "metric": "completion_tokens",
+              },
+            ],
+          "enable_sse_support": true,
+        }
+    - name: apicast
+      version: "builtin"
+      configuration: {}
+      enabled: true

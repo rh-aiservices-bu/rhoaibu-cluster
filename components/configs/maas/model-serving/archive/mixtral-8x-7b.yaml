@@ -1,0 +1,85 @@
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    opendatahub.io/accelerator-name: ''
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+    opendatahub.io/template-display-name: 'vLLM-RHOAI 2.17-Mixtral-8x7B'
+    opendatahub.io/template-name: vllm-mixtral-8x7b-instruct-v0-1
+    openshift.io/display-name: vllm-mixtral-8x7b-instruct-v0-1
+  name: vllm-mixtral-8x7b-instruct-v0-1
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: '8080'
+  containers:
+    - args:
+        - '--port=8080'
+        - '--model=/mnt/models'
+        - '--served-model-name=mistralai/Mixtral-8x7B-Instruct-v0.1'
+        - '--distributed-executor-backend=mp'
+        - '--dtype=float16'
+        - "--tensor-parallel-size=4"
+      command:
+        - python
+        - '-m'
+        - vllm.entrypoints.openai.api_server
+      env:
+        - name: HF_HOME
+          value: /tmp/hf_home
+      image: 'quay.io/opendatahub/vllm@sha256:f7e40286a9e0a5870fcb96f3dc6c2cb094ed8eb8d9a17dc886fc6aae2ad06519'
+      name: kserve-container
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      volumeMounts:
+        - mountPath: /dev/shm
+          name: shm
+  multiModel: false
+  supportedModelFormats:
+    - autoSelect: true
+      name: vLLM
+  volumes:
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 2Gi
+      name: shm
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: Mixtral-8x7B-Instruct-v0.1
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: mixtral-8x7b-instruct-v0-1
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        limits:
+          cpu: '46'
+          memory: 360Gi
+          nvidia.com/gpu: '4'
+        requests:
+          cpu: '32'
+          memory: 300Gi
+          nvidia.com/gpu: '4'
+      runtime: vllm-mixtral-8x7b-instruct-v0-1
+      storage:
+        key: aws-connection-models
+        path: mistralai/Mixtral-8x7B-Instruct-v0.1/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Equal
+        value: NVIDIA-L40S-PRIVATE

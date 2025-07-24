@@ -1,0 +1,11 @@
+- op: add
+  path: /spec/identityProviders/-
+  value:
+    google:
+      clientID: 81828916161-sgk20jg203d3063ihojtld5o6o8ujebi.apps.googleusercontent.com
+      clientSecret:
+        name: google-client-secret
+      hostedDomain: redhat.com
+    mappingMethod: claim
+    name: RedHat-Google-Auth
+    type: Google

@@ -1,0 +1,8 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Backend
+metadata:
+  name: llama-3-2-3b
+spec:
+  name: "Llama-3.2-3B"
+  systemName: "llama-3-2-3b"
+  privateBaseURL: "http://llama-3-2-3b-predictor.llm-hosting.svc.cluster.local:8080"

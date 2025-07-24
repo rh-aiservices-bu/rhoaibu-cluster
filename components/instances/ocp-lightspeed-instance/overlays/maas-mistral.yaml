@@ -1,0 +1,18 @@
+apiVersion: ols.openshift.io/v1alpha1
+kind: OLSConfig
+metadata:
+  name: cluster
+spec:
+  llm:
+    providers:
+      - credentialsSecretRef:
+          name: credentials
+        models:
+          - name: mistral-7b-instruct
+        type: openai
+        name: OpenShiftAI
+        url: 'https://mistral-7b-instruct-v0-3-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1'
+
+  ols:
+    defaultModel: mistral-7b-instruct
+    defaultProvider: OpenShiftAI  

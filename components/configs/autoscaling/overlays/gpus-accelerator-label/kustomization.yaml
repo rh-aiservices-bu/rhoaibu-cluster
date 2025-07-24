@@ -1,0 +1,12 @@
+resources:
+  - ../gpus
+
+patches:
+  - target:
+      group: autoscaling.openshift.io
+      kind: ClusterAutoscaler
+      name: default
+    patch: |-
+      - op: replace
+        path: /spec/resourceLimits/gpus/0/type
+        value: Tesla-T4-SHARED

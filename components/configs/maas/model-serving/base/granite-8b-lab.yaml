@@ -1,0 +1,44 @@
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: Granite-8b-lab-v1
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: granite-8b-lab-v1
+  namespace: llm-hosting
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      args:
+        - '--port=8080'
+        - '--model=/mnt/models'
+        - '--distributed-executor-backend=mp'
+        - '--max-model-len=6144'
+        - '--dtype=half'
+        - '--served-model-name={{.Name}}'
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        limits:
+          cpu: '8'
+          memory: 24Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '4'
+          memory: 16Gi
+          nvidia.com/gpu: '1'
+      runtime: vllm-rhoai-2.21
+      storage:
+        key: aws-connection-models
+        path: ibm-granite/granite-8b-lab-v1/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Equal
+        value: NVIDIA-L40-PRIVATE

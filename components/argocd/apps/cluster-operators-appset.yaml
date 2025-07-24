@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-operators-applicationset
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/rh-aiservices-bu/rhoaibu-cluster
+        revision: dev
+        directories:
+          - path: components/operators/*
+  template:
+    metadata:
+      name: "{{path.basename}}"
+    spec:
+      project: cluster-operators
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true
+      source:
+        repoURL: https://github.com/rh-aiservices-bu/rhoaibu-cluster
+        targetRevision: dev
+        path: "{{path}}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: openshift-gitops

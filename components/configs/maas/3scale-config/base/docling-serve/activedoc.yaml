@@ -1,0 +1,12 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ActiveDoc
+metadata:
+  name: docling
+spec:
+  name: "Docling Serve API Documentation"
+  systemName: "docling"
+  activeDocOpenAPIRef:
+    url: "https://raw.githubusercontent.com/rh-aiservices-bu/maas-config/refs/heads/main/docling-serve/apidoc.json"
+  published: true
+  skipSwaggerValidations: true
+  productSystemName: "docling"

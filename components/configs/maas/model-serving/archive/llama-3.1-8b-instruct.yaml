@@ -1,0 +1,90 @@
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    opendatahub.io/accelerator-name: ''
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+    opendatahub.io/template-display-name: 'vLLM-Llama-3.1'
+    opendatahub.io/template-name: vllm-llama-3-1
+    openshift.io/display-name: vllm-llama-3-1
+  name: vllm-llama-3-1
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: '8080'
+  containers:
+    - args:
+        - '--port=8080'
+        - '--model=/mnt/models'
+        - '--served-model-name=meta-llama/Llama-3.1-8B-Instruct'
+        - '--distributed-executor-backend=mp'
+        - '--max-model-len=6144'
+        - '--dtype=half'
+        - '--enable-auto-tool-choice'
+        - '--tool-call-parser'
+        - llama3_json
+        - '--chat-template'
+        - /app/data/template/tool_chat_template_llama3.1_json.jinja
+      command:
+        - python
+        - '-m'
+        - vllm.entrypoints.openai.api_server
+      env:
+        - name: HF_HOME
+          value: /tmp/hf_home
+      image: 'quay.io/opendatahub/vllm@sha256:b9ed08943cb8b28e5ce79620d0229d45e394daa7bf4e67ec6a03b114071a2924'
+      name: kserve-container
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      volumeMounts:
+        - mountPath: /dev/shm
+          name: shm
+  multiModel: false
+  supportedModelFormats:
+    - autoSelect: true
+      name: vLLM
+  volumes:
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 2Gi
+      name: shm
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: Llama-3.1-8B-Instruct
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: llama-3-1-8b-instruct
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        limits:
+          cpu: '8'
+          memory: 24Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '4'
+          memory: 16Gi
+          nvidia.com/gpu: '1'
+      runtime: vllm-llama-3-1
+      storage:
+        key: aws-connection-models
+        path: meta-llama/Llama-3.1-8B-Instruct/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Equal
+        value: NVIDIA-A10G-PRIVATE

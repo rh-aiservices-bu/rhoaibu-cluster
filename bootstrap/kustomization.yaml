@@ -1,0 +1,7 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources: # This is the bootstrap of the OpenShift GitOps initial instance needed to perform GitOps
+  - ../components/operators/openshift-gitops-operator/operator # This is the operator of OpenShift GitOps
+  - ../components/operators/openshift-gitops-operator/instance # This is the instance of ArgoCD
+  - ../components/argocd/projects/overlays # This is the projects of ArgoCD

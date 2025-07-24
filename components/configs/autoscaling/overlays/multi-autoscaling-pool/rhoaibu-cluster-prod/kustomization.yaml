@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonAnnotations:
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+
+resources:
+  - ../../../base
+  - machineautoscaler-l40-private.yaml
+  - machineautoscaler-l40-shared.yaml
+  - machineautoscaler-t4-private.yaml
+  - machineautoscaler-t4-shared.yaml

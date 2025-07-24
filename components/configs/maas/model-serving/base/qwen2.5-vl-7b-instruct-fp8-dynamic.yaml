@@ -1,0 +1,43 @@
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: Qwen2.5-VL-7B-Instruct-FP8-Dynamic
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: qwen25-vl-7b-instruct-fp8-dynamic
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      args:
+        - '--port=8080'
+        - '--model=/mnt/models'
+        - '--served-model-name=RedHatAI/Qwen2.5-VL-7B-Instruct-FP8-Dynamic'
+        - '--distributed-executor-backend=mp'
+        - '--dtype=auto'
+        - '--max-model-len=100000'
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        limits:
+          cpu: '8'
+          memory: 24Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '4'
+          memory: 16Gi
+          nvidia.com/gpu: '1'
+      runtime: vllm-rhoai-2.21
+      storage:
+        key: aws-connection-models
+        path: RedHatAI/Qwen2.5-VL-7B-Instruct-FP8-Dynamic/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Equal
+        value: NVIDIA-A10G-PRIVATE

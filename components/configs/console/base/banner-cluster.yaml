@@ -1,0 +1,11 @@
+apiVersion: console.openshift.io/v1
+kind: ConsoleNotification
+metadata:
+  name: banner-cluster
+spec:
+  text: "< see overlays - if you are seeing this you have mistaken >"
+  # valid locations: BannerTop, BannerBottom, BannerTopBottom
+  location: BannerTop
+  # https://htmlcolorcodes.com/color-picker
+  color: "#FFF"
+  backgroundColor: "#0066FF"

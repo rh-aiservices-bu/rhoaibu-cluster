@@ -1,0 +1,8 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Backend
+metadata:
+  name: docling
+spec:
+  name: "Docling Serve"
+  systemName: "docling"
+  privateBaseURL: "http://docling-v0-7-0-predictor.llm-hosting.svc.cluster.local:5001"
