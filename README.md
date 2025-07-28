@@ -76,5 +76,3 @@
 ## How to develop and test changes in the RHOAI Cluster
 
 * [Develop and Test Changes](docs/develop-and-test-changes.md)
-
->IMPORTANT: Do NOT publish or make public this repository! It contains **sensitive** information and resources to manage the RHOAI BU Cluster.
