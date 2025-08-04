@@ -11,7 +11,9 @@ The repository supports a complete development lifecycle:
 3. **Dev Environment**: Changes are tested in the development cluster first
 4. **Production Promotion**: Validated changes are promoted to production via GitOps
 
-## Prerequisites
+## Prerequisites. 
+
+
 
 - Access to the RHOAI BU Cluster repository
 - `kubectl` configured for cluster access

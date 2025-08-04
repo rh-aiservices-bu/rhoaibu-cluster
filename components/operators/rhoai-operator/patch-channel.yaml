@@ -3,4 +3,4 @@
   value: Automatic
 - op: replace
   path: /spec/channel
-  value: stable-2.19
+  value: stable-2.22
