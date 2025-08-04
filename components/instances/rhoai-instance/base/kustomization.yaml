@@ -7,5 +7,5 @@ commonAnnotations:
 resources:
   - datasciencecluster.yaml
   - odh-dashboard-config.yaml
-  - accelerator-profile.yaml
   - notebook-controller-culler-config-cm.yaml
+  #- accelerator-profile.yaml
