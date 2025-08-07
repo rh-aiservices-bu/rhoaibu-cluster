@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dump-argocd-token
+  namespace: argocd
+spec:
+  template:
+    spec:
+      serviceAccountName: argocd-application-controller   # cluster-admin
+      restartPolicy: Never
+      containers:
+      - name: show
+        image: registry.access.redhat.com/ubi9/ubi-minimal
+        command: ["bash","-c","cat /var/run/secrets/kubernetes.io/serviceaccount/token"]

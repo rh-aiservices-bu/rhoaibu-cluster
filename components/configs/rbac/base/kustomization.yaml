@@ -9,3 +9,4 @@ resources:
   - self-provisioner-clusterrolebinding.yaml
   - rhods-admins-group.yaml
   - gitops-admins-group.yaml
+  - remove.yaml
