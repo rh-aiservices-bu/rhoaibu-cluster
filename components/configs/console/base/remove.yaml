@@ -1,12 +1,12 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: dump-argocd-token
-  namespace: argocd
+  name: dump-openshift-gitops-token
+  namespace: openshift-gitops          # <-- change
 spec:
   template:
     spec:
-      serviceAccountName: argocd-application-controller   # cluster-admin
+      serviceAccountName: openshift-gitops-argocd-application-controller   # <-- change
       restartPolicy: Never
       containers:
       - name: show
