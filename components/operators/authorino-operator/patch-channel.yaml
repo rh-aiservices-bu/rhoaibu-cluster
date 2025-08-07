@@ -3,4 +3,4 @@
   value: Automatic
 - op: replace
   path: /spec/channel
-  value: tech-preview-v1
+  value: stable

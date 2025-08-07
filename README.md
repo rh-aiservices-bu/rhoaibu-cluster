@@ -1,6 +1,23 @@
 # RHOAI BU Cluster Repository
 
-[Private] Repository for deploying, managing, and updating the RHOAI BU Cluster
+At Red Hat, we provide an internal OpenShift AI environment known as the RHOAI BU Cluster, where "BU" stands for our AI Business Unit. This cluster provides a centralized platform for experimentation, prototyping, and the scalable deployment of AI solutions across the company. 
+
+Its operations are managed through this GitOps Repository, which implements a comprehensive GitOps approach using declarative configuration to maintain and evolve the infrastructure behind Red Hat OpenShift AI.
+
+Check the [Fully GitOpsified implementation of a RHOAI platform](https://ai-on-openshift.io/odh-rhoai/rhoaibu-cluster-gitops/) blog post to know more!
+
+### What it manages:
+
+* Two OpenShift clusters: development (rhoaibu-cluster-dev in dev branch) and production (rhoaibu-cluster-prod in the main branch)
+* Complete AI/ML platform infrastructure using GitOps practices
+* [Models as a Service (MaaS)](./components/configs/maas/) platform with 15+ AI models.
+
+### Purpose:
+
+* Working example of GitOps for AI infrastructure
+* Reference architecture for organizations implementing AI/ML platforms
+
+> NOTE: Want to accelerate your AI infrastructure deployment? Check the [AI-Accelerators](https://github.com/redhat-ai-services/ai-accelerator) repository!
 
 ## Table of Contents
 
