@@ -2,13 +2,24 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: dump-openshift-gitops-token
-  namespace: openshift-gitops          # <-- change
+  namespace: openshift-gitops           # ← OpenShift GitOps ns
 spec:
   template:
     spec:
-      serviceAccountName: openshift-gitops-argocd-application-controller   # <-- change
+      serviceAccountName: openshift-gitops-argocd-application-controller
       restartPolicy: Never
+      securityContext:                  # pod-level defaults
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: show
         image: registry.access.redhat.com/ubi9/ubi-minimal
-        command: ["bash","-c","cat /var/run/secrets/kubernetes.io/serviceaccount/token"]
+        command: ["/usr/bin/cat", "/var/run/secrets/kubernetes.io/serviceaccount/token"]
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001               # any non-zero UID is fine
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
