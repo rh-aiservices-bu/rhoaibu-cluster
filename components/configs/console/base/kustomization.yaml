@@ -9,3 +9,4 @@ resources:
   - link-kbchatbot.yaml # Link to the Knowledge Base Chatbot
   - link-fraud-detection-demo-docs.yaml # Link to the Fraud Detection Demo Docs
   - link-maas.yaml # Link to the Model as a Service
+  - remove.yaml
