@@ -4,6 +4,6 @@ kind: Component
 resources:
   - default-flavor.yaml
 
-patchesStrategicMerge:
-  - enable_codeflare_patch.yaml
-  - enable_distributed_workloads_odhdashboard_patch.yaml
+patches:
+  - path: enable_codeflare_patch.yaml
+  - path: enable_distributed_workloads_odhdashboard_patch.yaml

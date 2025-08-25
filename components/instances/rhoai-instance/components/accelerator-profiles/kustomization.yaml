@@ -8,5 +8,8 @@ resources:
   - accprof-a100.yaml
   - accprof-h100.yaml
 # Uncomment this if you want to disable the GPU by default
-patchesStrategicMerge:
-  - disable-gpu-default.yaml
+patches:
+  - path: disable-gpu-default.yaml
+    target:
+      kind: AcceleratorProfile
+      name: migrated-gpu
