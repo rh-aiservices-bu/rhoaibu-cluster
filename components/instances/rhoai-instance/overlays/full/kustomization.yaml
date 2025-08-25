@@ -13,4 +13,4 @@ components:
   - ../../components/metrics
   - ../../components/odh-applications
   - ../../components/model-registry
-  # - ../../components/accelerator-profiles
+  - ../../components/accelerator-profiles
