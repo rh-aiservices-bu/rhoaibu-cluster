@@ -8,9 +8,9 @@ resources:
   - ../default
 
 components:
-  - ../../components/accelerator-profiles
   - ../../components/codeflare
   - ../../components/custom-workbenches
   - ../../components/metrics
   - ../../components/odh-applications
   - ../../components/model-registry
+  # - ../../components/accelerator-profiles

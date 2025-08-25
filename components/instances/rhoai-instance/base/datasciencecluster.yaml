@@ -18,6 +18,9 @@ spec:
     kserve:
       devFlags: {}
       managementState: Managed
+      nim:
+        managementState: Managed
+      rawDeploymentServiceConfig: Headless
       serving:
         ingressGateway:
           certificate:
@@ -37,3 +40,11 @@ spec:
     modelregistry:
       managementState: Managed
       registriesNamespace: rhoai-model-registries
+    llamastackoperator:
+      managementState: Managed
+    feastoperator:
+      managementState: Managed
+    kueue:
+      managementState: Managed
+    trainingoperator:
+      managementState: Managed

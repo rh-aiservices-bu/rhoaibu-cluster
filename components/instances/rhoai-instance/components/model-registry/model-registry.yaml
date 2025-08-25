@@ -1,5 +1,5 @@
 ---
-apiVersion: modelregistry.opendatahub.io/v1alpha1
+apiVersion: modelregistry.opendatahub.io/v1beta1
 kind: ModelRegistry
 metadata:
   annotations:
@@ -7,39 +7,9 @@ metadata:
     openshift.io/display-name: registry
   name: registry
   namespace: rhoai-model-registries
-  finalizers:
-    - modelregistry.opendatahub.io/finalizer
 spec:
   grpc:
     port: 9090
-    resources:
-      limits:
-        cpu: 100m
-        memory: 256Mi
-      requests:
-        cpu: 100m
-        memory: 256Mi
-  istio:
-    audiences:
-      - 'https://kubernetes.default.svc'
-    authConfigLabels:
-      security.opendatahub.io/authorization-group: default
-    authProvider: redhat-ods-applications-auth-provider
-    gateway:
-      grpc:
-        gatewayRoute: enabled
-        port: 443
-        tls:
-          credentialName: default-modelregistry-cert
-          mode: SIMPLE
-      istioIngress: ingressgateway
-      rest:
-        gatewayRoute: enabled
-        port: 443
-        tls:
-          credentialName: default-modelregistry-cert
-          mode: SIMPLE
-    tlsMode: ISTIO_MUTUAL
   mysql:
     database: metadb
     host: registry-db.rhoai-model-registries.svc.cluster.local
@@ -47,16 +17,11 @@ spec:
       key: database-password
       name: registry-db
     port: 3306
-    skipDBCreation: false
     username: root
+  oauthProxy:
+    port: 8443
+    routePort: 443
+    serviceRoute: enabled
   rest:
-    image: 'quay.io/opendatahub/model-registry:v0.2.10'
     port: 8080
-    resources:
-      limits:
-        cpu: 100m
-        memory: 256Mi
-      requests:
-        cpu: 100m
-        memory: 256Mi
     serviceRoute: disabled
