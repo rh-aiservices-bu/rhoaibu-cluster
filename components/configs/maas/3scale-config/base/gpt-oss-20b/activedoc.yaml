@@ -1,0 +1,12 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ActiveDoc
+metadata:
+  name: granite-3-3-8b-instruct
+spec:
+  name: "Granite-3.3-8B-Instruct API Documentation"
+  systemName: "granite338binstruct"
+  activeDocOpenAPIRef:
+    url: "https://raw.githubusercontent.com/rh-aiservices-bu/maas-config/refs/heads/main/granite-3-3-8b-instruct/apidoc.json"
+  published: true
+  skipSwaggerValidations: true
+  productSystemName: "granite-3-3-8b-instruct"

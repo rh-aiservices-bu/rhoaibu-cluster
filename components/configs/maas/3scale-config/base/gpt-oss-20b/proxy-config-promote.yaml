@@ -1,0 +1,9 @@
+---
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ProxyConfigPromote
+metadata:
+  name: gpt-oss-20b
+spec:
+  productCRName: gpt-oss-20b
+  production: true
+  deleteCR: false

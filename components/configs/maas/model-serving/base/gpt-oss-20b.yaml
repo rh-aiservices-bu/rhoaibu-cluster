@@ -1,0 +1,40 @@
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: GPT-OSS-20b
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: gpt-oss-20b
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      args:
+        - '--model=/mnt/models'
+        - '--served-model-name=gpt-oss-20b'
+        - '--max-model-len=130000'
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        limits:
+          cpu: '6'
+          memory: 24Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '4'
+          memory: 16Gi
+          nvidia.com/gpu: '1'
+      runtime: vllm-gptoss
+      storage:
+        key: aws-connection-models
+        path: openai/gpt-oss-20b/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Equal
+        value: NVIDIA-L40-PRIVATE

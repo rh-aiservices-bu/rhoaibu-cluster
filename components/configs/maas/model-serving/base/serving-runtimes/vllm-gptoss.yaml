@@ -1,0 +1,56 @@
+---
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    opendatahub.io/accelerator-name: ''
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+    opendatahub.io/template-display-name: 'vLLM-GPTPOSS'
+    opendatahub.io/template-name: vllm-gptoss
+    openshift.io/display-name: vllm-gptoss
+  name: vllm-gptoss
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: '8080'
+  containers:
+    - args:
+        - '--port=8080'
+        - '--model=/mnt/models'
+      command:
+        - python3
+        - '-m'
+        - vllm.entrypoints.openai.api_server
+      env:
+        - name: HF_HOME
+          value: /tmp/hf_home
+        - name: HF_HUB_HOME
+          value: /tmp/hf_hub_home
+        - name: OUTLINES_CACHE_DIR
+          value: /tmp/outlines
+        - name: NUMBA_CACHE_DIR
+          value: /tmp/numba
+        - name: TRITON_CACHE_DIR
+          value: /tmp/triton
+        - name: VLLM_CACHE_ROOT
+          value: /tmp/vllm
+      image: 'quay.io/vllm/cuda-devpreview-unsupported:gpt-oss'
+      name: kserve-container
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      volumeMounts:
+        - mountPath: /dev/shm
+          name: shm
+  multiModel: false
+  supportedModelFormats:
+    - autoSelect: true
+      name: vLLM
+  volumes:
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 2Gi
+      name: shm

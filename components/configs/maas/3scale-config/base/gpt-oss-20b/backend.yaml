@@ -1,0 +1,8 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Backend
+metadata:
+  name: gpt-oss-20b
+spec:
+  name: "GPT-OSS-20b"
+  systemName: "gpt-oss-20b"
+  privateBaseURL: "http://gpt-oss-20b-predictor.llm-hosting.svc.cluster.local:8080"
