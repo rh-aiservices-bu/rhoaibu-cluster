@@ -3,10 +3,13 @@ apiVersion: nfd.openshift.io/v1
 metadata:
   name: nfd-instance
 spec:
-  instance: ""
+  enableTaints: false
+  instance: ''
   operand:
-    image: registry.redhat.io/openshift4/ose-node-feature-discovery:latest
+    image: 'registry.redhat.io/openshift4/ose-node-feature-discovery-rhel9@sha256:5c5f76d80514ce600f4251b325a8fb462dad5310a602fcb8b471e26d014f8a53'
+    imagePullPolicy: IfNotPresent
     servicePort: 12000
+  prunerOnDelete: false
   topologyUpdater: false
   workerConfig:
     configData: |
