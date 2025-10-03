@@ -1,0 +1,12 @@
+apiVersion: autoscaling.openshift.io/v1beta1
+kind: MachineAutoscaler
+metadata:
+  name: worker-gpu-g6.12xlarge-us-west-2a
+  namespace: openshift-machine-api
+spec:
+  maxReplicas: 4
+  minReplicas: 0
+  scaleTargetRef:
+    apiVersion: machine.openshift.io/v1beta1
+    kind: MachineSet
+    name: worker-gpu-g6.12xlarge-us-west-2a
