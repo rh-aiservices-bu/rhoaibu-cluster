@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    openshift.io/description: Spark Operator
+    openshift.io/display-name: Spark Operator
+  name: spark-operator
