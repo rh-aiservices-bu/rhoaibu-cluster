@@ -1,0 +1,11 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: spark-helm-operator
+  namespace: spark-operator
+spec:
+  channel: alpha
+  installPlanApproval: Automatic
+  name: spark-helm-operator
+  source: community-operators
+  sourceNamespace: openshift-marketplace

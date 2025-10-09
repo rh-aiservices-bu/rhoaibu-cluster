@@ -35,6 +35,11 @@ spec:
               name: redis-enterprise-operator
               path: components/operators-extra/redis-enterprise-operator/overlays/production
               namespace: openshift-gitops
+          - cluster: local
+            values:
+              name: spark-community-operator
+              path: components/operators-extra/spark-community-operator/overlays/alpha
+              namespace: openshift-gitops
           # - cluster: local
           #   values:
           #     name: run-ai-operator
