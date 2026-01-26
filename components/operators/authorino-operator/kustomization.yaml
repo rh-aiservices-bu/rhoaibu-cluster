@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - github.com/redhat-cop/gitops-catalog/authorino-operator/operator/overlays/stable?ref=main
+  - bg.yaml
 
 patches:
   - target:
