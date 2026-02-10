@@ -10,3 +10,4 @@ resources:
   - machineautoscaler-l40-shared.yaml
   - machineautoscaler-t4-private.yaml
   - machineautoscaler-t4-shared.yaml
+  - machineautoscaler-l40-multi.yaml
