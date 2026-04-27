@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: patch-cluster-wildcard-cert-cronjob
 spec:
-  schedule: "0 0 1 2,5,8,11 *" # Run at 00:00 on day-of-month 1 in February, May, August, and November.
+  schedule: "0 0 1 * *" # Run at 00:00 on the 1st of every month.
   concurrencyPolicy: Forbid
   suspend: false
   successfulJobsHistoryLimit: 1
