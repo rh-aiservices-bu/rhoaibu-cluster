@@ -11,4 +11,4 @@ spec:
   commonName: "*.apps.cluster.example.com"
   dnsNames:
     - "*.apps.cluster.example.com"
-  renewBefore: 1800h
+  renewBefore: 720h

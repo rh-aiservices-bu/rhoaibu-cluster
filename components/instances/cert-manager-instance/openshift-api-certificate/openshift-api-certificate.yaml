@@ -10,4 +10,4 @@ spec:
     kind: ClusterIssuer
   dnsNames:
     - api.cluster.example.com
-  renewBefore: 1800h
+  renewBefore: 720h
