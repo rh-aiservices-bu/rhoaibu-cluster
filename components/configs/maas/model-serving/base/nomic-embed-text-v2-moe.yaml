@@ -1,0 +1,44 @@
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: Nomic-embed-text-v2-moe
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: nomic-embed-text-v2-moe
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      args:
+        - '--model=/mnt/models'
+        - '--served-model-name=nomic-embed-text-v2-moe'
+      modelFormat:
+        name: vLLM
+      name: ''
+      env:
+        - name: HF_HUB_OFFLINE
+          value: '1'
+        - name: TRANSFORMERS_OFFLINE
+          value: '1'
+      resources:
+        limits:
+          cpu: '6'
+          memory: 22Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '4'
+          memory: 18Gi
+          nvidia.com/gpu: '1'
+      runtime: vllm-rhoai-3.3
+      storage:
+        key: aws-connection-models
+        path: nomic-ai/nomic-embed-text-v2-moe/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Equal
+        value: Tesla-T4-PRIVATE
