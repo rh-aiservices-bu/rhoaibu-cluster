@@ -15,7 +15,7 @@ patches:
     patch: |-
       - op: replace
         path: /spec/text
-        value: 'This environment is available to any Red Hat employee who wants to use RHOAI -'
+        value: 'This cluster is approaching its end of life. Please review the email you received and migrate your workloads by the end of July.'
       # https://htmlcolorcodes.com/color-picker
       # - op: replace
       #   path: /spec/color
@@ -23,8 +23,8 @@ patches:
       - op: replace
         path: /spec/backgroundColor
         value: '#FF333C'
-      - op: add
-        path: /spec/link
-        value:
-          href: 'https://source.redhat.com/departments/products_and_global_engineering/artificial_intelligence/rhoaibucluster'
-          text: More Information
+      # - op: add
+      #   path: /spec/link
+      #   value:
+      #     href: 'https://source.redhat.com/departments/products_and_global_engineering/artificial_intelligence/rhoaibucluster'
+      #     text: More Information
