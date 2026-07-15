@@ -1,0 +1,40 @@
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+    opendatahub.io/runtime-version: v0.14.1
+    opendatahub.io/serving-runtime-scope: global
+    opendatahub.io/template-display-name: vLLM-RHOAI-3.3
+    opendatahub.io/template-name: vllm-rhoai-3.3
+    openshift.io/display-name: vllm-rhoai-3.3
+  name: vllm-rhoai-3.3
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  annotations:
+    opendatahub.io/kserve-runtime: vllm
+    prometheus.io/path: /metrics
+    prometheus.io/port: '8080'
+  containers:
+    - args:
+        - '--port=8080'
+        - '--model=/mnt/models'
+        - '--served-model-name={{.Name}}'
+      command:
+        - python
+        - '-m'
+        - vllm.entrypoints.openai.api_server
+      env:
+        - name: HF_HOME
+          value: /tmp/hf_home
+      image: 'registry.redhat.io/rhaiis/vllm-cuda-rhel9:3.3.0'
+      name: kserve-container
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+  multiModel: false
+  supportedModelFormats:
+    - autoSelect: true
+      name: vLLM
