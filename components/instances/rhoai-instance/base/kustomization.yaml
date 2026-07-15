@@ -5,7 +5,11 @@ commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
 resources:
+  - dscinitialization.yaml
   - datasciencecluster.yaml
   - odh-dashboard-config.yaml
   - notebook-controller-culler-config-cm.yaml
-  #- accelerator-profile.yaml
+  - hardwareprofile-cpu.yaml
+  - hardwareprofile-default-disabled.yaml
+  - hardwareprofile-gpu.yaml
+  - model-catalog-sources.yaml

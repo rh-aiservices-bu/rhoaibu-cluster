@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: nfs-provisioner-limits
+  namespace: nfs-provisioner
+spec:
+  limits:
+    - type: Container
+      default:
+        cpu: "2"
+        memory: 8Gi
+      defaultRequest:
+        cpu: 100m
+        memory: 128Mi

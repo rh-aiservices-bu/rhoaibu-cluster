@@ -1,0 +1,12 @@
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSModelRef
+metadata:
+  name: granite-4-tiny-gpu
+  namespace: llm
+  annotations:
+    openshift.io/display-name: "RedHatAI Granite 4.0-h-tiny FP8"
+    openshift.io/description: "Small Granite model on vLLM with NVIDIA GPU"
+spec:
+  modelRef:
+    kind: LLMInferenceService
+    name: granite-4-tiny-gpu

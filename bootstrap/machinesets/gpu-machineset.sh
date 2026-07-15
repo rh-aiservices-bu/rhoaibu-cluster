@@ -143,10 +143,15 @@ else
   oc get -n openshift-machine-api machinesets -o name | grep -v ocs | while read -r MACHINESET
   do
     oc get -n openshift-machine-api "$MACHINESET" -o json | jq --arg INSTANCE_TYPE "$INSTANCE_TYPE" --arg NEW_NAME "$NEW_NAME" --arg ACCELERATOR_LABEL "$ACCELERATOR_LABEL" --arg SPOT_MARKET_OPTIONS "$SPOT_MARKET_OPTIONS" '
+        del( .metadata.uid, .metadata.managedFields, .metadata.selfLink, .metadata.resourceVersion, .metadata.creationTimestamp, .metadata.generation, .status) |
         (.metadata.name) |= $NEW_NAME |
         (.spec.selector.matchLabels["machine.openshift.io/cluster-api-machineset"]) |= $NEW_NAME |
         (.spec.template.metadata.labels["machine.openshift.io/cluster-api-machineset"]) |= $NEW_NAME |
         (.spec.template.spec.providerSpec.value.instanceType) |= $INSTANCE_TYPE |
+        (.spec.template.spec.providerSpec.value.blockDevices[0].ebs.volumeType) |= "gp3" |
+        (.spec.template.spec.providerSpec.value.blockDevices[0].ebs.volumeSize) |= 500 |
+        (.spec.template.spec.providerSpec.value.blockDevices[0].ebs.iops) |= 3000 |
+        (.spec.template.spec.providerSpec.value.blockDevices[0].ebs.throughputMib) |= 500 |
         (.spec.template.spec.metadata.labels["cluster-api/accelerator"]) |= $ACCELERATOR_LABEL |
         (.spec.template.spec.taints) |= [{ "effect": "NoSchedule", "key": "nvidia.com/gpu", "value": $ACCELERATOR_LABEL }] |
         if $SPOT_MARKET_OPTIONS != "" then

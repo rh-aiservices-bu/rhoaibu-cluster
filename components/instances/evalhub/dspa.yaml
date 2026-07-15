@@ -1,0 +1,17 @@
+apiVersion: datasciencepipelinesapplications.opendatahub.io/v1
+kind: DataSciencePipelinesApplication
+metadata:
+  name: dspa
+  namespace: evalhub-tenant
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  dspVersion: v2
+  podToPodTLS: false
+  objectStorage:
+    disableHealthCheck: false
+    enableExternalRoute: true
+    minio:
+      deploy: true
+      image: quay.io/opendatahub/minio:RELEASE.2019-08-14T20-37-41Z-license-compliance

@@ -1,0 +1,20 @@
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSSubscription
+metadata:
+  name: granite-tiny-gpu-premium
+  namespace: models-as-a-service
+  annotations:
+    openshift.io/display-name: "Granite Tiny GPU Premium Tier"
+    openshift.io/description: "Premium tier: 10000 tokens/min for all authenticated users"
+spec:
+  owner:
+    groups:
+      - name: system:authenticated
+    users: []
+  modelRefs:
+    - name: granite-4-tiny-gpu
+      namespace: llm
+      tokenRateLimits:
+        - limit: 100000
+          window: 1m
+  priority: 20

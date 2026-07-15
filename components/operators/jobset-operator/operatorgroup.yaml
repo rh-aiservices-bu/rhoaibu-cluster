@@ -1,0 +1,9 @@
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: openshift-jobset-operator
+  namespace: openshift-jobset-operator
+spec:
+  targetNamespaces:
+    - openshift-jobset-operator
+  upgradeStrategy: Default

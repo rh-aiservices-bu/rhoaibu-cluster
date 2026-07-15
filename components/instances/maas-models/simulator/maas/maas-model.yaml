@@ -1,0 +1,12 @@
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSModelRef
+metadata:
+  name: facebook-opt-125m-simulated
+  namespace: llm
+  annotations:
+    openshift.io/display-name: "Facebook OPT 125M (Simulated)"
+    openshift.io/description: "CPU-only simulator for testing MaaS without a real LLM"
+spec:
+  modelRef:
+    kind: LLMInferenceService
+    name: facebook-opt-125m-simulated

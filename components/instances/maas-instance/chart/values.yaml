@@ -1,0 +1,8 @@
+clusterDomain: ""              # Required - set by install-maas.sh
+certName: router-certs-default # Overridable, auto-detected by script
+namespace: redhat-ods-applications
+
+postgres:
+  persistence:
+    size: 20Gi
+    storageClassName: ""  # empty = cluster default (gp3-csi on AWS)

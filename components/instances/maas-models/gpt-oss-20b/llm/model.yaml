@@ -1,0 +1,84 @@
+# OpenAI gpt-oss-20b on vLLM CUDA
+# Model weights: OCI modelcar from registry.redhat.io (~8GB download)
+# Runtime: Red Hat AI Inference Server (vLLM CUDA)
+# Requires: nvidia.com/gpu node (A10G or better), ~16GB GPU memory
+apiVersion: serving.kserve.io/v1alpha1
+kind: LLMInferenceService
+metadata:
+  name: gpt-oss-20b
+  annotations:
+    openshift.io/display-name: "OpenAI gpt-oss-20b"
+    opendatahub.io/model-type: generative
+    security.opendatahub.io/enable-auth: "true"
+  labels:
+    opendatahub.io/dashboard: "true"
+    opendatahub.io/genai-asset: "true"
+spec:
+  model:
+    name: gpt-oss-20b
+    uri: oci://registry.redhat.io/rhelai1/modelcar-gpt-oss-20b:1.5
+  replicas: 1
+  router:
+    route: {}
+    gateway:
+      refs:
+        - name: maas-default-gateway
+          namespace: openshift-ingress
+  template:
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Exists
+    containers:
+      - name: main
+        image: registry.redhat.io/rhaiis/vllm-cuda-rhel9:3.3.0
+        command:
+          - python
+          - -m
+          - vllm.entrypoints.openai.api_server
+        args:
+          - "--served-model-name={{.Name}}"
+          - --model=/mnt/models
+          - --enable-ssl-refresh
+          - --ssl-certfile=/var/run/kserve/tls/tls.crt
+          - --ssl-keyfile=/var/run/kserve/tls/tls.key
+          - --enable-force-include-usage
+        ports:
+          - containerPort: 8000
+            name: http
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+            scheme: HTTPS
+          initialDelaySeconds: 300
+          periodSeconds: 30
+          timeoutSeconds: 30
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+            scheme: HTTPS
+          initialDelaySeconds: 300
+          periodSeconds: 15
+          timeoutSeconds: 15
+          failureThreshold: 30
+        resources:
+          requests:
+            cpu: "2"
+            memory: 16Gi
+            nvidia.com/gpu: "1"
+          limits:
+            cpu: "4"
+            memory: 60Gi
+            nvidia.com/gpu: "1"
+        volumeMounts:
+          - mountPath: /dev/shm
+            name: shm
+    volumes:
+      - name: shm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 2Gi

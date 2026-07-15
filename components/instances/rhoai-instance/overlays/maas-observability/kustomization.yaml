@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../maas
+  - service-ca-injection.yaml
+  - kuadrant-persesdatasource-fix.yaml
+
+patches:
+  - target:
+      kind: DSCInitialization
+      name: default-dsci
+    patch: |-
+      - op: add
+        path: /spec/monitoring/metrics
+        value:
+          storage:
+            size: 5Gi
+            retention: 1d
+      - op: add
+        path: /spec/monitoring/namespace
+        value: redhat-ods-monitoring

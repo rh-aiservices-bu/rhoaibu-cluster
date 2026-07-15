@@ -1,0 +1,15 @@
+apiVersion: trustyai.opendatahub.io/v1alpha1
+kind: EvalHub
+metadata:
+  name: evalhub
+  namespace: redhat-ods-applications
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  replicas: 1
+  database:
+    type: sqlite
+  env:
+    - name: MLFLOW_TRACKING_URI
+      value: https://mlflow.redhat-ods-applications.svc.cluster.local:8443

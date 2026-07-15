@@ -1,0 +1,22 @@
+apiVersion: infrastructure.opendatahub.io/v1
+kind: HardwareProfile
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+    opendatahub.io/disabled: 'true'
+    opendatahub.io/display-name: default-profile
+    opendatahub.io/managed: 'false'
+  name: default-profile
+  namespace: redhat-ods-applications
+spec:
+  identifiers:
+    - defaultCount: '2'
+      displayName: CPU
+      identifier: cpu
+      minCount: 1
+      resourceType: CPU
+    - defaultCount: 8Gi
+      displayName: Memory
+      identifier: memory
+      minCount: 1Gi
+      resourceType: Memory

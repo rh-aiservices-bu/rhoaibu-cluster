@@ -20,7 +20,7 @@ spec:
           - cluster: local
             values:
               name: instance-rhoai
-              path: components/instances/rhoai-instance/overlays/full
+              path: components/instances/rhoai-instance/overlays/maas
               namespace: openshift-gitops
     - list:
         elements:
@@ -56,6 +56,34 @@ spec:
             values:
               name: instance-external-secrets
               path: components/instances/external-secrets-instance/overlays
+              namespace: openshift-gitops
+    - list:
+        elements:
+          - cluster: local
+            values:
+              name: instance-kuadrant
+              path: components/instances/connectivity-link-instance/base
+              namespace: openshift-gitops
+    - list:
+        elements:
+          - cluster: local
+            values:
+              name: instance-jobset
+              path: components/instances/jobset-instance/base
+              namespace: openshift-gitops
+    - list:
+        elements:
+          - cluster: local
+            values:
+              name: instance-lws
+              path: components/instances/leader-worker-set-instance/base
+              namespace: openshift-gitops
+    - list:
+        elements:
+          - cluster: local
+            values:
+              name: instance-nfs
+              path: components/instances/nfs-instance/base
               namespace: openshift-gitops
   template:
     metadata:

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: maas-default-gateway-options
+  namespace: openshift-ingress
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+data:
+  deployment: |
+    spec:
+      template:
+        spec:
+          containers:
+            - name: istio-proxy
+              resources:
+                requests:
+                  memory: 256Mi
+                limits:
+                  memory: 2Gi

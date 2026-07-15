@@ -1,50 +1,49 @@
 kind: DataScienceCluster
-apiVersion: datasciencecluster.opendatahub.io/v1
+apiVersion: datasciencecluster.opendatahub.io/v2
 metadata:
-  name: default
+  name: default-dsc
   annotations:
     argocd.argoproj.io/sync-wave: "1"
+  labels:
+    app.kubernetes.io/name: datasciencecluster
 spec:
   components:
-    codeflare:
-      devFlags: {}
+    aipipelines:
       managementState: Managed
     dashboard:
-      devFlags: {}
       managementState: Managed
-    datasciencepipelines:
-      devFlags: {}
+    feastoperator:
       managementState: Managed
     kserve:
-      devFlags: {}
       managementState: Managed
+      modelsAsService:
+        managementState: Removed
       nim:
         managementState: Managed
-      rawDeploymentServiceConfig: Headless
-      serving:
-        ingressGateway:
-          certificate:
-            type: OpenshiftDefaultIngress
-        managementState: Managed
-        name: knative-serving
-    modelmeshserving:
-      devFlags: {}
+      rawDeploymentServiceConfig: Headed
+    kueue:
+      defaultClusterQueueName: default
+      defaultLocalQueueName: default
+      managementState: Removed
+    llamastackoperator:
       managementState: Managed
-    ray:
-      devFlags: {}
-      managementState: Managed
-    trustyai:
-      managementState: Managed
-    workbenches:
+    mlflowoperator:
       managementState: Managed
     modelregistry:
       managementState: Managed
       registriesNamespace: rhoai-model-registries
-    llamastackoperator:
+    ray:
       managementState: Managed
-    feastoperator:
-      managementState: Managed
-    kueue:
+    trainer:
       managementState: Managed
     trainingoperator:
       managementState: Managed
+    trustyai:
+      eval:
+        lmeval:
+          permitCodeExecution: deny
+          permitOnline: deny
+      managementState: Managed
+    workbenches:
+      managementState: Managed
+      workbenchNamespace: rhods-notebooks

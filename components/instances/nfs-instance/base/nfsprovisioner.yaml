@@ -1,0 +1,9 @@
+apiVersion: cache.jhouse.com/v1alpha1
+kind: NFSProvisioner
+metadata:
+  name: nfs-provisioner
+  namespace: nfs-provisioner
+spec:
+  scForNFS: nfs
+  scForNFSPvc: gp3-csi
+  storageSize: 1000Gi

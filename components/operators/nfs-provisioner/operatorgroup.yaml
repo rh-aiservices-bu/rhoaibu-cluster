@@ -1,0 +1,9 @@
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: nfs-provisioner-og
+  namespace: nfs-provisioner
+spec:
+  targetNamespaces:
+    - nfs-provisioner
+  upgradeStrategy: Default

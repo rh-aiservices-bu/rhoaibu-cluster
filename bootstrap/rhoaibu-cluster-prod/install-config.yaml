@@ -1,12 +1,17 @@
 apiVersion: v1
-baseDomain: ${BASE_DOMAIN}
+baseDomain: rhoai.rh-aiservices-bu.com
 compute:
   - architecture: amd64
     hyperthreading: Enabled
     name: worker
     platform:
       aws:
-        type: m6i.4xlarge
+        type: m6i.8xlarge
+        rootVolume:
+          type: gp3
+          size: 1000
+          iops: 6000
+          throughput: 500
     replicas: 3
 controlPlane:
   architecture: amd64
@@ -14,11 +19,16 @@ controlPlane:
   name: master
   platform:
     aws:
-      type: m6i.4xlarge
+      type: m6i.8xlarge
+      rootVolume:
+        type: gp3
+        size: 1000
+        iops: 3000
+        throughput: 250
   replicas: 3
 metadata:
   creationTimestamp: null
-  name: prod
+  name: cai
 networking:
   clusterNetwork:
     - cidr: 10.128.0.0/14

@@ -1,0 +1,43 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: evalhub-jobs-dspa-api
+  namespace: evalhub-tenant
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+rules:
+- apiGroups: ["datasciencepipelinesapplications.opendatahub.io"]
+  resources: ["datasciencepipelinesapplications/api"]
+  verbs: ["get", "create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: evalhub-jobs-dspa-api
+  namespace: evalhub-tenant
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: evalhub-jobs-dspa-api
+subjects:
+- kind: ServiceAccount
+  name: evalhub-redhat-ods-applications-job
+  namespace: evalhub-tenant
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: evalhub-jobs-pipeline-management
+  namespace: evalhub-tenant
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: ds-pipeline-dspa
+subjects:
+- kind: ServiceAccount
+  name: evalhub-redhat-ods-applications-job
+  namespace: evalhub-tenant

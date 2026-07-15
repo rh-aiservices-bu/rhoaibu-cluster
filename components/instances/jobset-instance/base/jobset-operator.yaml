@@ -1,0 +1,8 @@
+apiVersion: operator.openshift.io/v1
+kind: JobSetOperator
+metadata:
+  name: cluster
+  namespace: openshift-jobset-operator
+spec:
+  logLevel: Normal
+  operatorLogLevel: Normal

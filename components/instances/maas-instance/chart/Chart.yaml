@@ -1,0 +1,4 @@
+apiVersion: v2
+name: maas-instance
+description: MaaS infrastructure - PostgreSQL and Gateway
+version: 0.1.0

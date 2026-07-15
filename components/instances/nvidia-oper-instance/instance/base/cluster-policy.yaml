@@ -29,11 +29,12 @@ spec:
     enabled: true
   cdi:
     default: false
-    enabled: false
+    enabled: true
   driver:
     licensingConfig:
       nlsEnabled: true
-      configMapName: ''
+      secretName: ''
+    kernelModuleType: auto
     certConfig:
       name: ''
     kernelModuleConfig:
@@ -59,12 +60,15 @@ spec:
       config: ''
     enabled: true
     useNvidiaDriverCRD: false
-    useOpenKernelModules: false
   devicePlugin:
     config:
       name: ''
       default: ''
+    mps:
+      root: /run/nvidia/mps
     enabled: true
+  gdrcopy:
+    enabled: false
   kataManager:
     config:
       artifactsDir: /opt/nvidia-gpu-operator/artifacts/runtimeclasses
@@ -74,9 +78,7 @@ spec:
     enabled: true
   validator:
     plugin:
-      env:
-        - name: WITH_WORKLOAD
-          value: 'false'
+      env: []
   nodeStatusExporter:
     enabled: true
   daemonsets:

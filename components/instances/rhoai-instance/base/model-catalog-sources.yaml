@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: model-catalog-sources
+  namespace: rhoai-model-registries
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+data:
+  sources.yaml: |
+    catalogs:
+      - id: redhat_ai_models
+        enabled: true
+      - id: redhat_ai_validated_models
+        enabled: true
