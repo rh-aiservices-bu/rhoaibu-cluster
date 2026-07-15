@@ -12,4 +12,5 @@ components:
   - ../../components/metrics
   - ../../components/odh-applications
   - ../../components/model-registry
+  - ../../components/mlflow
   # - ../../components/accelerator-profiles
