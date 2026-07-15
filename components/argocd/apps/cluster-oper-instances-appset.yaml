@@ -36,13 +36,6 @@ spec:
               name: instance-nvidia-operator
               path: components/instances/nvidia-oper-instance/aggregate/overlays/default
               namespace: openshift-gitops
-    - list:
-        elements:
-          - cluster: local
-            values:
-              name: instance-ocp-virt
-              path: components/instances/ocp-virt-instance/base
-              namespace: openshift-gitops
     # - list:
     #     elements:
     #       - cluster: local

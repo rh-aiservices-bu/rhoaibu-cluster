@@ -50,7 +50,6 @@ Check the [Fully GitOpsified implementation of a RHOAI platform](https://ai-on-o
 * [Web Terminal](./components/operators/web-terminal)
 * [Authorino Operator](./components/operators/authorino-operator)
 * [Openshift Lightspeed](./components/operators/openshift-lightspeed)
-* [Openshift Virtualization](./components/operators/openshift-virtualization)
 * [OpenShift Red Hat Build of OpenTelemetry Operator](./components/operators/openshift-opentelemetry-operator/)
 
 ### Extra Operators
