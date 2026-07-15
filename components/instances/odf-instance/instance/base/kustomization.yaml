@@ -5,7 +5,6 @@ namespace: openshift-storage
 
 resources:
   - ocsinitialization.yaml
-  - storagesystem.yaml
   - cephstorage.yaml
   - ceph-route.yaml
   - ceph-sc.yaml
