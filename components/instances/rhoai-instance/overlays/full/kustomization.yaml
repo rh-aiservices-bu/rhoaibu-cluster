@@ -8,7 +8,7 @@ resources:
   - ../default
 
 components:
-  - ../../components/custom-workbenches
+  # - ../../components/custom-workbenches
   - ../../components/metrics
   - ../../components/odh-applications
   - ../../components/model-registry
