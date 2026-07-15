@@ -20,7 +20,7 @@ spec:
           - cluster: local
             values:
               name: instance-rhoai
-              path: components/instances/rhoai-instance/overlays/maas
+              path: components/instances/rhoai-instance/overlays/full
               namespace: openshift-gitops
     - list:
         elements:
