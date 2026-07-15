@@ -85,6 +85,13 @@ spec:
               name: instance-nfs
               path: components/instances/nfs-instance/base
               namespace: openshift-gitops
+    - list:
+        elements:
+          - cluster: local
+            values:
+              name: instance-acm
+              path: components/instances/acm-instance/base
+              namespace: openshift-gitops
   template:
     metadata:
       name: "{{values.name}}"
