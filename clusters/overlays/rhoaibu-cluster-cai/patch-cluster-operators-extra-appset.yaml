@@ -1,3 +1,5 @@
 - op: replace
   path: /spec/template/spec/source/targetRevision
-  value: rhoai34 # Adjust it to the desired branch for CAI
+  value: rhoai34
+- op: remove
+  path: /spec/generators/0/list/elements/1
