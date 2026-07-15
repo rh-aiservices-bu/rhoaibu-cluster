@@ -5,5 +5,5 @@
   path: /spec/generators/2/list/elements/0/values/path
   value: components/instances/odf-instance/aggregate/overlays/rhoaibu-cluster-cai
 - op: replace
-  path: /spec/generators/6/list/elements/0/values/path
+  path: /spec/generators/5/list/elements/0/values/path
   value: components/instances/external-secrets-instance/overlays/rhoaibu-cluster-cai

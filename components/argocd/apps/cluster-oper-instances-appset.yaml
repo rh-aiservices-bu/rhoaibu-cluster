@@ -43,13 +43,13 @@ spec:
               name: instance-ocp-virt
               path: components/instances/ocp-virt-instance/base
               namespace: openshift-gitops
-    - list:
-        elements:
-          - cluster: local
-            values:
-              name: instance-ocp-lightspeed
-              path: components/instances/ocp-lightspeed-instance/overlays
-              namespace: openshift-gitops
+    # - list:
+    #     elements:
+    #       - cluster: local
+    #         values:
+    #           name: instance-ocp-lightspeed
+    #           path: components/instances/ocp-lightspeed-instance/overlays
+    #           namespace: openshift-gitops
     - list:
         elements:
           - cluster: local
