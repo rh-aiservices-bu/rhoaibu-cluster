@@ -8,7 +8,6 @@ resources:
   - ../default
 
 components:
-  - ../../components/codeflare
   - ../../components/custom-workbenches
   - ../../components/metrics
   - ../../components/odh-applications
