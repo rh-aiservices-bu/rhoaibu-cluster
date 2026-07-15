@@ -2,6 +2,7 @@ apiVersion: opendatahub.io/v1alpha
 kind: OdhDashboardConfig
 metadata:
   annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "2"
   name: odh-dashboard-config
   labels:
@@ -10,18 +11,42 @@ metadata:
   namespace: redhat-ods-applications
 spec:
   dashboardConfig:
-    disableKServeMetrics: false
+    externalVectorStores: false
+    vLLMDeploymentOnMaaS: true
+    disableProjectScoped: false
+    aiAssetCustomEndpoints: true
     disableLMEval: false
-    disableModelCatalog: false
-    disableModelRegistry: false
-    disableTracking: false
+    promptManagement: true
+    autorag: true
+    deploymentWizardYAMLViewer: false
+    disableProjectSharing: false
+    disableNIMModelServing: false
+    disableCustomServingRuntimes: false
     genAiStudio: true
-    modelAsService: true
+    automl: true
+    disableFeatureStore: false
     observabilityDashboard: true
-  groupsConfig:
-    adminGroups: "rhoai-admins,rhods-admins,cluster-admins"
-    allowedGroups: "system:authenticated"
+    disableKServeAuth: false
+    disableAdminConnectionTypes: false
+    disableKServeMetrics: false
+    disableModelCatalog: false
+    modelAsService: true
+    disableServingRuntimeParams: false
+    disableClusterManager: false
+    disablePerformanceMetrics: false
+    disableBYONImageStream: false
+    disableModelRegistry: false
+    maasAuthPolicies: true
+    mcpCatalog: true
+    disableTracking: false
+  genAiStudioConfig:
+    aiAssetCustomEndpoints:
+      clusterDomains: []
+      externalProviders: true
   hardwareProfileOrder: []
+  modelServing:
+    deploymentStrategy: rolling
+    isLLMdDefault: false
   notebookController:
     enabled: true
     notebookNamespace: rhods-notebooks
