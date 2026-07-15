@@ -3,3 +3,5 @@
   value: rhoai34
 - op: remove
   path: /spec/generators/0/list/elements/1
+- op: remove
+  path: /spec/generators/0/list/elements/0
