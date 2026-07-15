@@ -12,45 +12,14 @@ spec:
         elements:
           - cluster: local
             values:
-              name: ovms-operator
-              path: components/operators-extra/ovms-operator/overlays/alpha
-              namespace: openshift-gitops
-          - cluster: local
-            values:
-              name: aikit-operator
-              path: components/operators-extra/aikit-operator/overlays/alpha
-              namespace: openshift-gitops
-          - cluster: local
-            values:
-              name: pachyderm-operator
-              path: components/operators-extra/pachyderm-operator/overlays/stable
-              namespace: openshift-gitops
-          - cluster: local
-            values:
-              name: starbust-operator
-              path: components/operators-extra/starbust-operator/overlays/alpha
-              namespace: openshift-gitops
-          - cluster: local
-            values:
               name: redis-enterprise-operator
               path: components/operators-extra/redis-enterprise-operator/overlays/production
               namespace: openshift-gitops
           - cluster: local
             values:
-              name: spark-community-operator
-              path: components/operators-extra/spark-community-operator/overlays/alpha
+              name: run-ai-operator
+              path: components/operators-extra/run-ai-operator/overlays/stable
               namespace: openshift-gitops
-          # - cluster: local
-          #   values:
-          #     name: run-ai-operator
-          #     path: components/operators-extra/run-ai-operator/overlays/stable
-          #     namespace: openshift-gitops
-          ### This enables the upstream codeflare operator
-          # - cluster: local
-          #   values:
-          #     name: codeflare-operator
-          #     path: components/operators-extra/codeflare-operator/overlays/alpha
-          #     namespace: openshift-gitops
 
   template:
     metadata:
