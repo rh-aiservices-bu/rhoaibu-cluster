@@ -17,6 +17,7 @@ spec:
       caCert:
         certPath: service-ca.crt
         name: prometheus-web-tls-ca
+        namespace: redhat-ods-applications
         type: configmap
       enable: true
   config:
