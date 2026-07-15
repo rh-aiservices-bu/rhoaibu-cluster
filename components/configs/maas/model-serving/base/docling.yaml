@@ -8,12 +8,12 @@ metadata:
     opendatahub.io/template-display-name: Docling Serve ServingRuntime for KServe
     opendatahub.io/template-name: docling-serve-runtime
     openshift.io/display-name: docling-serve
-  name: docling-serve-v0.7.0
+  name: docling-serve-v1.14.3
   labels:
     opendatahub.io/dashboard: 'true'
 spec:
   containers:
-    - image: 'quay.io/docling-project/docling-serve-cu124:v0.7.0'
+    - image: 'quay.io/docling-project/docling-serve-cu128:v1.14.3'
       name: kserve-container
       command:
         - python
@@ -42,7 +42,7 @@ metadata:
   annotations:
     openshift.io/display-name: Docling Serve
     serving.kserve.io/deploymentMode: RawDeployment
-  name: docling-v0-7-0
+  name: docling-v1-14-3
   labels:
     opendatahub.io/dashboard: 'true'
 spec:
@@ -67,7 +67,7 @@ spec:
           cpu: '4'
           memory: 8Gi
           nvidia.com/gpu: '1'
-      runtime: docling-serve-v0.7.0
+      runtime: docling-serve-v1.14.3
       storage:
         key: aws-connection-models
         path: dummy/
