@@ -1,0 +1,46 @@
+apiVersion: v1
+baseDomain: rhoai.rh-aiservices-bu.com
+compute:
+  - architecture: amd64
+    hyperthreading: Enabled
+    name: worker
+    platform:
+      aws:
+        type: m6i.8xlarge
+        rootVolume:
+          type: gp3
+          size: 1000
+          iops: 6000
+          throughput: 500
+    replicas: 3
+controlPlane:
+  architecture: amd64
+  hyperthreading: Enabled
+  name: master
+  platform:
+    aws:
+      type: m6i.8xlarge
+      rootVolume:
+        type: gp3
+        size: 1000
+        iops: 3000
+        throughput: 250
+  replicas: 3
+metadata:
+  creationTimestamp: null
+  name: cai
+networking:
+  clusterNetwork:
+    - cidr: 10.128.0.0/14
+      hostPrefix: 23
+  machineNetwork:
+    - cidr: 10.0.0.0/16
+  networkType: OVNKubernetes
+  serviceNetwork:
+    - 172.30.0.0/16
+platform:
+  aws:
+    region: us-east-1
+publish: External
+pullSecret: ${PULL_SECRET}
+sshKey: ${SSH_KEY}

@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonAnnotations:
+  argocd.argoproj.io/compare-options: IgnoreExtraneous
+  argocd.argoproj.io/sync-options: Prune=true
+
+resources:
+  - ../../base/
+
+patches:
+  - target:
+      kind: ConsoleNotification
+      name: banner-cluster
+    patch: |-
+      - op: replace
+        path: /spec/text
+        value: 'You are in the CAI RHOAI BU Cluster'
+      - op: replace
+        path: /spec/backgroundColor
+        value: '#B8860B'
