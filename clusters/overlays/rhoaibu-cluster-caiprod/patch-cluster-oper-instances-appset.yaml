@@ -5,4 +5,6 @@
   path: /spec/generators/4/list/elements/0/values/path
   value: components/instances/external-secrets-instance/overlays/rhoaibu-cluster-caiprod
 - op: remove
+  path: /spec/generators/9
+- op: remove
   path: /spec/generators/2
