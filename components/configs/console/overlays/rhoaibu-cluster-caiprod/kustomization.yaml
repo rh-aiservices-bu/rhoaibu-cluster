@@ -15,7 +15,7 @@ patches:
     patch: |-
       - op: replace
         path: /spec/text
-        value: 'You are in the CAIPROD RHOAI BU Cluster'
+        value: 'You are in the CAI PROD Cluster'
       - op: replace
         path: /spec/backgroundColor
         value: '#8B0000'
