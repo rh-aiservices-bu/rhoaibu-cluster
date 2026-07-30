@@ -10,7 +10,8 @@ INSTANCE_TYPES=(
   "A100:p4d.24xlarge"
   "H100:p5.48xlarge"
   "DL1:dl1.24xlarge"
-  "L40 Single GPU:g6.2xlarge"
+  "L40 Single GPU (xlarge):g6.xlarge"
+  "L40 Single GPU (2xlarge):g6.2xlarge"
   "L40 Multi GPU x4:g6.12xlarge"
   "L40 Multi GPU x8:g6.48xlarge"
   "L40S Single GPU:g6e.2xlarge"
@@ -42,7 +43,8 @@ options=(
   "A100"
   "H100"
   "DL1"
-  "L40 Single GPU"
+  "L40 Single GPU (xlarge)"
+  "L40 Single GPU (2xlarge)"
   "L40 Multi GPU x4"
   "L40 Multi GPU x8"
   "L40S Single GPU"
@@ -117,7 +119,7 @@ case $GPU_TYPE in
   "H100")
     ACCELERATOR_LABEL="NVIDIA-H100-$GPU_ACCESS_TYPE"
     ;;
-  "L40 Single GPU"|"L40 Multi GPU x4"|"L40 Multi GPU x8")
+  "L40 Single GPU (xlarge)"|"L40 Single GPU (2xlarge)"|"L40 Multi GPU x4"|"L40 Multi GPU x8")
     ACCELERATOR_LABEL="NVIDIA-L40-$GPU_ACCESS_TYPE"
     ;;
   "L40S Single GPU")
