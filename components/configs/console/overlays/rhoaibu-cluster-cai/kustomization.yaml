@@ -15,7 +15,7 @@ patches:
     patch: |-
       - op: replace
         path: /spec/text
-        value: 'You are in the CAI RHOAI BU Cluster'
+        value: 'You are in the CAI HUB Cluster'
       - op: replace
         path: /spec/backgroundColor
         value: '#B8860B'
