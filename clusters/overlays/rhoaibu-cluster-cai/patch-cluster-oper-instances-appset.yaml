@@ -4,6 +4,15 @@
 - op: replace
   path: /spec/generators/2/list/elements/0/values/path
   value: components/instances/odf-instance/aggregate/overlays/rhoaibu-cluster-cai
-- op: replace
-  path: /spec/generators/5/list/elements/0/values/path
-  value: components/instances/external-secrets-instance/overlays/rhoaibu-cluster-cai
+- op: remove
+  path: /spec/generators/7
+- op: remove
+  path: /spec/generators/6
+- op: remove
+  path: /spec/generators/5
+- op: remove
+  path: /spec/generators/3
+- op: remove
+  path: /spec/generators/1
+- op: remove
+  path: /spec/generators/0

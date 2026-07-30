@@ -4,3 +4,43 @@
 - op: replace
   path: /spec/generators/0/git/revision
   value: rhoai34 # Adjust it to the desired branch for CAI
+- op: add
+  path: /spec/generators/0/git/directories/-
+  value:
+    path: components/operators/rhoai-operator
+    exclude: true
+- op: add
+  path: /spec/generators/0/git/directories/-
+  value:
+    path: components/operators/nfd
+    exclude: true
+- op: add
+  path: /spec/generators/0/git/directories/-
+  value:
+    path: components/operators/nvidia-operator
+    exclude: true
+- op: add
+  path: /spec/generators/0/git/directories/-
+  value:
+    path: components/operators/connectivity-link
+    exclude: true
+- op: add
+  path: /spec/generators/0/git/directories/-
+  value:
+    path: components/operators/jobset-operator
+    exclude: true
+- op: add
+  path: /spec/generators/0/git/directories/-
+  value:
+    path: components/operators/leader-worker-set
+    exclude: true
+- op: add
+  path: /spec/generators/0/git/directories/-
+  value:
+    path: components/operators/kueue-operator
+    exclude: true
+- op: add
+  path: /spec/generators/0/git/directories/-
+  value:
+    path: components/operators/kiali-operator
+    exclude: true
