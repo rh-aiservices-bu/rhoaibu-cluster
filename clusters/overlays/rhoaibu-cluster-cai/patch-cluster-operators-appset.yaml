@@ -44,3 +44,13 @@
   value:
     path: components/operators/kiali-operator
     exclude: true
+- op: add
+  path: /spec/generators/0/git/directories/-
+  value:
+    path: components/operators/openshift-data-foundation-operator
+    exclude: true
+- op: add
+  path: /spec/generators/0/git/directories/-
+  value:
+    path: components/operators/nfs-provisioner
+    exclude: true
