@@ -12,6 +12,7 @@ spec:
   target:
     name: google-client-secret
     creationPolicy: Owner
+    deletionPolicy: Retain
     metadata:
       annotations:
         template.openshift.io/expose-clientSecret: '{.data[''clientSecret'']}'

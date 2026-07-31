@@ -5,7 +5,7 @@ metadata:
   namespace: redhat-ods-applications
   annotations:
     opendatahub.io/managed: "false"
-    argocd.argoproj.io/sync-options: Replace=true
+    argocd.argoproj.io/sync-options: ServerSideApply=true,SkipDryRunOnMissingResource=true
   labels:
     app.kubernetes.io/component: perses
     app.kubernetes.io/managed-by: maas-observability

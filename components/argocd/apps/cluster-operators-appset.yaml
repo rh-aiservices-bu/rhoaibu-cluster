@@ -22,6 +22,12 @@ spec:
         automated:
           prune: false
           selfHeal: true
+      ignoreDifferences:
+        - group: console.openshift.io
+          kind: ConsolePlugin
+          jsonPointers:
+            - /metadata/ownerReferences
+            - /metadata/annotations
       source:
         repoURL: https://github.com/rh-aiservices-bu/rhoaibu-cluster
         targetRevision: dev
