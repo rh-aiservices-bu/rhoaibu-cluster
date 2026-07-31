@@ -21,3 +21,6 @@ spec:
       remoteRef:
         key: google-client-secret
         property: clientSecret
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None
