@@ -75,8 +75,8 @@ spec:
         elements:
           - cluster: local
             values:
-              name: instance-nfs
-              path: components/instances/nfs-instance/base
+              name: instance-efs
+              path: components/instances/efs-instance/base
               namespace: openshift-gitops
     - list:
         elements:
