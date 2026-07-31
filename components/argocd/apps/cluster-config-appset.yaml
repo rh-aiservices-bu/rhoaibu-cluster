@@ -48,6 +48,11 @@ spec:
         #     duration: 5s
         #     factor: 2
         #     maxDuration: 10m
+      ignoreDifferences:
+        - group: external-secrets.io
+          kind: ExternalSecret
+          jsonPointers:
+            - /spec/target/metadata
       source:
         repoURL: https://github.com/rh-aiservices-bu/rhoaibu-cluster
         targetRevision: dev
