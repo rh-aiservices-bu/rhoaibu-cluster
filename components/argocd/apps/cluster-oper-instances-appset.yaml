@@ -103,6 +103,12 @@ spec:
         #     duration: 5s
         #     factor: 2
         #     maxDuration: 10m
+      ignoreDifferences:
+        - group: perses.dev
+          kind: PersesDatasource
+          jsonPointers:
+            - /metadata/labels
+            - /metadata/annotations
       source:
         repoURL: https://github.com/rh-aiservices-bu/rhoaibu-cluster
         targetRevision: dev
