@@ -1,23 +1,30 @@
+---
 apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
   annotations:
-    openshift.io/display-name: Qwen3.6-35B-A3B-FP8
-    serving.kserve.io/deploymentMode: RawDeployment
+    modelFormat: vLLM
+    opendatahub.io/model-type: generative
+    openshift.io/description: ''
+    openshift.io/display-name: qwen36-35b-a3b-fp8
+    security.opendatahub.io/enable-auth: 'false'
+    serving.kserve.io/deploymentMode: Standard
   name: qwen36-35b-a3b-fp8
+  namespace: llm
   labels:
     opendatahub.io/dashboard: 'true'
 spec:
   predictor:
     automountServiceAccountToken: false
-    maxReplicas: 1
-    minReplicas: 1
+    minReplicas: 0
     model:
       args:
+        - '--model=/mnt/models'
         - '--served-model-name=qwen36-35b-a3b-fp8'
         - '--tensor-parallel-size=4'
         - '--max-model-len=262144'
-        - '--gpu-memory-utilization=0.95'
+        - '--gpu-memory-utilization=0.85'
+        - '--max-num-seqs=128'
         - '--kv-cache-dtype=fp8'
         - '--enable-prefix-caching'
         - '--enable-auto-tool-choice'
@@ -25,22 +32,33 @@ spec:
         - '--reasoning-parser=qwen3'
         - '--mm-encoder-tp-mode=data'
         - '--mm-processor-cache-type=shm'
+      env:
+        - name: TRITON_CACHE_DIR
+          value: /tmp/.triton
+        - name: HF_HOME
+          value: /tmp/.cache/huggingface
+        - name: VLLM_CONFIG_ROOT
+          value: /tmp/.vllm
+        - name: XDG_CACHE_HOME
+          value: /tmp/.cache
+        - name: HOME
+          value: /tmp
+        - name: FLASHINFER_WORKSPACE_DIR
+          value: /tmp/flashinfer
       modelFormat:
         name: vLLM
       name: ''
       resources:
         limits:
           cpu: '44'
-          memory: 360Gi
+          memory: 350Gi
           nvidia.com/gpu: '4'
         requests:
           cpu: '32'
           memory: 300Gi
           nvidia.com/gpu: '4'
-      runtime: vllm-rhaiis-3.3.1
-      storage:
-        key: aws-connection-models
-        path: Qwen/Qwen3.6-35B-A3B-FP8/
+      runtime: vllm-openai-v0191-cu130
+      storageUri: 'pvc://models/Qwen/Qwen3.6-35B-A3B'
     tolerations:
       - effect: NoSchedule
         key: nvidia.com/gpu
