@@ -4,13 +4,13 @@ kind: InferenceService
 metadata:
   annotations:
     modelFormat: vLLM
-    security.opendatahub.io/enable-auth: 'false'
-    opendatahub.io/connections: llama-32-3b-instruct
+    opendatahub.io/connections: nomic-embed-text-v2-moe
     opendatahub.io/model-type: generative
     openshift.io/description: ''
-    openshift.io/display-name: llama-32-3b-instruct
+    openshift.io/display-name: nomic-embed-text-v2-moe
+    security.opendatahub.io/enable-auth: 'false'
     serving.kserve.io/deploymentMode: Standard
-  name: llama-32-3b-instruct
+  name: nomic-embed-text-v2-moe
   namespace: llm
   labels:
     opendatahub.io/dashboard: 'true'
@@ -23,27 +23,31 @@ spec:
     minReplicas: 1
     model:
       args:
-        - '--served-model-name=llama-3-2-3b'
-        - '--max-model-len=12000'
+        - '--model=/mnt/models'
+        - '--served-model-name=nomic-embed-text-v2-moe'
+        - '--trust-remote-code'
+      env:
+        - name: HF_HUB_OFFLINE
+          value: '0'
+        - name: TRANSFORMERS_OFFLINE
+          value: '1'
       modelFormat:
         name: vLLM
       name: ''
       resources:
         limits:
-          cpu: '2'
-          memory: 12Gi
+          cpu: '6'
+          memory: 22Gi
           nvidia.com/gpu: '1'
         requests:
-          cpu: '2'
-          memory: 12Gi
+          cpu: '4'
+          memory: 18Gi
           nvidia.com/gpu: '1'
-      runtime: llama-32-3b-instruct
-      storageUri: 'pvc://models/meta-llama/Llama-3.2-3B-Instruct'
+      runtime: vllm-rhoai-3.3
+      storageUri: 'pvc://models/nomic-ai/nomic-embed-text-v2-moe'
     timeout: 600
     tolerations:
       - effect: NoSchedule
         key: nvidia.com/gpu
-        operator: Exists
-      - effect: NoSchedule
-        key: nvidia.com/gpu
-        value: NVIDIA-L40-PRIVATE
+        operator: Equal
+        value: Tesla-T4-PRIVATE
